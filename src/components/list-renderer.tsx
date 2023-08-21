@@ -1,5 +1,5 @@
-import React, { ReactNode, useMemo, useState } from "react";
-import { Box, Button, Icon, Text } from "zmp-ui";
+import React, { ReactNode, useMemo, useState } from 'react';
+import { Box, Button, Icon, Text } from 'zmp-ui';
 
 interface ListRendererProps<T> {
   title?: string;
@@ -35,8 +35,7 @@ export function ListRenderer<T>({
           <div
             key={renderKey ? renderKey(item) : i}
             onClick={() => onClick?.(item)}
-            className="flex space-x-4 p-4 last:pb-0"
-          >
+            className="flex space-x-4 p-4 last:pb-0">
             {renderLeft(item)}
             <Box className="flex-1 min-w-0 relative">
               {renderRight(item)}
@@ -54,8 +53,7 @@ export function ListRenderer<T>({
             fullWidth
             suffixIcon={<Icon icon="zi-chevron-down" />}
             variant="tertiary"
-            type="neutral"
-          >
+            type="neutral">
             Xem thêm
           </Button>
         </Box>

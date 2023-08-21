@@ -1,64 +1,62 @@
-import { useVirtualKeyboardVisible } from "hooks";
-import React, { FC, useMemo, useState } from "react";
-import { useLocation, useNavigate } from "react-router";
-import { MenuItem } from "types/menu";
-import { BottomNavigation, Icon } from "zmp-ui";
-import { CartIcon } from "./cart-icon";
+import { useVirtualKeyboardVisible } from 'hooks';
+import React, { FC, useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router';
+import { MenuItem } from 'types/menu';
+import { BottomNavigation, Icon, useNavigate } from 'zmp-ui';
+import { CartIcon } from './cart-icon';
 
-const tabs: Record<string, MenuItem> = {
-  "/": {
-    label: "Trang chủ",
-    icon: <Icon icon="zi-home" />,
+const navItems = [
+  {
+    path: '/overall-statistics',
+    label: 'Tổng quan',
+    icon: <Icon icon="zi-more-grid" />,
   },
-  "/notification": {
-    label: "Thông báo",
+  {
+    path: '/notification',
+    label: 'Thông báo',
     icon: <Icon icon="zi-notif" />,
   },
-  "/cart": {
-    label: "Giỏ hàng",
-    icon: <CartIcon />,
-    activeIcon: <CartIcon active />,
+  {
+    path: '/aura',
+    label: 'Thẻ Aura',
+    icon: <Icon icon="zi-user-circle" />,
   },
-  "/profile": {
-    label: "Cá nhân",
-    icon: <Icon icon="zi-user" />,
-  },
-};
-
-export type TabKeys = keyof typeof tabs;
-
-export const NO_BOTTOM_NAVIGATION_PAGES = ["/search", "/category"];
+];
 
 export const Navigation: FC = () => {
-  const [activeTab, setActiveTab] = useState<TabKeys>("/");
-  const keyboardVisible = useVirtualKeyboardVisible();
   const navigate = useNavigate();
   const location = useLocation();
+  const [activeTab, setActiveTab] = useState('/');
+  const pathname = location.pathname.split('/')[1];
 
-  const noBottomNav = useMemo(() => {
-    return NO_BOTTOM_NAVIGATION_PAGES.includes(location.pathname);
+  useEffect(() => {
+    if (navItems.find((item) => item.path === location.pathname)) {
+      setActiveTab(location.pathname);
+    }
   }, [location]);
 
-  if (noBottomNav || keyboardVisible) {
-    return <></>;
-  }
-
+  const handleChangeRoute = (key) => {
+    setActiveTab(key);
+    navigate(key, { animate: false });
+  };
   return (
-    <BottomNavigation
-      id="footer"
-      activeKey={activeTab}
-      onChange={(key: TabKeys) => setActiveTab(key)}
-      className="z-50"
-    >
-      {Object.keys(tabs).map((path: TabKeys) => (
-        <BottomNavigation.Item
-          key={path}
-          label={tabs[path].label}
-          icon={tabs[path].icon}
-          activeIcon={tabs[path].activeIcon}
-          onClick={() => navigate(path)}
-        />
-      ))}
-    </BottomNavigation>
+    <>
+      {location.pathname == '/overall-statistics' && (
+        <>
+          <BottomNavigation
+            id="bottom-nav"
+            activeKey={activeTab}
+            onChange={(key) => handleChangeRoute(key)}>
+            {navItems.map(({ path, label, icon }) => (
+              <BottomNavigation.Item
+                key={path}
+                label={label}
+                icon={icon}
+              />
+            ))}
+          </BottomNavigation>
+        </>
+      )}
+    </>
   );
 };

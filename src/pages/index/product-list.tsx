@@ -1,10 +1,10 @@
-import React, { FC, Suspense } from "react";
-import { Section } from "components/section";
-import { useRecoilValue } from "recoil";
-import { productsState } from "state";
-import { Box } from "zmp-ui";
-import { ProductItem } from "components/product/item";
-import { ProductItemSkeleton } from "components/skeletons";
+import React, { FC, Suspense } from 'react';
+import { Section } from 'components/section';
+import { useRecoilValue } from 'recoil';
+import { productsState } from 'state';
+import { Box } from 'zmp-ui';
+import { ProductItem } from 'components/product/item';
+import { ProductItemSkeleton } from 'components/skeletons';
 
 export const ProductListContent: FC = () => {
   const products = useRecoilValue(productsState);
@@ -13,7 +13,10 @@ export const ProductListContent: FC = () => {
     <Section title="Danh sách sản phẩm">
       <Box className="grid grid-cols-2 gap-4">
         {products.map((product) => (
-          <ProductItem key={product.id} product={product} />
+          <ProductItem
+            key={product.id}
+            product={product}
+          />
         ))}
       </Box>
     </Section>
