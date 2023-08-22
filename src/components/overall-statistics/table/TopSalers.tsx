@@ -1,5 +1,6 @@
 import React from 'react';
-import BoxCustomer from './BoxCustomer';
+import BoxRow from './BoxCustomer';
+
 const customerTop5 = [
   {
     name: 'Ten khach hang',
@@ -38,10 +39,12 @@ const TopSalers = () => {
         <div>
           {customerTop5.map((customer, index) => {
             return (
-              <BoxCustomer
+              <BoxRow
+                key={index}
                 name={customer.name}
                 index={index + 1}
                 money={customer.money}
+                currency={'đ'}
               />
             );
           })}

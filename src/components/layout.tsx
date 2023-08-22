@@ -1,17 +1,15 @@
+import HomePage from 'pages/index';
 import React, { FC } from 'react';
 import { Route, Routes } from 'react-router';
 import { Box } from 'zmp-ui';
 import { Navigation } from './navigation';
-import HomePage from 'pages/index';
-import CategoryPage from 'pages/category';
-import CartPage from 'pages/cart';
-import NotificationPage from 'pages/notification';
+
 import ProfilePage from 'pages/profile';
-import SearchPage from 'pages/search';
-import { getSystemInfo } from 'zmp-sdk';
-import { ScrollRestoration } from './scroll-restoration';
+
 import OverallStatistics from 'pages/index/overal-statistics';
 import RevenuePage from 'pages/revenue';
+import { getSystemInfo } from 'zmp-sdk';
+import OrderBookings from 'pages/order-bookings';
 
 if (getSystemInfo().platform === 'android') {
   const androidSafeTop = Math.round(
@@ -41,6 +39,9 @@ export const Layout: FC = () => {
           <Route
             path="/revenue"
             element={<RevenuePage />}></Route>
+          <Route
+            path="/order-bookings"
+            element={<OrderBookings />}></Route>
           <Route
             path="/profile"
             element={<ProfilePage />}></Route>

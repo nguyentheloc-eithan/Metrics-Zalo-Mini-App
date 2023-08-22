@@ -22,7 +22,10 @@
   "dependencies": {
     "@ant-design/charts": "^1.4.2",
     "@react-spring/web": "^9.6.1",
+    "@supabase/supabase-js": "^2.32.0",
     "@types/lodash": "^4.14.191",
+    "antd": "^4.24.13",
+    "dayjs": "^1.11.9",
     "lodash": "^4.17.21",
     "lottie-react": "^2.4.0",
     "prop-types": "^15.8.1",
@@ -32,7 +35,8 @@
     "recoil": "^0.7.7",
     "swiper": "^9.1.0",
     "zmp-sdk": "^2.27.2",
-    "zmp-ui": "^1.6.0-rc.6"
+    "zmp-ui": "^1.6.0-rc.6",
+    "zustand": "^4.4.1"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

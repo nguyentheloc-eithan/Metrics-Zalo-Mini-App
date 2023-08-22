@@ -1,30 +1,12 @@
+import { DataCategories } from 'pages/revenue';
 import React from 'react';
-import BoxCustomer from './BoxCustomer';
-import BulletPoint from 'components/button/BulletPoint';
-const customerTop5 = [
-  {
-    name: 'Tên danh mục',
-    money: '100.000.000',
-  },
-  {
-    name: 'Tên danh mục',
-    money: '100.000.000',
-  },
-  {
-    name: 'Tên danh mục',
-    money: '100.000.000',
-  },
-  {
-    name: 'Tên danh mục',
-    money: '100.000.000',
-  },
-  {
-    name: 'Tên danh mục',
-    money: '100.000.000',
-  },
-];
+import BoxRow from './BoxCustomer';
 
-const TableTopCategories = () => {
+interface TableTopCategoriesProps {
+  topCategories: DataCategories[];
+}
+const TableTopCategories = (props: TableTopCategoriesProps) => {
+  const { topCategories } = props;
   return (
     <div className="p-[16px] flex flex-col gap-[16px] bg-white rounded-[8px]">
       <div className="text-[14px] font-[700] leading-[20px] tracking-[0.1px]">
@@ -37,12 +19,14 @@ const TableTopCategories = () => {
           <p className="w-[100px]">Doanh thu</p>
         </div>
         <div>
-          {customerTop5.map((customer, index) => {
+          {topCategories.map((customer, index) => {
             return (
-              <BoxCustomer
-                name={customer.name}
+              <BoxRow
+                key={index}
+                name={customer.type}
                 index={index + 1}
-                money={customer.money}
+                money={customer.revenue}
+                currency={'đ'}
               />
             );
           })}

@@ -4,10 +4,13 @@ import TableTopCategories from './table/TableTopCategories';
 import TableTopServices from './table/TableTopServices';
 import GraphCategories from './graph/graph-categories';
 import GraphServices from './graph/graph-services';
+import { DataCategories, DataServices } from 'pages/revenue';
 
 const ServiceRevenue = () => {
   const [chartType, setChartType] = useState<boolean>(true);
   const [tableType, setTableType] = useState<boolean>(false);
+  const [topCategories, setTopCategories] = useState<DataCategories[]>([]);
+  const [topServices, setTopServices] = useState<DataServices[]>([]);
   const onClickChart = () => {
     setTableType(false);
     setChartType(true);
@@ -37,13 +40,13 @@ const ServiceRevenue = () => {
       </div>
       {chartType == false ? (
         <div>
-          <TableTopCategories />
-          <TableTopServices />
+          <TableTopCategories topCategories={topCategories} />
+          <TableTopServices topServices={topServices} />
         </div>
       ) : (
         <div>
-          <GraphCategories />
-          <GraphServices />
+          <GraphCategories setTopCategories={setTopCategories} />
+          <GraphServices setTopServices={setTopServices} />
         </div>
       )}
     </div>

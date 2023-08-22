@@ -15,7 +15,7 @@ const BoxButton = (params: BoxButtonParams) => {
       onClick={() => {
         navigate(link);
       }}
-      className="w-[164px] rounded-[8px] gap-[8px] h-[92px] flex flex-col items-center justify-center py-[16px] px-[8px] bg-[white]">
+      className="w-[calc((100%-16px)/2)] rounded-[8px] gap-[8px] h-[92px] flex flex-col items-center justify-center py-[16px] px-[8px] bg-[white]">
       {icon}
 
       <div className="text-[14px] text-[#36383A] font-[500] leading-[20px] tracking-[0.1px]">

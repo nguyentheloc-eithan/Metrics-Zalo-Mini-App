@@ -1,10 +1,14 @@
 import ButtonIcon from 'components/button/ButtonIcon';
 import React, { useEffect, useState } from 'react';
-import TableClinicRevenue from './table/TableClinicRevenue';
-import GraphClinicRevenue from './graph/graph-clinic-revenue';
-import GraphServices from './graph/graph-services';
+
 import { message } from 'antd';
 import { ExportParams, getClinicRevenue } from 'services/rpc/clinic-revenue';
+import TableClinicOrders from './TableClinicOrders';
+
+const temp: ExportParams = {
+  start_date: '2023-01-01',
+  end_date: '2023-06-01',
+};
 
 interface ClinicsRevenueFetch {
   clinic_address: string;
@@ -14,14 +18,30 @@ interface ClinicsRevenueFetch {
   debit: number;
   revenue: number;
 }
-
-interface ClinicRevenueProps {
-  data: ClinicsRevenueFetch[];
-}
-const ClinicRevenue = (props: ClinicRevenueProps) => {
-  const { data } = props;
+const ClinicOrders = () => {
   const [chartType, setChartType] = useState<boolean>(true);
   const [tableType, setTableType] = useState<boolean>(false);
+
+  const [data, setData] = useState<ClinicsRevenueFetch[]>([]);
+  useEffect(() => {
+    const fetchClinicRevenue = async () => {
+      try {
+        const { clinicRevenue, errorClinicRevenue } = await getClinicRevenue(
+          temp
+        );
+        if (errorClinicRevenue) {
+          message.error('loi');
+          return;
+        }
+        if (clinicRevenue) {
+          setData(clinicRevenue);
+          console.log('clinicRevenue', clinicRevenue);
+        }
+      } finally {
+      }
+    };
+    fetchClinicRevenue();
+  }, []);
 
   const onClickChart = () => {
     setTableType(false);
@@ -36,8 +56,7 @@ const ClinicRevenue = (props: ClinicRevenueProps) => {
     <div className="p-[16px] flex flex-col gap-[16px] bg-white rounded-[8px]">
       <div className="flex items-center justify-between">
         <div className="text-[14px] font-[700] leading-[20px] tracking-[0.1px]">
-          Doanh thu theo chi nhánh
-          <span> {chartType ? '(Triệu đông)' : ''}</span>
+          Orders theo chi nhánh
         </div>
         <div className="flex gap-[8px]">
           <ButtonIcon
@@ -54,17 +73,15 @@ const ClinicRevenue = (props: ClinicRevenueProps) => {
       </div>
       {chartType == false ? (
         <div>
-          <TableClinicRevenue data={data} />
+          <TableClinicOrders />
         </div>
       ) : (
-        <>
-          <GraphClinicRevenue />
-        </>
+        <>okee</>
       )}
     </div>
   );
 };
 
-export default ClinicRevenue;
+export default ClinicOrders;
 
 export type { ClinicsRevenueFetch };

@@ -1,5 +1,8 @@
+import { Skeleton, message } from 'antd';
+import useFetchClinic from 'common/stores/clinics/clinic-revenue';
 import BoxButton from 'components/overall-statistics/box-button';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { supabase } from 'services/supabse';
 import { Header, Icon } from 'zmp-ui';
 const sections = [
   {
@@ -15,7 +18,7 @@ const sections = [
   {
     name: 'Orders & Bookings',
     icon: <Icon icon="zi-note" />,
-    link: '',
+    link: '/order-bookings',
   },
   {
     name: 'Khách hàng',
@@ -49,6 +52,29 @@ const sections = [
   },
 ];
 const OverallStatistics = () => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const { clinics, setClinics } = useFetchClinic();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const { data: allClinics, error: errClinics } = await supabase
+          .from('clinics')
+          .select('*');
+        if (errClinics) {
+          message.error(errClinics.message);
+          return;
+        }
+        if (allClinics) {
+          setClinics(allClinics);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData(); // Call the async function
+  }, []);
+
   return (
     <>
       <Header
@@ -56,7 +82,7 @@ const OverallStatistics = () => {
         showBackIcon={false}
         title="AURA MANAGER"
       />
-      <div className="p-[16px] flex items-center justify-center flex-wrap gap-[16px]">
+      <div className="p-[16px] w-full flex items-center justify-center flex-wrap gap-[16px]">
         {sections.map((section, index) => (
           <BoxButton
             key={index}

@@ -1,5 +1,6 @@
 import { Column } from '@ant-design/charts';
-import React from 'react';
+import useFetchClinic from 'common/stores/clinics/clinic-revenue';
+import React, { useEffect, useState } from 'react';
 const data = [
   {
     year: '1991',
@@ -92,17 +93,46 @@ const data = [
     type: 'Bor',
   },
 ];
+
+interface DataBarChart {
+  clinic: string;
+  value: number;
+  type: string;
+}
 const GraphClinicRevenue = () => {
+  const { clinics } = useFetchClinic();
+  const [data, setData] = useState<DataBarChart[]>([]);
+
+  useEffect(() => {
+    if (clinics) {
+      const dataClinicRevenue = clinics.map((clinic) => {
+        return {
+          clinic: clinic.clinic_name,
+          value: clinic.revenue / 1000000,
+          type: 'customer_paid',
+        };
+      });
+      const dataClinicDebit = clinics.map((clinic) => {
+        return {
+          clinic: clinic.clinic_name,
+          value: clinic.debit / 1000000,
+          type: 'debit',
+        };
+      });
+      const mergedData = [...dataClinicRevenue, ...dataClinicDebit];
+      setData(mergedData);
+    }
+  }, []);
   const config = {
     data,
     autoFit: true,
-    isStack: true,
-    xField: 'year',
+    isStack: false,
+    xField: 'clinic',
     yField: 'value',
     seriesField: 'type',
     label: {
       // 可手动配置 label 数据标签位置
-      position: 'middle', // 'top', 'bottom', 'middle'
+      position: 'top', // 'top', 'bottom', 'middle'
     },
     interactions: [
       {
@@ -119,7 +149,7 @@ const GraphClinicRevenue = () => {
 
   return (
     <>
-      <Column {...config} />
+      <Column {...(config as any)} />
     </>
   );
 };
