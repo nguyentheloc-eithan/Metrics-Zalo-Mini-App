@@ -1,26 +1,18 @@
 import React, { useEffect, useState } from 'react';
 
+import useFetchTopTenServices from 'common/stores/services/top-ten-services';
 import BulletPoint from 'components/button/BulletPoint';
 import BoxRow from 'components/overall-statistics/table/BoxCustomer';
-import useFetchClinicBookings from 'common/stores/clinics/clinic-bookings';
 
-const TableClinicBookings = () => {
-  const { clinicBookings } = useFetchClinicBookings();
+const TableTopTenServices = () => {
+  const { topTenServices } = useFetchTopTenServices();
 
   const [isAllBookings, setIsAllBookings] = useState<boolean>(true);
   const [isNew, setIsNew] = useState<boolean>(false);
   const [isOld, setIsOld] = useState<boolean>(false);
 
   const [data, setData] = useState<any>([]);
-  useEffect(() => {
-    const filterDataNoCLinicName = () => {
-      const dataNew = clinicBookings.filter((item: any) => {
-        return item.clinic_data.clinic_name;
-      });
-      setData(dataNew);
-    };
-    filterDataNoCLinicName();
-  }, [clinicBookings]);
+
   const handleClickBulletPoint = (type: string) => {
     if (type == 'allBookings') {
       if (isAllBookings) {
@@ -51,15 +43,16 @@ const TableClinicBookings = () => {
     }
   };
   return (
-    <div className="p-[16px] flex flex-col gap-[16px] bg-white rounded-[8px]">
+    <div className="p-[2px] flex flex-col gap-[16px] bg-white rounded-[8px]">
       <div>
         <div className="w-full bg-[#E9EBED] h-[36px] px-[12px] py-[8px] flex justify-between text-[10px] text-[#1F1F1F] font-[600] leading-[16px] tracking-[1.5px] items-center">
           <p>STT</p>
-          <p>Cơ sở</p>
-          <p className="w-[120px]">Tổng số bookings</p>
+          <p>Dịch vụ</p>
+          <p className="w-[12px]">doanh thu</p>
+          <p className="w-[]">% so tổng</p>
         </div>
         <div>
-          {data.map((clinic, index) => {
+          {topTenServices.map((service, index) => {
             return (
               <BoxRow
                 classNameStatistic={`${
@@ -70,19 +63,11 @@ const TableClinicBookings = () => {
                     : 'text-[#36383A]'
                 }`}
                 key={index}
-                avatar={clinic.clinic_data.clinic_avatar}
-                name={clinic.clinic_data.clinic_name}
+                avatar={service.service_image}
+                name={service.service_name}
                 index={index + 1}
-                money={
-                  isAllBookings
-                    ? clinic.clinic_data.new + clinic.clinic_data.old
-                    : isNew
-                    ? clinic.clinic_data.new
-                    : isOld
-                    ? clinic.clinic_data.old
-                    : clinic.clinic_data.new + clinic.clinic_data.old
-                }
-                currency={'bookings'}
+                money={service.revenue}
+                currency={'đ'}
               />
             );
           })}
@@ -117,4 +102,4 @@ const TableClinicBookings = () => {
   );
 };
 
-export default TableClinicBookings;
+export default TableTopTenServices;

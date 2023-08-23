@@ -52,7 +52,7 @@ const sections = [
         className="w-[24px] h-[24px]"
       />
     ),
-    link: '',
+    link: '/services',
   },
   {
     name: 'Sales report',
@@ -92,61 +92,6 @@ const OverallStatistics = () => {
     fetchData(); // Call the async function
   }, []);
 
-  useEffect(() => {
-    const fetchClinicOrders = async () => {
-      try {
-        setLoading(true);
-        const { dataClinicOrders, errorClinicOrders } = await getClinicOrders(
-          temp
-        );
-        if (errorClinicOrders) {
-          message.error(errorClinicOrders.message);
-          return;
-        }
-        if (dataClinicOrders) {
-          setClinicOrders(dataClinicOrders);
-        }
-      } finally {
-      }
-    };
-    fetchClinicOrders();
-  }, []);
-  useEffect(() => {
-    const fetchClinicCustomers = async () => {
-      try {
-        setLoading(true);
-        const { dataClinicBookings, errorClinicBookings } =
-          await getClinicBookings(temp);
-        if (errorClinicBookings) {
-          message.error(errorClinicBookings.message);
-          return;
-        }
-        if (dataClinicBookings) {
-          setClinicBookings(dataClinicBookings);
-        }
-      } finally {
-      }
-    };
-    fetchClinicCustomers();
-  }, []);
-  useEffect(() => {
-    const fetchClinicCustomers = async () => {
-      try {
-        setLoading(true);
-        const { dataCustomerByClinic, errorCustomerByClinic } =
-          await getCustomerByClinic(temp);
-        if (errorCustomerByClinic) {
-          message.error(errorCustomerByClinic.message);
-          return;
-        }
-        if (dataCustomerByClinic) {
-          setClinicCustomers(dataCustomerByClinic);
-        }
-      } finally {
-      }
-    };
-    fetchClinicCustomers();
-  }, []);
   return (
     <>
       <Header

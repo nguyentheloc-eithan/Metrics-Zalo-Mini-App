@@ -1,4 +1,3 @@
-import { ICustomer } from 'common/types/customer';
 import { create } from 'zustand';
 
 type State = {

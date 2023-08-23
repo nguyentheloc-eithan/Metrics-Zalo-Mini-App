@@ -7,16 +7,17 @@ interface BoxCustomerParams {
   avatar?: any;
   money?: any;
   currency: string;
+  classNameStatistic?: string;
 }
 const BoxRow = (props: BoxCustomerParams) => {
-  const { name, index, avatar, money, currency } = props;
+  const { name, index, avatar, money, currency, classNameStatistic } = props;
 
   return (
     <div
       className={`w-full h-[40px] flex items-center px-[12px] py-[8px] lex justify-around text-[10px] text-[#36383A] font-[400] leading-[16px] border-b-[0.5px] border-b-[#E9EBED]`}>
       <div>{index}</div>
       <div
-        className={`w-[142px] flex items-center  ${
+        className={`w-[122px] flex items-center  ${
           avatar ? 'justify-start ml-[10px]' : ''
         } gap-[6px]`}>
         {avatar ? (
@@ -27,7 +28,7 @@ const BoxRow = (props: BoxCustomerParams) => {
         ) : null}
         <div>{name}</div>
       </div>
-      <div className="w-[100px] flex justify-between">
+      <div className={`w-[100px] flex justify-between ${classNameStatistic}`}>
         <div>{formatMoney(money)}</div>
         <div>{currency}</div>
       </div>

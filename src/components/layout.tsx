@@ -12,6 +12,7 @@ import { getSystemInfo } from 'zmp-sdk';
 import OrderBookings from 'pages/order-bookings';
 import Developing from 'pages/developing';
 import Customers from 'pages/customers';
+import ServicesPage from 'pages/services';
 
 if (getSystemInfo().platform === 'android') {
   const androidSafeTop = Math.round(
@@ -44,6 +45,9 @@ export const Layout: FC = () => {
           <Route
             path="/revenue"
             element={<RevenuePage />}></Route>
+          <Route
+            path="/services"
+            element={<ServicesPage />}></Route>
           <Route
             path="/order-bookings"
             element={<OrderBookings />}></Route>

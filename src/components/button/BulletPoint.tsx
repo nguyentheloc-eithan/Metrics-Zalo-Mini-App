@@ -4,11 +4,14 @@ interface BulletPointProps {
   color?: string;
   text: string;
   enable: boolean;
+  onClick?: any;
 }
 const BulletPoint = (props: BulletPointProps) => {
-  const { color = '#36383A', text, enable } = props;
+  const { color = '#36383A', text, enable, onClick } = props;
   return (
-    <div className="flex gap-[8px] items-center w-fit h-[16px]">
+    <div
+      onClick={onClick}
+      className="flex gap-[8px] items-center w-fit h-[16px]">
       <div
         className="w-[10px] h-[10px] rounded-[50%] "
         style={{ backgroundColor: `${color}` }}></div>
