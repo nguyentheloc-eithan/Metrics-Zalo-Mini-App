@@ -1,32 +1,31 @@
 import React from 'react';
-
-import BulletPoint from 'components/button/BulletPoint';
 import BoxRow from 'components/overall-statistics/table/BoxCustomer';
+import useFetchClinicOrders from 'common/stores/clinics/clinic-orders';
 
 const clinics = [
   {
     clinic_name: 'Tên cơ sở',
-    revenue: '100.000',
+    revenue: 100000,
     clinic_avatar: '',
   },
   {
     clinic_name: 'Tên cơ sở',
-    revenue: '100.000',
+    revenue: 100000,
     clinic_avatar: '',
   },
   {
     clinic_name: 'Tên cơ sở',
-    revenue: '100.000',
+    revenue: 100000,
     clinic_avatar: '',
   },
   {
     clinic_name: 'Tên cơ sở',
-    revenue: '100.000',
+    revenue: 100000,
     clinic_avatar: '',
   },
   {
     clinic_name: 'Tên cơ sở',
-    revenue: '100.000',
+    revenue: 100000,
     clinic_avatar: '',
   },
 ];
@@ -35,7 +34,8 @@ const clinics = [
 //   data: ClinicsRevenueFetch[];
 // }
 const TableClinicOrders = () => {
-  //   const { data } = props;
+  const { clinicOrders } = useFetchClinicOrders();
+
   return (
     <div className="p-[16px] flex flex-col gap-[16px] bg-white rounded-[8px]">
       <div>
@@ -45,14 +45,14 @@ const TableClinicOrders = () => {
           <p className="w-[120px]">Tổng số orders</p>
         </div>
         <div>
-          {clinics.map((clinic, index) => {
+          {clinicOrders.map((clinic, index) => {
             return (
               <BoxRow
                 key={index}
-                avatar={clinic.clinic_avatar}
-                name={clinic.clinic_name}
+                avatar={clinic.clinic_data.clinic_avatar}
+                name={clinic.clinic_data.clinic_name}
                 index={index + 1}
-                money={clinic.revenue}
+                money={clinic.clinic_data.paid + clinic.clinic_data.unpaid}
                 currency={'orders'}
               />
             );

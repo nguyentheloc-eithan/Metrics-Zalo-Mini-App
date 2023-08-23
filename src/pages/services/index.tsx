@@ -1,9 +1,7 @@
 import useFetchClinicBookings from 'common/stores/clinics/clinic-bookings';
 import useFetchClinicOrders from 'common/stores/clinics/clinic-orders';
 import ButtonIcon from 'components/button/ButtonIcon';
-import ClinicBookings from 'components/order-bookings/clinic-bookings';
-import BoxSum from 'components/order-bookings/clinic-bookings/BoxSum';
-import ClinicOrders from 'components/order-bookings/clinic-orders';
+import CustomerClinics from 'components/customers/customer-clinics';
 
 import BoxStatistics from 'components/overall-statistics/box-statistics';
 
@@ -34,7 +32,7 @@ interface ClinicBookingsParams {
   new: number;
   old: number;
 }
-const OrderBookings = () => {
+const Customer = () => {
   const { clinicOrders } = useFetchClinicOrders();
   const { clinicBookings } = useFetchClinicBookings();
 
@@ -114,7 +112,7 @@ const OrderBookings = () => {
       <Header
         className="app-header no-border pl-4 flex-none pb-[6px] font-[500] leading-[26px] text-[20px] tracking-[0.15px]"
         showBackIcon={true}
-        title="Order & bookings"
+        title="Khách hàng"
       />
       <div className="flex flex-col p-[16px] gap-[16px] overflow-y-scroll">
         <div className="flex items-center justify-between">
@@ -135,48 +133,34 @@ const OrderBookings = () => {
           </div>
         </div>
         <div className="flex flex-col gap-[8px]">
-          <div className="flex gap-[8px]">
-            <BoxStatistics
-              title={'Tổng số order mới'}
-              number={totalOrders}
-              current={'orders'}
-            />
-            <BoxStatistics
-              title={'Có thanh toán'}
-              number={totalPaids}
-              current={'orders'}
-              colorNumber={'#5A68ED'}
-            />
-          </div>
+          <BoxStatistics
+            title={'Tổng số khách hiện tại'}
+            number={76000}
+            current={'khách'}
+          />
 
           <div className="flex gap-[8px]">
             <BoxStatistics
-              title={'Không có thanh toán'}
-              colorNumber={'#D8315B'}
-              number={totalUnpaids}
-              current={'orders'}
+              title={'Có số điện thoại'}
+              number={36000}
+              current={'khách'}
             />
             <BoxStatistics
-              title={'Upsale'}
-              number={0}
-              colorNumber={'#34B764'}
-              current={'orders'}
+              title={'Không có số điện thoại'}
+              number={2550}
+              colorNumber={'#5A68ED'}
+              current={'khách'}
             />
           </div>
         </div>
-        <ClinicOrders />
-        <BoxSum
-          title={'Tổng số bookings'}
-          number={totalBookings}
-          currency={'bookings'}
-        />
-        <ClinicBookings />
+
+        <CustomerClinics />
         {/* <TopSalers /> */}
       </div>
     </>
   );
 };
 
-export default OrderBookings;
+export default Customer;
 
 export type { DataCategories, DataServices };

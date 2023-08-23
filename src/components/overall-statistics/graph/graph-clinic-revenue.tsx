@@ -100,7 +100,7 @@ interface DataBarChart {
   type: string;
 }
 const GraphClinicRevenue = () => {
-  const { clinics } = useFetchClinic();
+  const { clinics, setClinics } = useFetchClinic();
   const [data, setData] = useState<DataBarChart[]>([]);
 
   useEffect(() => {
@@ -122,9 +122,8 @@ const GraphClinicRevenue = () => {
       const mergedData = [...dataClinicRevenue, ...dataClinicDebit];
       setData(mergedData);
     }
-  }, []);
+  }, [clinics]);
   const config = {
-    data,
     autoFit: true,
     isStack: false,
     xField: 'clinic',
@@ -148,9 +147,11 @@ const GraphClinicRevenue = () => {
   };
 
   return (
-    <>
-      <Column {...(config as any)} />
-    </>
+    <Column
+      {...(config as any)}
+      data={[...data]}
+      key={'graph-1'}
+    />
   );
 };
 

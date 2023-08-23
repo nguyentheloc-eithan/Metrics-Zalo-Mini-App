@@ -1,9 +1,8 @@
 import { useVirtualKeyboardVisible } from 'hooks';
 import React, { FC, useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router';
-import { MenuItem } from 'types/menu';
+
 import { BottomNavigation, Icon, useNavigate } from 'zmp-ui';
-import { CartIcon } from './cart-icon';
 
 const navItems = [
   {
@@ -12,13 +11,18 @@ const navItems = [
     icon: <Icon icon="zi-more-grid" />,
   },
   {
-    path: '/notification',
+    path: '/dev',
+    label: 'Khách',
+    icon: <Icon icon="zi-group" />,
+  },
+  {
+    path: '/dev',
     label: 'Thông báo',
     icon: <Icon icon="zi-notif" />,
   },
   {
-    path: '/aura',
-    label: 'Thẻ Aura',
+    path: '/dev',
+    label: 'Cá nhân',
     icon: <Icon icon="zi-user-circle" />,
   },
 ];

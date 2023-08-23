@@ -1,7 +1,16 @@
 import { Skeleton, message } from 'antd';
+import useFetchClinicBookings from 'common/stores/clinics/clinic-bookings';
+
+import useFetchClinicOrders from 'common/stores/clinics/clinic-orders';
 import useFetchClinic from 'common/stores/clinics/clinic-revenue';
+import useFetchClinicCustomers from 'common/stores/customers/customer-clinics';
+
 import BoxButton from 'components/overall-statistics/box-button';
 import React, { useEffect, useState } from 'react';
+import { getClinicBookings } from 'services/rpc/clinic-bookings';
+import { getClinicOrders } from 'services/rpc/clinic-orders';
+import { ExportParams } from 'services/rpc/clinic-revenue';
+import { getCustomerByClinic } from 'services/rpc/customers/customer-by-clinics';
 import { supabase } from 'services/supabse';
 import { Header, Icon } from 'zmp-ui';
 const sections = [
@@ -23,7 +32,7 @@ const sections = [
   {
     name: 'Khách hàng',
     icon: <Icon icon="zi-group" />,
-    link: '',
+    link: '/customers',
   },
   {
     name: 'Nhân viên',
@@ -51,9 +60,17 @@ const sections = [
     link: '',
   },
 ];
+const temp: ExportParams = {
+  start_date: '2023-01-01',
+  end_date: '2023-06-01',
+};
 const OverallStatistics = () => {
   const [loading, setLoading] = useState<boolean>(false);
-  const { clinics, setClinics } = useFetchClinic();
+  const { setClinics } = useFetchClinic();
+  const { setClinicOrders } = useFetchClinicOrders();
+  const { setClinicBookings } = useFetchClinicBookings();
+  const { setClinicCustomers } = useFetchClinicCustomers();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -75,6 +92,61 @@ const OverallStatistics = () => {
     fetchData(); // Call the async function
   }, []);
 
+  useEffect(() => {
+    const fetchClinicOrders = async () => {
+      try {
+        setLoading(true);
+        const { dataClinicOrders, errorClinicOrders } = await getClinicOrders(
+          temp
+        );
+        if (errorClinicOrders) {
+          message.error(errorClinicOrders.message);
+          return;
+        }
+        if (dataClinicOrders) {
+          setClinicOrders(dataClinicOrders);
+        }
+      } finally {
+      }
+    };
+    fetchClinicOrders();
+  }, []);
+  useEffect(() => {
+    const fetchClinicCustomers = async () => {
+      try {
+        setLoading(true);
+        const { dataClinicBookings, errorClinicBookings } =
+          await getClinicBookings(temp);
+        if (errorClinicBookings) {
+          message.error(errorClinicBookings.message);
+          return;
+        }
+        if (dataClinicBookings) {
+          setClinicBookings(dataClinicBookings);
+        }
+      } finally {
+      }
+    };
+    fetchClinicCustomers();
+  }, []);
+  useEffect(() => {
+    const fetchClinicCustomers = async () => {
+      try {
+        setLoading(true);
+        const { dataCustomerByClinic, errorCustomerByClinic } =
+          await getCustomerByClinic(temp);
+        if (errorCustomerByClinic) {
+          message.error(errorCustomerByClinic.message);
+          return;
+        }
+        if (dataCustomerByClinic) {
+          setClinicCustomers(dataCustomerByClinic);
+        }
+      } finally {
+      }
+    };
+    fetchClinicCustomers();
+  }, []);
   return (
     <>
       <Header

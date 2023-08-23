@@ -23,38 +23,6 @@ const GraphCategories = (props: GraphCategoriesProps) => {
   const { setTopCategories } = props;
   const [data, setData] = useState<DataCategories[]>([]);
 
-  const config = {
-    appendPadding: 10,
-    data,
-    angleField: 'value',
-    colorField: 'type',
-    radius: 0.9,
-    label: {
-      type: 'outer',
-      offset: '-30%',
-      content: ({ percent }) => `${(percent * 100).toFixed(0)}%`,
-      style: {
-        fontSize: 14,
-        textAlign: 'center',
-      },
-    },
-    interactions: [
-      {
-        type: 'element-active',
-      },
-    ],
-    color: ['#182CDC', '#3547E9', '#5A68ED', '#7E8AF1', '#A3ABF5', '#C8CDF9'],
-    legend: {
-      title: {
-        text: 'Top 5 danh mục',
-        style: {
-          fontSize: 12,
-          fontWeight: 600,
-        },
-      },
-    },
-  };
-
   const temp: ExportCategoriesParams = {
     start_date: '2023-01-01',
     end_date: '2023-06-01',
@@ -68,7 +36,7 @@ const GraphCategories = (props: GraphCategoriesProps) => {
         );
         if (dataCategories) {
           const top5categories: DataCategoriesFetch[] = take(dataCategories, 5);
-          const totalOrderCategory: number = dataCategories.reduce(
+          const totalRevenueCategory: number = dataCategories.reduce(
             (prev: any, cur: any) => prev + cur.revenue,
             0
           );
@@ -76,11 +44,15 @@ const GraphCategories = (props: GraphCategoriesProps) => {
             (item) => {
               return {
                 type: item.category_name,
-                value: Math.floor((item.revenue / totalOrderCategory) * 100),
+                value:
+                  Math.floor(
+                    ((item.revenue * 100) / totalRevenueCategory) * 100
+                  ) / 100,
                 revenue: item.revenue,
               };
             }
           );
+
           setTopCategories(formatTop5categories);
           setData(formatTop5categories);
         }
@@ -94,6 +66,37 @@ const GraphCategories = (props: GraphCategoriesProps) => {
     fetchCatagoriesData();
   }, []);
 
+  const config = {
+    appendPadding: 10,
+    data: [...data],
+    angleField: 'value',
+    colorField: 'type',
+    radius: 0.9,
+    label: {
+      type: 'inner',
+      offset: '-30%',
+      content: ({ percent }) => `${(percent * 100).toFixed(2)}%`,
+      style: {
+        fontSize: 14,
+        textAlign: 'center',
+      },
+    },
+    interactions: [
+      {
+        type: 'element-active',
+      },
+    ],
+    color: ['#182CDC', '#3547E9', '#5A68ED', '#7E8AF1', '#A3ABF5', '#C8CDF9'],
+    legend: {
+      title: {
+        text: 'Top 5 D.Mục',
+        style: {
+          fontSize: 12,
+          fontWeight: 600,
+        },
+      },
+    },
+  };
   return (
     <>
       <Pie {...(config as any)} />

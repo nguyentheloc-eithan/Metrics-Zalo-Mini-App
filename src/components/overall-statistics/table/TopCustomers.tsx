@@ -17,8 +17,8 @@ const TopCustomers = (props: TopCustomerProps) => {
       setTop5Customers(customersFilter);
     };
     filterTop5Customer();
-  }, []);
-  console.log(top5Customers);
+  }, [customers]);
+
   return (
     <div className="p-[16px] flex flex-col gap-[16px] bg-white rounded-[8px]">
       <div className="text-[14px] font-[700] leading-[20px] tracking-[0.1px]">

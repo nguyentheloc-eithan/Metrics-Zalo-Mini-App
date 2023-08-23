@@ -1,6 +1,7 @@
 import { message } from 'antd';
 import useFetchClinic from 'common/stores/clinics/clinic-revenue';
-import useFetchCustomers from 'common/stores/customers/customer';
+import useFetchCustomers from 'common/stores/customers/customers';
+
 import ButtonIcon from 'components/button/ButtonIcon';
 import ClinicRevenue, {
   ClinicsRevenueFetch,
@@ -20,13 +21,13 @@ import { Header } from 'zmp-ui';
 const dateRanges = ['Hôm nay', 'Tuần này', 'Tháng này'];
 interface DataCategories {
   type: string;
-  value: number;
+  value: any;
   revenue: number;
 }
 interface DataServices {
-  value: number;
+  value: any;
   type: string;
-  revenue: number;
+  revenue: any;
   service_image: string;
   customer_paid: number;
   debit: number;
@@ -38,6 +39,7 @@ const temp: ExportParams = {
 
 const RevenuePage = () => {
   const { clinics, setClinics } = useFetchClinic();
+
   const { customers, setCustomers } = useFetchCustomers();
   const [totalRevenue, setTotalRevenue] = useState<string>('');
   const [totalCustomerPaid, setTotalCustomerPaid] = useState<string>('');
@@ -55,6 +57,7 @@ const RevenuePage = () => {
           return;
         }
         if (clinicRevenue) {
+          console.log('clinicRevenue', clinicRevenue);
           setClinics(clinicRevenue);
           const revenue = clinicRevenue.reduce(
             (prev: any, cur: any) => prev + cur.revenue,
@@ -79,7 +82,6 @@ const RevenuePage = () => {
           if (dataCustomer) {
             setCustomers(dataCustomer);
           }
-          console.log('dataCustomer', clinics);
         }
       } finally {
       }
@@ -132,9 +134,9 @@ const RevenuePage = () => {
             />
           </div>
         </div>
-        <ClinicRevenue data={clinics} />
+        {clinics && <ClinicRevenue data={[...clinics]} />}
         <ServiceRevenue />
-        <TopCustomers customers={customers} />
+        <TopCustomers customers={[...customers]} />
         {/* <TopSalers /> */}
       </div>
     </>

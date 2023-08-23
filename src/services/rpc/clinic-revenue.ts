@@ -14,7 +14,7 @@ const getClinicRevenue = async (params: ExportParams) => {
     'total_statistic_by_clinic',
     rpcParams
   );
-  console.log(clinicRevenue);
+
   return { clinicRevenue, errorClinicRevenue };
 };
 

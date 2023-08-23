@@ -43,6 +43,8 @@ const GraphServices = (props: GraphServicesProps) => {
                 value: Math.floor((item.revenue / totalRevenueService) * 100),
                 revenue: item.revenue,
                 service_image: item.service_image,
+                customer_paid: item.customer_paid,
+                debit: item.debit,
               };
             }
           );
@@ -68,7 +70,7 @@ const GraphServices = (props: GraphServicesProps) => {
     label: {
       type: 'inner',
       offset: '-30%',
-      content: ({ percent }) => `${(percent * 100).toFixed(0)}%`,
+      content: ({ percent }) => `${(percent * 100).toFixed(2)}%`,
       style: {
         fontSize: 14,
         textAlign: 'center',

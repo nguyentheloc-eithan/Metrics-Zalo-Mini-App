@@ -10,6 +10,8 @@ import OverallStatistics from 'pages/index/overal-statistics';
 import RevenuePage from 'pages/revenue';
 import { getSystemInfo } from 'zmp-sdk';
 import OrderBookings from 'pages/order-bookings';
+import Developing from 'pages/developing';
+import Customers from 'pages/customers';
 
 if (getSystemInfo().platform === 'android') {
   const androidSafeTop = Math.round(
@@ -34,6 +36,9 @@ export const Layout: FC = () => {
             path="/"
             element={<HomePage />}></Route>
           <Route
+            path="/dev"
+            element={<Developing />}></Route>
+          <Route
             path="/overall-statistics"
             element={<OverallStatistics />}></Route>
           <Route
@@ -42,6 +47,9 @@ export const Layout: FC = () => {
           <Route
             path="/order-bookings"
             element={<OrderBookings />}></Route>
+          <Route
+            path="/customers"
+            element={<Customers />}></Route>
           <Route
             path="/profile"
             element={<ProfilePage />}></Route>

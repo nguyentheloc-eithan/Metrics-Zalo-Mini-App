@@ -20,6 +20,7 @@ interface ClinicRevenueProps {
 }
 const ClinicRevenue = (props: ClinicRevenueProps) => {
   const { data } = props;
+
   const [chartType, setChartType] = useState<boolean>(true);
   const [tableType, setTableType] = useState<boolean>(false);
 

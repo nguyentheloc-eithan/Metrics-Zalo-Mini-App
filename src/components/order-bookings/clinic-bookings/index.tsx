@@ -4,6 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { message } from 'antd';
 import { ExportParams, getClinicRevenue } from 'services/rpc/clinic-revenue';
 import TableClinicBookings from './TableClinicBookings';
+import useFetchClinic from 'common/stores/clinics/clinic-revenue';
+import useFetchClinicOrders from 'common/stores/clinics/clinic-orders';
+import GraphClinicBookings from './graph-clinic-bookings';
 
 const temp: ExportParams = {
   start_date: '2023-01-01',
@@ -21,8 +24,9 @@ interface ClinicsRevenueFetch {
 const ClinicBookings = () => {
   const [chartType, setChartType] = useState<boolean>(true);
   const [tableType, setTableType] = useState<boolean>(false);
-
+  const { clinics } = useFetchClinic();
   const [data, setData] = useState<ClinicsRevenueFetch[]>([]);
+
   useEffect(() => {
     const fetchClinicRevenue = async () => {
       try {
@@ -35,7 +39,6 @@ const ClinicBookings = () => {
         }
         if (clinicRevenue) {
           setData(clinicRevenue);
-          console.log('clinicRevenue', clinicRevenue);
         }
       } finally {
       }
@@ -76,7 +79,7 @@ const ClinicBookings = () => {
           <TableClinicBookings />
         </div>
       ) : (
-        <>okee</>
+        <GraphClinicBookings />
       )}
     </div>
   );
