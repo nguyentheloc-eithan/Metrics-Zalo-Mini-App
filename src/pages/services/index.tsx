@@ -1,22 +1,28 @@
 import { message } from 'antd';
 import useFetchClinicCustomers from 'common/stores/customers/customer-clinics';
 import useDateFilter from 'common/stores/date-filter';
+import useFetchTopServiceBookings from 'common/stores/services/service-bookings';
+import useFetchServicesRevenue from 'common/stores/services/service-revenue';
 import useFetchTopTenServices from 'common/stores/services/top-ten-services';
 import ButtonIcon from 'components/button/ButtonIcon';
 
 import BoxStatistics from 'components/overall-statistics/box-statistics';
+import TopServiceBookings from 'components/services/top-service-bookings';
 import TopServices from 'components/services/top-services';
 import dayjs from 'dayjs';
 import { take } from 'lodash';
 
 import React, { useEffect, useState } from 'react';
 import { ExportParams } from 'services/rpc/clinic-revenue';
-import { getTopServices } from 'services/rpc/top-services';
+import {
+  getTopServiceBookings,
+  getTopServices,
+} from 'services/rpc/top-services';
 import { dateRangeOptions } from 'utils/date-data-filter';
+import { temp } from 'utils/date-params-default';
 import { formatMoney } from 'utils/money-format';
 import { Header } from 'zmp-ui';
 
-const dateRanges = ['Hôm nay', 'Tuần này', 'Tháng này'];
 interface DataCategories {
   type: string;
   value: number;
@@ -28,29 +34,22 @@ interface DataServices {
   revenue: number;
   service_image: string;
 }
-interface ClinicOrdersParams {
-  orders: any;
-  paid: number;
-  unpaid: number;
-  upsale: number;
-}
-interface ClinicBookingsParams {
-  clinic_name: string;
-  new: number;
-  old: number;
-}
-const temp: ExportParams = {
-  start_date: '2023-01-01',
-  end_date: '2023-06-01',
-};
 
 const ServicesPage = () => {
   const { setTopTenServices } = useFetchTopTenServices();
+  const {
+    setServicesRevenue,
+    setSumServiceRevenue,
+    setSumServiceCustomerPaid,
+    setSumServiceDebit,
+    setSumServiceTotalBookings,
+  } = useFetchServicesRevenue();
   const [allRevenueServices, setAllRevenueServices] = useState<string>('');
   const [realRevenue, setRealRevenue] = useState<string>('');
   const [allDebit, setAllDebit] = useState<string>('');
+  const { setTopServiceBookings } = useFetchTopServiceBookings();
 
-  const [indexSelect, setIndexSelect] = useState<any>();
+  const [indexSelect, setIndexSelect] = useState<any>(2);
 
   const { dateFilter, setDateFilter } = useDateFilter();
   const [date, setDate] = useState<ExportParams>(temp);
@@ -58,15 +57,24 @@ const ServicesPage = () => {
   useEffect(() => {
     const fetchTopTenServices = async () => {
       try {
-        const { dataServices, errorServices } = await getTopServices(temp);
+        const { dataServiceBookings, errorServiceBookings } =
+          await getTopServiceBookings(date);
+        if (errorServiceBookings) {
+          message.error(errorServiceBookings.message);
+          return;
+        }
+        if (dataServiceBookings) {
+          setTopServiceBookings(dataServiceBookings);
+        }
+        const { dataServices, errorServices } = await getTopServices(date);
         if (errorServices) {
           message.error(errorServices.message);
           return;
         }
         if (dataServices) {
-          console.log('dataCustomerByClinic', take(dataServices, 10));
+          //TODO: Trash code => need to reduce at next time.
+          setServicesRevenue(dataServices);
           const setTop10 = take(dataServices, 10);
-
           const revenue = formatMoney(
             dataServices.reduce((prev: any, cur: any) => prev + cur.revenue, 0)
           );
@@ -79,17 +87,37 @@ const ServicesPage = () => {
           const sum_debit = formatMoney(
             dataServices.reduce((prev: any, cur: any) => prev + cur.debit, 0)
           );
-          console.log('sumRevenueFromService', revenue);
+          const revenueSum = dataServices.reduce(
+            (prev: any, cur: any) => prev + cur.revenue,
+            0
+          );
+          const debitSum = dataServices.reduce(
+            (prev: any, cur: any) => prev + cur.debit,
+            0
+          );
+          const totalBookingsSum = dataServices.reduce(
+            (prev: any, cur: any) => prev + cur.total,
+            0
+          );
+          const customerPaidSum = dataServices.reduce(
+            (prev: any, cur: any) => prev + cur.customer_paid,
+            0
+          );
+          setSumServiceCustomerPaid(customerPaidSum);
+          setSumServiceDebit(debitSum);
+          setSumServiceTotalBookings(totalBookingsSum);
+          setSumServiceRevenue(revenueSum);
           setAllDebit(sum_debit);
           setRealRevenue(sum_customer_paid);
           setAllRevenueServices(revenue);
           setTopTenServices(setTop10);
+          /*** fetch services have most bookings **/
         }
       } finally {
       }
     };
     fetchTopTenServices();
-  }, []);
+  }, [dateFilter]);
 
   const handleOnclickRange = (index: number, value: string) => {
     if (index == indexSelect) {
@@ -204,6 +232,7 @@ const ServicesPage = () => {
           </div>
         </div>
         <TopServices />
+        <TopServiceBookings />
         {/* <TopSalers /> */}
       </div>
     </>

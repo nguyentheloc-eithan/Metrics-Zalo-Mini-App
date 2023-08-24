@@ -13,6 +13,7 @@ import OrderBookings from 'pages/order-bookings';
 import Developing from 'pages/developing';
 import Customers from 'pages/customers';
 import ServicesPage from 'pages/services';
+import StaffsPage from 'pages/staffs';
 
 if (getSystemInfo().platform === 'android') {
   const androidSafeTop = Math.round(
@@ -42,6 +43,9 @@ export const Layout: FC = () => {
           <Route
             path="/overall-statistics"
             element={<OverallStatistics />}></Route>
+          <Route
+            path="/staffs"
+            element={<StaffsPage />}></Route>
           <Route
             path="/revenue"
             element={<RevenuePage />}></Route>

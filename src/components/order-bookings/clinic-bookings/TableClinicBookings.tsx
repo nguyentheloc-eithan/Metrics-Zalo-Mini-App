@@ -94,6 +94,7 @@ const TableClinicBookings = () => {
             handleClickBulletPoint('allBookings');
           }}
           text={'Tổng số bookings'}
+          color={isAllBookings ? '#36383A' : '#D6D9DC'}
           enable={isAllBookings}
         />
         <BulletPoint
@@ -101,7 +102,7 @@ const TableClinicBookings = () => {
             handleClickBulletPoint('new');
           }}
           text={'Mới'}
-          color={'#A3ABF5'}
+          color={isNew ? '#5A68ED' : '#A3ABF5'}
           enable={isNew}
         />
         <BulletPoint
@@ -109,7 +110,7 @@ const TableClinicBookings = () => {
           onClick={() => {
             handleClickBulletPoint('old');
           }}
-          color={'#F2BBC9'}
+          color={isOld ? '#D8315B' : '#F2BBC9'}
           enable={isOld}
         />
       </div>

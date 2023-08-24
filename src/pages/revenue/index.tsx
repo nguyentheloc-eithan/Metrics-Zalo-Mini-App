@@ -14,6 +14,7 @@ import React, { useEffect, useState } from 'react';
 import { ExportParams, getClinicRevenue } from 'services/rpc/clinic-revenue';
 import { getTopCustomer } from 'services/rpc/top-customer';
 import { dateRangeOptions } from 'utils/date-data-filter';
+import { temp } from 'utils/date-params-default';
 import { formatMoney } from 'utils/money-format';
 
 import { DatePicker, Header } from 'zmp-ui';
@@ -31,10 +32,6 @@ interface DataServices {
   customer_paid: number;
   debit: number;
 }
-const temp: ExportParams = {
-  start_date: '2023-01-01',
-  end_date: '2023-06-01',
-};
 
 const RevenuePage = () => {
   const { clinics, setClinics } = useFetchClinic();
@@ -45,7 +42,7 @@ const RevenuePage = () => {
   const [totalRevenue, setTotalRevenue] = useState<string>('');
   const [totalCustomerPaid, setTotalCustomerPaid] = useState<string>('');
   const [totalDebit, setTotalDebit] = useState<string>('');
-  const [indexSelect, setIndexSelect] = useState<any>();
+  const [indexSelect, setIndexSelect] = useState<any>(2);
 
   const [datePickerEnable, setDatePickerEnable] = useState<boolean>(false);
 
@@ -116,6 +113,7 @@ const RevenuePage = () => {
           date
         );
         const { dataCustomer, errorCustomer } = await getTopCustomer(date);
+
         if (errorClinicRevenue) {
           message.error(errorClinicRevenue.message);
           return;

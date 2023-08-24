@@ -2,7 +2,7 @@ import { ICustomer } from 'common/types/customer';
 import { create } from 'zustand';
 
 type State = {
-  customers: ICustomer[];
+  customers: any;
 };
 
 type Action = {

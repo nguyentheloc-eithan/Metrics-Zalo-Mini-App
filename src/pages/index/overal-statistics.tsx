@@ -42,7 +42,7 @@ const sections = [
         className="w-[24px] h-[24px]"
       />
     ),
-    link: '',
+    link: '/staffs',
   },
   {
     name: 'Dịch vụ',
@@ -56,7 +56,7 @@ const sections = [
   },
   {
     name: 'Sales report',
-    icon: <Icon icon="zi-poll" />,
+    icon: <Icon icon="zi-poll-solid" />,
     link: '',
   },
 ];

@@ -29,9 +29,7 @@ const GraphClinicBookings = () => {
           type: 'old',
         };
       });
-      console.log('clinicBookings', clinicBookings);
 
-      console.log('formatDataOld', formatDataOld);
       const mergedData = [...formatDataNew, ...formatDataOld];
       setData(mergedData);
     }

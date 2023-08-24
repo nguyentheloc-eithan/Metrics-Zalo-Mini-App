@@ -4,27 +4,27 @@ import useFetchCustomers from 'common/stores/customers/customers';
 import BulletPoint from 'components/button/BulletPoint';
 import BoxRow from 'components/overall-statistics/table/BoxCustomer';
 
-const TableCustomerClinics = () => {
+const TableStaffStatistics = () => {
   const { customers } = useFetchCustomers();
 
-  const [isAllCustomers, setIsAllCustomers] = useState<boolean>(true);
-  const [isNewCustomers, setIsNewCustomers] = useState<boolean>(false);
+  const [isRight, setIsRight] = useState<boolean>(true);
+  const [isWrong, setIsWrong] = useState<boolean>(false);
 
   const handleClickBulletPoint = (type: string) => {
     if (type == 'allCustomers') {
-      if (isAllCustomers) {
-        setIsAllCustomers(false);
+      if (isRight) {
+        setIsRight(false);
       } else {
-        setIsAllCustomers(true);
-        setIsNewCustomers(false);
+        setIsRight(true);
+        setIsWrong(false);
       }
       return;
     } else if (type == 'newCustomers') {
-      if (isNewCustomers) {
-        setIsNewCustomers(false);
+      if (isWrong) {
+        setIsWrong(false);
       } else {
-        setIsNewCustomers(true);
-        setIsAllCustomers(false);
+        setIsWrong(true);
+        setIsRight(false);
       }
       return;
     }
@@ -35,27 +35,21 @@ const TableCustomerClinics = () => {
         <div className="w-full bg-[#E9EBED] h-[36px] px-[12px] py-[8px] flex justify-between text-[10px] text-[#1F1F1F] font-[600] leading-[16px] tracking-[1.5px] items-center">
           <p>STT</p>
           <p>Cơ sở</p>
-          <p className="w-[120px]">
-            {isAllCustomers ? 'Tổng số K.Hàng' : 'Khách hàng mới'}
-          </p>
+          <p className="w-[120px]">{isRight ? 'Tổng số K.Hàng' : 'Chấm sai'}</p>
         </div>
         <div>
           {customers.map((clinic, index) => {
             return (
               <BoxRow
                 classNameStatistic={`${
-                  isNewCustomers ? 'text-[#5A68ED]' : 'text-[#36383A]'
+                  isWrong ? 'text-[#5A68ED]' : 'text-[#36383A]'
                 }`}
                 key={index}
                 avatar={clinic.clinic_avatar}
                 name={clinic.clinic_name}
                 index={index + 1}
                 money={
-                  isAllCustomers
-                    ? clinic.total
-                    : isNewCustomers
-                    ? clinic.new
-                    : clinic.total
+                  isRight ? clinic.total : isWrong ? clinic.new : clinic.total
                 }
                 currency={'khách'}
               />
@@ -68,21 +62,26 @@ const TableCustomerClinics = () => {
           onClick={() => {
             handleClickBulletPoint('allCustomers');
           }}
-          text={'Tổng số khách'}
-          color={isAllCustomers ? '#36383A' : '#D6D9DC'}
-          enable={isAllCustomers}
+          text={'Chấm đúng'}
+          color={isRight ? '#34B764' : '#D1F5DE'}
+          enable={isRight}
         />
         <BulletPoint
           onClick={() => {
             handleClickBulletPoint('newCustomers');
           }}
-          text={'Khách mới'}
-          color={isNewCustomers ? '#5A68ED' : '#A3ABF5'}
-          enable={isNewCustomers}
+          text={'Chấm sai'}
+          color={isWrong ? '#5A68ED' : '#A3ABF5'}
+          enable={isWrong}
+        />
+        <BulletPoint
+          text={'Không chấm'}
+          color={isWrong ? '#D8315B' : '#F2BBC9'}
+          enable={isWrong}
         />
       </div>
     </div>
   );
 };
 
-export default TableCustomerClinics;
+export default TableStaffStatistics;

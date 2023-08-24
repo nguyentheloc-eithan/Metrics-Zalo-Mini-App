@@ -1,12 +1,12 @@
 import { Pie } from '@ant-design/charts';
 import { message } from 'antd';
+import dayjs from 'dayjs';
 import { take } from 'lodash';
 import { DataCategories } from 'pages/revenue';
 import React, { useEffect, useState } from 'react';
-import {
-  ExportCategoriesParams,
-  getTopCategories,
-} from 'services/rpc/top-categories';
+import { ExportParams } from 'services/rpc/clinic-revenue';
+import { getTopCategories } from 'services/rpc/top-categories';
+import { temp } from 'utils/date-params-default';
 
 interface DataCategoriesFetch {
   category_name: string;
@@ -22,11 +22,6 @@ interface GraphCategoriesProps {
 const GraphCategories = (props: GraphCategoriesProps) => {
   const { setTopCategories } = props;
   const [data, setData] = useState<DataCategories[]>([]);
-
-  const temp: ExportCategoriesParams = {
-    start_date: '2023-01-01',
-    end_date: '2023-06-01',
-  };
 
   useEffect(() => {
     const fetchCatagoriesData = async () => {

@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useFetchTopTenServices from 'common/stores/services/top-ten-services';
 import BulletPoint from 'components/button/BulletPoint';
-import RowBoxTopTenService from './RowBoxTopTenService';
-import useFetchServicesRevenue from 'common/stores/services/service-revenue';
 
-const TableTopTenServices = () => {
-  const { topTenServices } = useFetchTopTenServices();
+import useFetchServicesRevenue from 'common/stores/services/service-revenue';
+import RowBoxTopTenService from '../top-services/RowBoxTopTenService';
+import useFetchTopServiceBookings from 'common/stores/services/service-bookings';
+import { take } from 'lodash';
+
+const TableTopServiceBookings = () => {
+  const { topServiceBookings } = useFetchTopServiceBookings();
   const {
     sumServiceRevenue,
     sumServiceCustomerPaid,
@@ -14,9 +17,19 @@ const TableTopTenServices = () => {
   } = useFetchServicesRevenue();
 
   const [customerPaidFilter, setCustomerPaidFilter] = useState<boolean>(false);
-  const [revenueFilter, setRevenueFilter] = useState<boolean>(true);
+  const [revenueFilter, setRevenueFilter] = useState<boolean>(false);
   const [debitFilter, setDebitFilter] = useState<boolean>(false);
-  const [isBookings, setIsBookings] = useState<boolean>(false);
+  const [isBookings, setIsBookings] = useState<boolean>(true);
+
+  const [data, setData] = useState<any>([]);
+
+  useEffect(() => {
+    const filterTopTen = () => {
+      const topTen = take(topServiceBookings, 10);
+      setData(topTen);
+    };
+    filterTopTen();
+  }, [topServiceBookings]);
 
   const handleClickBulletPoint = (type: string) => {
     if (type == 'revenue') {
@@ -65,7 +78,7 @@ const TableTopTenServices = () => {
         <div className="w-full bg-[#E9EBED] h-[36px] px-[12px] py-[8px] flex  text-[10px] text-[#1F1F1F] font-[600] leading-[16px] tracking-[1.5px] items-center">
           <p>STT</p>
           <p className="w-[80px] ml-[15px]">Dịch vụ</p>
-          <p className="w-[100px] ml-[70px]">
+          <p className="w-[100px] ml-[60px]">
             {revenueFilter
               ? 'Doanh thu'
               : debitFilter
@@ -74,12 +87,12 @@ const TableTopTenServices = () => {
               ? 'Thực thu'
               : isBookings
               ? 'Số bookings'
-              : 'Doanh thu'}
+              : 'Số bookings'}
           </p>
-          <p className="w-[90px] ml-[5px]">% so tổng</p>
+          <p className="w-[80px] ml-[15px]">% so tổng</p>
         </div>
         <div>
-          {topTenServices.map((service, index) => {
+          {data.map((service, index) => {
             return (
               <RowBoxTopTenService
                 classNameStatistic={`${
@@ -104,9 +117,9 @@ const TableTopTenServices = () => {
                     ? service.debit
                     : isBookings
                     ? service.total
-                    : service.revenue
+                    : service.total
                 }
-                currency={isBookings ? 'booking' : 'đ'}
+                currency={isBookings ? 'bookings' : 'đ'}
                 percentage={
                   revenueFilter
                     ? ((service.revenue / sumServiceRevenue) * 100).toFixed(2)
@@ -129,6 +142,14 @@ const TableTopTenServices = () => {
         </div>
       </div>
       <div className="mt-[16px] flex flex-wrap gap-[16px]">
+        <BulletPoint
+          text={'Bookings'}
+          color={isBookings ? '#34B764' : '#D1F5DE'}
+          enable={isBookings}
+          onClick={() => {
+            handleClickBulletPoint('bookings');
+          }}
+        />
         <BulletPoint
           text={'Doanh thu'}
           color={revenueFilter ? '#36383A' : '#D6D9DC'}
@@ -153,17 +174,9 @@ const TableTopTenServices = () => {
             handleClickBulletPoint('debit');
           }}
         />
-        <BulletPoint
-          text={'Bookings'}
-          color={isBookings ? '#34B764' : '#D1F5DE'}
-          enable={isBookings}
-          onClick={() => {
-            handleClickBulletPoint('bookings');
-          }}
-        />
       </div>
     </div>
   );
 };
 
-export default TableTopTenServices;
+export default TableTopServiceBookings;

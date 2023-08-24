@@ -2,6 +2,7 @@ import { message } from 'antd';
 import useFetchClinicBookings from 'common/stores/clinics/clinic-bookings';
 import useFetchClinicOrders from 'common/stores/clinics/clinic-orders';
 import useDateFilter from 'common/stores/date-filter';
+import useFetchTopServiceBookings from 'common/stores/services/service-bookings';
 import ButtonIcon from 'components/button/ButtonIcon';
 import ClinicBookings from 'components/order-bookings/clinic-bookings';
 import BoxSum from 'components/order-bookings/clinic-bookings/BoxSum';
@@ -14,10 +15,10 @@ import React, { useEffect, useState } from 'react';
 import { getClinicBookings } from 'services/rpc/clinic-bookings';
 import { getClinicOrders } from 'services/rpc/clinic-orders';
 import { ExportParams } from 'services/rpc/clinic-revenue';
+import { getTopServiceBookings } from 'services/rpc/top-services';
 import { dateRangeOptions } from 'utils/date-data-filter';
 import { Header } from 'zmp-ui';
 
-const dateRanges = ['Hôm nay', 'Tuần này', 'Tháng này'];
 interface DataCategories {
   type: string;
   value: number;
@@ -46,9 +47,9 @@ const temp: ExportParams = {
   end_date: '2023-06-01',
 };
 const OrderBookings = () => {
-  const { clinicOrders, setClinicOrders } = useFetchClinicOrders();
-  const { clinicBookings, setClinicBookings } = useFetchClinicBookings();
-  const { dateFilter, setDateFilter } = useDateFilter();
+  const { setClinicOrders } = useFetchClinicOrders();
+  const { setClinicBookings } = useFetchClinicBookings();
+  const { setDateFilter } = useDateFilter();
 
   const [totalOrders, setTotalOrders] = useState<number>();
   const [totalPaids, setTotalPaids] = useState<number>();
@@ -57,7 +58,7 @@ const OrderBookings = () => {
   const [totalBookings, setTotalBookings] = useState<number>(0);
 
   const [date, setDate] = useState<ExportParams>(temp);
-  const [indexSelect, setIndexSelect] = useState<any>();
+  const [indexSelect, setIndexSelect] = useState<any>(2);
 
   const handleOnclickRange = (index: number, value: string) => {
     if (index == indexSelect) {
@@ -182,6 +183,7 @@ const OrderBookings = () => {
         if (dataClinicBookings) {
           setClinicBookings(dataClinicBookings);
         }
+
         const dataBookings: ClinicBookingsParams[] = dataClinicBookings.map(
           (item: any) => {
             return {

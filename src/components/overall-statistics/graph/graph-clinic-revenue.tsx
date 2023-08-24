@@ -109,14 +109,14 @@ const GraphClinicRevenue = () => {
         return {
           clinic: clinic.clinic_name,
           value: clinic.revenue / 1000000,
-          type: 'customer_paid',
+          type: 'Thực thu',
         };
       });
       const dataClinicDebit = clinics.map((clinic) => {
         return {
           clinic: clinic.clinic_name,
           value: clinic.debit / 1000000,
-          type: 'debit',
+          type: 'Công nợ',
         };
       });
       const mergedData = [...dataClinicRevenue, ...dataClinicDebit];
@@ -129,16 +129,17 @@ const GraphClinicRevenue = () => {
     xField: 'clinic',
     yField: 'value',
     seriesField: 'type',
-    label: {
-      // 可手动配置 label 数据标签位置
-      position: 'top', // 'top', 'bottom', 'middle'
-    },
+    // legend: false,
+    label: false,
     interactions: [
       {
         type: 'active-region',
         enable: false,
       },
     ],
+    xAxis: false,
+    yAxis: {},
+
     columnBackground: {
       style: {
         fill: 'rgba(0,0,0,0.1)',

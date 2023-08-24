@@ -28,12 +28,12 @@ const ServiceRevenue = () => {
         <div className="flex gap-[8px]">
           <ButtonIcon
             onClick={onClickTable}
-            icon={'zi-tune'}
+            icon={'zi-list-1'}
             active={tableType}
           />
           <ButtonIcon
             onClick={onClickChart}
-            icon={'zi-poll'}
+            icon={'zi-poll-solid'}
             active={chartType}
           />
         </div>
