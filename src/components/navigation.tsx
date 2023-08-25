@@ -46,6 +46,7 @@ export const Navigation: FC = () => {
   return (
     <>
       {location.pathname !== '/sale-report' &&
+        location.pathname !== '/' &&
         location.pathname !== '/staffs' &&
         location.pathname !== '/revenue' &&
         location.pathname !== '/services' &&

@@ -56,14 +56,11 @@ const sections = [
   },
   {
     name: 'Sales report',
-    icon: <Icon icon="zi-poll-solid" />,
+    icon: <Icon icon="zi-poll" />,
     link: '/sale-report',
   },
 ];
-const temp: ExportParams = {
-  start_date: '2023-01-01',
-  end_date: '2023-06-01',
-};
+
 const OverallStatistics = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { setClinics } = useFetchClinic();
