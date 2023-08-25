@@ -1,16 +1,9 @@
-import { Skeleton, message } from 'antd';
-import useFetchClinicBookings from 'common/stores/clinics/clinic-bookings';
+import { message } from 'antd';
 
-import useFetchClinicOrders from 'common/stores/clinics/clinic-orders';
 import useFetchClinic from 'common/stores/clinics/clinic-revenue';
-import useFetchClinicCustomers from 'common/stores/customers/customer-clinics';
 
 import BoxButton from 'components/overall-statistics/box-button';
 import React, { useEffect, useState } from 'react';
-import { getClinicBookings } from 'services/rpc/clinic-bookings';
-import { getClinicOrders } from 'services/rpc/clinic-orders';
-import { ExportParams } from 'services/rpc/clinic-revenue';
-import { getCustomerByClinic } from 'services/rpc/customers/customer-by-clinics';
 import { supabase } from 'services/supabse';
 import { Header, Icon } from 'zmp-ui';
 const sections = [

@@ -5,10 +5,10 @@ import useDateFilter from 'common/stores/date-filter';
 
 import ButtonIcon from 'components/button/ButtonIcon';
 import LoadingSquareSpin from 'components/loading';
+import ModalDatePicker from 'components/modals/ModalDatePicker';
 import ClinicRevenue from 'components/overall-statistics/ClinicRevenue';
 import ServiceRevenue from 'components/overall-statistics/ServiceRevenue';
 import BoxStatistics from 'components/overall-statistics/box-statistics';
-
 import TopCustomers from 'components/overall-statistics/table/TopCustomers';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
@@ -18,7 +18,7 @@ import { dateRangeOptions } from 'utils/date-data-filter';
 import { temp } from 'utils/date-params-default';
 import { formatMoney } from 'utils/money-format';
 
-import { DatePicker, Header } from 'zmp-ui';
+import { Header, Modal } from 'zmp-ui';
 
 interface DataCategories {
   type: string;
@@ -108,7 +108,23 @@ const RevenuePage = () => {
     setDate(dateNew);
     setDateFilter(dateNew);
   };
+  const onHandleFilterDate = (date_start: string, date_end: string) => {
+    const numericDateStart = parseInt(date_start.replace(/-/g, ''), 10);
+    const numericDateEnd = parseInt(date_end.replace(/-/g, ''), 10);
+    const check = numericDateEnd - numericDateStart;
+    if (check < 0) {
+      message.error('Chọn ngày kết thúc không hợp lệ');
+      return;
+    }
 
+    const dateNew: ExportParams = {
+      start_date: date_start,
+      end_date: date_end,
+    };
+    setDate(dateNew);
+    setDateFilter(dateNew);
+    setDatePickerEnable(false);
+  };
   useEffect(() => {
     const fetchClinicRevenue = async () => {
       try {
@@ -195,6 +211,12 @@ const RevenuePage = () => {
               />
             </div>
           </div>
+          {datePickerEnable && (
+            <ModalDatePicker
+              open={datePickerEnable}
+              onClose={onHandleFilterDate}
+            />
+          )}
           <div className="flex flex-col gap-[8px]">
             <BoxStatistics
               title={'Doanh Thu'}
