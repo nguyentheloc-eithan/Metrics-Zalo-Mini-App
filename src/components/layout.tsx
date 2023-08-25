@@ -14,16 +14,16 @@ import Developing from 'pages/developing';
 import Customers from 'pages/customers';
 import ServicesPage from 'pages/services';
 
-if (getSystemInfo().platform === 'android') {
-  const androidSafeTop = Math.round(
-    (window as any).ZaloJavaScriptInterface.getStatusBarHeight() /
-      window.devicePixelRatio
-  );
-  document.body.style.setProperty(
-    '--zaui-safe-area-inset-top',
-    `${androidSafeTop}px`
-  );
-}
+// if (getSystemInfo().platform === 'android') {
+//   const androidSafeTop = Math.round(
+//     (window as any).ZaloJavaScriptInterface.getStatusBarHeight() /
+//       window.devicePixelRatio
+//   );
+//   document.body.style.setProperty(
+//     '--zaui-safe-area-inset-top',
+//     `${androidSafeTop}px`
+//   );
+// }
 
 export const Layout: FC = () => {
   return (
