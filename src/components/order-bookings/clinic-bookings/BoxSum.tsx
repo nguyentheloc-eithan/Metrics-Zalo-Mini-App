@@ -2,7 +2,7 @@ import React from 'react';
 
 interface BoxSum {
   title: string;
-  number: number;
+  number: any;
   currency: string;
   colorNumber?: string;
 }

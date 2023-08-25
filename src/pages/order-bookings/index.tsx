@@ -3,6 +3,7 @@ import useFetchClinicBookings from 'common/stores/clinics/clinic-bookings';
 import useFetchClinicOrders from 'common/stores/clinics/clinic-orders';
 import useDateFilter from 'common/stores/date-filter';
 import ButtonIcon from 'components/button/ButtonIcon';
+import LoadingSquareSpin from 'components/loading';
 import ClinicBookings from 'components/order-bookings/clinic-bookings';
 import BoxSum from 'components/order-bookings/clinic-bookings/BoxSum';
 import ClinicOrders from 'components/order-bookings/clinic-orders';
@@ -15,9 +16,10 @@ import { getClinicBookings } from 'services/rpc/clinic-bookings';
 import { getClinicOrders } from 'services/rpc/clinic-orders';
 import { ExportParams } from 'services/rpc/clinic-revenue';
 import { dateRangeOptions } from 'utils/date-data-filter';
+import { temp } from 'utils/date-params-default';
+import { formatMoney } from 'utils/money-format';
 import { Header } from 'zmp-ui';
 
-const dateRanges = ['Hôm nay', 'Tuần này', 'Tháng này'];
 interface DataCategories {
   type: string;
   value: number;
@@ -41,23 +43,22 @@ interface ClinicBookingsParams {
   new: number;
   old: number;
 }
-const temp: ExportParams = {
-  start_date: '2023-01-01',
-  end_date: '2023-06-01',
-};
-const OrderBookings = () => {
-  const { clinicOrders, setClinicOrders } = useFetchClinicOrders();
-  const { clinicBookings, setClinicBookings } = useFetchClinicBookings();
-  const { dateFilter, setDateFilter } = useDateFilter();
 
-  const [totalOrders, setTotalOrders] = useState<number>();
-  const [totalPaids, setTotalPaids] = useState<number>();
-  const [totalUnpaids, setTotalUnpaids] = useState<number>();
+const OrderBookings = () => {
+  const { setClinicOrders } = useFetchClinicOrders();
+  const { setClinicBookings } = useFetchClinicBookings();
+  const { setDateFilter } = useDateFilter();
+
+  const [totalOrders, setTotalOrders] = useState<number>(0);
+  const [totalPaids, setTotalPaids] = useState<number>(0);
+  const [totalUnpaids, setTotalUnpaids] = useState<number>(0);
   const [totalUpsales, setTotalUpsales] = useState<number>(0);
   const [totalBookings, setTotalBookings] = useState<number>(0);
 
+  const [loading, setLoading] = useState<boolean>(false);
+
   const [date, setDate] = useState<ExportParams>(temp);
-  const [indexSelect, setIndexSelect] = useState<any>();
+  const [indexSelect, setIndexSelect] = useState<any>(2);
 
   const handleOnclickRange = (index: number, value: string) => {
     if (index == indexSelect) {
@@ -75,9 +76,25 @@ const OrderBookings = () => {
       } else if (value == 'today') {
         console.log('today');
         todayStatistics();
+      } else if (value == 'yesterday') {
+        console.log('yesterday');
+        yesterdayFilter();
       }
     }
   };
+  const yesterdayFilter = () => {
+    const currentDate = new Date();
+    const previousDate = new Date(currentDate);
+    previousDate.setDate(currentDate.getDate() - 1);
+    const formatDate = dayjs(previousDate).format('YYYY-MM-DD');
+    const dateNew: ExportParams = {
+      start_date: formatDate,
+      end_date: formatDate,
+    };
+    setDate(dateNew);
+    setDateFilter(dateNew);
+  };
+
   const thisWeekStatistics = () => {
     const now = dayjs().format('YYYY-MM-DD');
     const currentDate = new Date();
@@ -122,6 +139,7 @@ const OrderBookings = () => {
   useEffect(() => {
     const fetchClinicOrders = async () => {
       try {
+        setLoading(true);
         const { dataClinicOrders, errorClinicOrders } = await getClinicOrders(
           date
         );
@@ -156,15 +174,22 @@ const OrderBookings = () => {
             (prev: any, cur: any) => prev + cur.upsale,
             0
           );
+          const statisticOrder = dataClinicOrders.sort(
+            (a, b) =>
+              b.clinic_data.paid +
+              b.clinic_data.unpaid -
+              (a.clinic_data.paid + a.clinic_data.unpaid)
+          );
 
           setTotalOrders(totalOrder);
           setTotalPaids(totalPaid);
           setTotalUnpaids(totalUnpaid);
 
           setTotalUpsales(totalUpsale);
-          setClinicOrders(dataClinicOrders);
+          setClinicOrders(statisticOrder);
         }
       } finally {
+        setLoading(false);
       }
     };
     fetchClinicOrders();
@@ -173,6 +198,7 @@ const OrderBookings = () => {
   useEffect(() => {
     const filterStatisticBookings = async () => {
       try {
+        setLoading(true);
         const { dataClinicBookings, errorClinicBookings } =
           await getClinicBookings(date);
         if (errorClinicBookings) {
@@ -180,8 +206,16 @@ const OrderBookings = () => {
           return;
         }
         if (dataClinicBookings) {
-          setClinicBookings(dataClinicBookings);
+          const statisticOrder = dataClinicBookings.sort(
+            (a, b) =>
+              b.clinic_data.new +
+              b.clinic_data.old -
+              (a.clinic_data.new + a.clinic_data.old)
+          );
+
+          setClinicBookings(statisticOrder);
         }
+
         const dataBookings: ClinicBookingsParams[] = dataClinicBookings.map(
           (item: any) => {
             return {
@@ -199,6 +233,7 @@ const OrderBookings = () => {
         );
         setTotalBookings(sumBookings);
       } finally {
+        setLoading(false);
       }
     };
     filterStatisticBookings();
@@ -211,70 +246,74 @@ const OrderBookings = () => {
         showBackIcon={true}
         title="Order & bookings"
       />
-      <div className="flex flex-col p-[16px] gap-[16px] overflow-y-scroll">
-        <div className="flex items-center justify-between">
-          <div className="w-full flex gap-[5px]">
-            {dateRangeOptions.map((range, index) => {
-              return (
-                <div
-                  onClick={() => {
-                    handleOnclickRange(index, range.value);
-                  }}
-                  key={index}
-                  className={`${
-                    indexSelect == index
-                      ? 'bg-[#36383A] text-white'
-                      : 'bg-[white] text-[#36383A]'
-                  } rounded-[8px] text-[10px]  font-[400] leading-[16px] flex items-center justify-center w- h-[24px] px-[12px] py-[4px]`}>
-                  {range.title}
-                </div>
-              );
-            })}
+      {loading ? (
+        <LoadingSquareSpin />
+      ) : (
+        <div className="flex flex-col p-[16px] gap-[16px] overflow-y-scroll">
+          <div className="flex items-center justify-between">
+            <div className="w-full flex-wrap items-center justify-start flex gap-[5px]">
+              {dateRangeOptions.map((range, index) => {
+                return (
+                  <div
+                    onClick={() => {
+                      handleOnclickRange(index, range.value);
+                    }}
+                    key={index}
+                    className={`${
+                      indexSelect == index
+                        ? 'bg-[#36383A] text-white'
+                        : 'bg-[white] text-[#36383A]'
+                    } rounded-[8px] text-[10px]  font-[400] leading-[16px] flex items-center justify-center w- h-[24px] px-[12px] py-[4px]`}>
+                    {range.title}
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex gap-[8px]">
+              <ButtonIcon icon={'zi-location'} />
+              <ButtonIcon icon={'zi-calendar'} />
+            </div>
           </div>
-          <div className="flex gap-[8px]">
-            <ButtonIcon icon={'zi-location'} />
-            <ButtonIcon icon={'zi-calendar'} />
-          </div>
-        </div>
-        <div className="flex flex-col gap-[8px]">
-          <div className="flex gap-[8px]">
-            <BoxStatistics
-              title={'Tổng số order mới'}
-              number={totalOrders}
-              current={'orders'}
-            />
-            <BoxStatistics
-              title={'Có thanh toán'}
-              number={totalPaids}
-              current={'orders'}
-              colorNumber={'#5A68ED'}
-            />
-          </div>
+          <div className="flex flex-col gap-[8px]">
+            <div className="flex gap-[8px]">
+              <BoxStatistics
+                title={'Tổng số order mới'}
+                number={formatMoney(totalOrders)}
+                current={'orders'}
+              />
+              <BoxStatistics
+                title={'Có thanh toán'}
+                number={formatMoney(totalPaids)}
+                current={'orders'}
+                colorNumber={'#5A68ED'}
+              />
+            </div>
 
-          <div className="flex gap-[8px]">
-            <BoxStatistics
-              title={'Không có thanh toán'}
-              colorNumber={'#D8315B'}
-              number={totalUnpaids}
-              current={'orders'}
-            />
-            <BoxStatistics
-              title={'Upsale'}
-              number={0}
-              colorNumber={'#34B764'}
-              current={'orders'}
-            />
+            <div className="flex gap-[8px]">
+              <BoxStatistics
+                title={'Không có thanh toán'}
+                colorNumber={'#D8315B'}
+                number={formatMoney(totalUnpaids)}
+                current={'orders'}
+              />
+              <BoxStatistics
+                title={'Upsale'}
+                number={0}
+                colorNumber={'#34B764'}
+                current={'orders'}
+              />
+            </div>
           </div>
+          <ClinicOrders />
+          <BoxSum
+            title={'Tổng số bookings'}
+            number={formatMoney(totalBookings)}
+            currency={'bookings'}
+          />
+          <ClinicBookings />
+          {/* <TopSalers /> */}
         </div>
-        <ClinicOrders />
-        <BoxSum
-          title={'Tổng số bookings'}
-          number={totalBookings}
-          currency={'bookings'}
-        />
-        <ClinicBookings />
-        {/* <TopSalers /> */}
-      </div>
+      )}
     </>
   );
 };

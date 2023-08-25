@@ -11,6 +11,7 @@ interface DataClinicOrders {
 }
 const GraphClinicBookings = () => {
   const { clinicBookings } = useFetchClinicBookings();
+
   const [data, setData] = useState<DataClinicOrders[]>([]);
 
   useEffect(() => {
@@ -19,19 +20,17 @@ const GraphClinicBookings = () => {
         return {
           clinic_name: item.clinic_data.clinic_name,
           value: item.clinic_data.new,
-          type: 'new',
+          type: 'Mới',
         };
       });
       const formatDataOld = clinicBookings.map((item: any) => {
         return {
           clinic_name: item.clinic_data.clinic_name,
           value: item.clinic_data.old,
-          type: 'old',
+          type: 'Cũ',
         };
       });
-      console.log('clinicBookings', clinicBookings);
 
-      console.log('formatDataOld', formatDataOld);
       const mergedData = [...formatDataNew, ...formatDataOld];
       setData(mergedData);
     }
@@ -42,14 +41,11 @@ const GraphClinicBookings = () => {
     xField: 'clinic_name',
     yField: 'value',
     seriesField: 'type',
-    label: {
-      // 可手动配置 label 数据标签位置
-      position: 'top', // 'top', 'bottom', 'middle'
-    },
+    label: false,
     interactions: [
       {
         type: 'active-region',
-        enable: false,
+        enable: true,
       },
     ],
     columnBackground: {

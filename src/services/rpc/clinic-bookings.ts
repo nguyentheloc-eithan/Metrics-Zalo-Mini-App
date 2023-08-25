@@ -1,5 +1,3 @@
-// total_statistic_booking_clinic;
-// total_statistic_order_clinic;
 import { supabase } from 'services/supabse';
 
 interface ExportParams {

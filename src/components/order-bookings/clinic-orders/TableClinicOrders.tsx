@@ -5,7 +5,7 @@ import BulletPoint from 'components/button/BulletPoint';
 
 const TableClinicOrders = () => {
   const { clinicOrders } = useFetchClinicOrders();
-  console.log('clinicOrders', clinicOrders);
+
   const [paid, setPaid] = useState<boolean>(false);
   const [allOrders, setAllOrders] = useState<boolean>(true);
   const [unpaid, setUnpaid] = useState<boolean>(false);
@@ -99,6 +99,7 @@ const TableClinicOrders = () => {
             onClick={() => {
               handleClickBulletPoint('allOrders');
             }}
+            color={allOrders ? '#36383A' : '#D6D9DC'}
             text={'Tổng order mới'}
             enable={allOrders}
           />
@@ -107,7 +108,7 @@ const TableClinicOrders = () => {
               handleClickBulletPoint('paid');
             }}
             text={'Có thanh toán'}
-            color={'#A3ABF5'}
+            color={paid ? '#5A68ED' : '#A3ABF5'}
             enable={paid}
           />
           <BulletPoint
@@ -115,7 +116,7 @@ const TableClinicOrders = () => {
               handleClickBulletPoint('unpaid');
             }}
             text={'Không có thanh toán'}
-            color={'#F2BBC9'}
+            color={unpaid ? '#D8315B' : '#F2BBC9'}
             enable={unpaid}
           />
         </div>

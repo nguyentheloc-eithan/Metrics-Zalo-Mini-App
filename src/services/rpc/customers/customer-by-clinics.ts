@@ -18,4 +18,10 @@ const getCustomerByClinic = async (params: ExportParams) => {
   return { dataCustomerByClinic, errorCustomerByClinic };
 };
 
-export { getCustomerByClinic };
+const getCountUserPhone = async () => {
+  const { data: allUserHasPhone, error: errorAllUserHasPhone } =
+    await supabase.rpc('count_users_phone');
+  return { allUserHasPhone, errorAllUserHasPhone };
+};
+
+export { getCustomerByClinic, getCountUserPhone };

@@ -102,6 +102,7 @@ const TopCustomers = (props: TopCustomerProps) => {
         <div className="mt-[16px] flex gap-[16px]">
           <BulletPoint
             text={'Doanh thu'}
+            color={revenueFilter ? '#36383A' : '#D6D9DC'}
             enable={revenueFilter}
             onClick={() => {
               handleClickBulletPoint('revenue');
@@ -109,7 +110,7 @@ const TopCustomers = (props: TopCustomerProps) => {
           />
           <BulletPoint
             text={'Thực thu'}
-            color={'#A3ABF5'}
+            color={customerPaidFilter ? '#5A68ED' : '#A3ABF5'}
             enable={customerPaidFilter}
             onClick={() => {
               handleClickBulletPoint('customer_paid');
@@ -117,7 +118,7 @@ const TopCustomers = (props: TopCustomerProps) => {
           />
           <BulletPoint
             text={'Công nợ'}
-            color={'#F2BBC9'}
+            color={debitFilter ? '#D8315B' : '#F2BBC9'}
             enable={debitFilter}
             onClick={() => {
               handleClickBulletPoint('debit');

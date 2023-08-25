@@ -13,17 +13,11 @@ import OrderBookings from 'pages/order-bookings';
 import Developing from 'pages/developing';
 import Customers from 'pages/customers';
 import ServicesPage from 'pages/services';
-
-// if (getSystemInfo().platform === 'android') {
-//   const androidSafeTop = Math.round(
-//     (window as any).ZaloJavaScriptInterface.getStatusBarHeight() /
-//       window.devicePixelRatio
-//   );
-//   document.body.style.setProperty(
-//     '--zaui-safe-area-inset-top',
-//     `${androidSafeTop}px`
-//   );
-// }
+import StaffsPage from 'pages/staffs';
+import SaleReportPage from 'pages/sale-report';
+import Profile from 'pages/profile';
+import Notifications from 'pages/notification';
+import CustomersNav from 'pages/customers-nav';
 
 export const Layout: FC = () => {
   return (
@@ -37,11 +31,26 @@ export const Layout: FC = () => {
             path="/"
             element={<HomePage />}></Route>
           <Route
+            path="/profile"
+            element={<Profile />}></Route>
+          <Route
+            path="/notifications"
+            element={<Notifications />}></Route>
+          <Route
+            path="/customers-nav"
+            element={<CustomersNav />}></Route>
+          <Route
             path="/dev"
             element={<Developing />}></Route>
           <Route
+            path="/sale-report"
+            element={<SaleReportPage />}></Route>
+          <Route
             path="/overall-statistics"
             element={<OverallStatistics />}></Route>
+          <Route
+            path="/staffs"
+            element={<StaffsPage />}></Route>
           <Route
             path="/revenue"
             element={<RevenuePage />}></Route>

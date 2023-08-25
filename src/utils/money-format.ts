@@ -1,4 +1,4 @@
-export const formatMoney = (number: number, decimalSeparator: string = '.') => {
+const formatMoney = (number: number, decimalSeparator: string = '.') => {
   // Check if the input is a valid number
   if (isNaN(number)) {
     return 'Invalid Number';
@@ -13,3 +13,15 @@ export const formatMoney = (number: number, decimalSeparator: string = '.') => {
   // Join the integer part with the specified decimal separator
   return parts.join(decimalSeparator);
 };
+
+const convertVnd = (amount: number) => {
+  return new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  }).format(amount);
+};
+//300,000đ to 300000
+const convertVndToNumber = (value: string) => {
+  return parseInt(value.replace(/[^0-9]/g, ''));
+};
+export { convertVnd, convertVndToNumber, formatMoney };

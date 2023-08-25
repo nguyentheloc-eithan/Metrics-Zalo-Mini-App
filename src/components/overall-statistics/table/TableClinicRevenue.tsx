@@ -92,6 +92,7 @@ const TableClinicRevenue = (props: TableClinicRevenueProps) => {
             onClick={() => {
               handleClickBulletPoint('revenue');
             }}
+            color={revenueFilter ? '#36383A' : '#D6D9DC'}
             text={'Doanh thu'}
             enable={revenueFilter}
           />
@@ -100,7 +101,7 @@ const TableClinicRevenue = (props: TableClinicRevenueProps) => {
               handleClickBulletPoint('customer_paid');
             }}
             text={'Thực thu'}
-            color={'#A3ABF5'}
+            color={customerPaidFilter ? '#5A68ED' : '#A3ABF5'}
             enable={customerPaidFilter}
           />
           <BulletPoint
@@ -108,7 +109,7 @@ const TableClinicRevenue = (props: TableClinicRevenueProps) => {
               handleClickBulletPoint('debit');
             }}
             text={'Công nợ'}
-            color={'#F2BBC9'}
+            color={debitFilter ? '#D8315B' : '#F2BBC9'}
             enable={debitFilter}
           />
         </div>

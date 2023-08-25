@@ -42,7 +42,7 @@ const sections = [
         className="w-[24px] h-[24px]"
       />
     ),
-    link: '',
+    link: '/staffs',
   },
   {
     name: 'Dịch vụ',
@@ -57,19 +57,13 @@ const sections = [
   {
     name: 'Sales report',
     icon: <Icon icon="zi-poll" />,
-    link: '',
+    link: '/sale-report',
   },
 ];
-const temp: ExportParams = {
-  start_date: '2023-01-01',
-  end_date: '2023-06-01',
-};
+
 const OverallStatistics = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { setClinics } = useFetchClinic();
-  const { setClinicOrders } = useFetchClinicOrders();
-  const { setClinicBookings } = useFetchClinicBookings();
-  const { setClinicCustomers } = useFetchClinicCustomers();
 
   useEffect(() => {
     const fetchData = async () => {

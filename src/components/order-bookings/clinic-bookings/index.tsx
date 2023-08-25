@@ -1,17 +1,8 @@
 import ButtonIcon from 'components/button/ButtonIcon';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
-import { message } from 'antd';
-import { ExportParams, getClinicRevenue } from 'services/rpc/clinic-revenue';
 import TableClinicBookings from './TableClinicBookings';
-import useFetchClinic from 'common/stores/clinics/clinic-revenue';
-import useFetchClinicOrders from 'common/stores/clinics/clinic-orders';
 import GraphClinicBookings from './graph-clinic-bookings';
-
-const temp: ExportParams = {
-  start_date: '2023-01-01',
-  end_date: '2023-06-01',
-};
 
 interface ClinicsRevenueFetch {
   clinic_address: string;
@@ -24,27 +15,6 @@ interface ClinicsRevenueFetch {
 const ClinicBookings = () => {
   const [chartType, setChartType] = useState<boolean>(true);
   const [tableType, setTableType] = useState<boolean>(false);
-  const { clinics } = useFetchClinic();
-  const [data, setData] = useState<ClinicsRevenueFetch[]>([]);
-
-  useEffect(() => {
-    const fetchClinicRevenue = async () => {
-      try {
-        const { clinicRevenue, errorClinicRevenue } = await getClinicRevenue(
-          temp
-        );
-        if (errorClinicRevenue) {
-          message.error('loi');
-          return;
-        }
-        if (clinicRevenue) {
-          setData(clinicRevenue);
-        }
-      } finally {
-      }
-    };
-    fetchClinicRevenue();
-  }, []);
 
   const onClickChart = () => {
     setTableType(false);
@@ -64,12 +34,12 @@ const ClinicBookings = () => {
         <div className="flex gap-[8px]">
           <ButtonIcon
             onClick={onClickTable}
-            icon={'zi-tune'}
+            icon={'zi-list-1'}
             active={tableType}
           />
           <ButtonIcon
             onClick={onClickChart}
-            icon={'zi-poll'}
+            icon={'zi-poll-solid'}
             active={chartType}
           />
         </div>
