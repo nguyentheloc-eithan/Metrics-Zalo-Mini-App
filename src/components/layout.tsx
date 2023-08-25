@@ -15,6 +15,9 @@ import Customers from 'pages/customers';
 import ServicesPage from 'pages/services';
 import StaffsPage from 'pages/staffs';
 import SaleReportPage from 'pages/sale-report';
+import Profile from 'pages/profile';
+import Notifications from 'pages/notification';
+import CustomersNav from 'pages/customers-nav';
 
 if (getSystemInfo().platform === 'android') {
   const androidSafeTop = Math.round(
@@ -38,6 +41,15 @@ export const Layout: FC = () => {
           <Route
             path="/"
             element={<HomePage />}></Route>
+          <Route
+            path="/profile"
+            element={<Profile />}></Route>
+          <Route
+            path="/notifications"
+            element={<Notifications />}></Route>
+          <Route
+            path="/customers-nav"
+            element={<CustomersNav />}></Route>
           <Route
             path="/dev"
             element={<Developing />}></Route>

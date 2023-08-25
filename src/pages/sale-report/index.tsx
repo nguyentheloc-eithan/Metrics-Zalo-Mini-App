@@ -5,6 +5,10 @@ import ButtonIcon from 'components/button/ButtonIcon';
 import CustomerClinics from 'components/customers/customer-clinics';
 
 import BoxStatistics from 'components/overall-statistics/box-statistics';
+import TopSalers from 'components/overall-statistics/table/TopSalers';
+import AdsCustomerResources from 'components/sale-report/ads-customer-resources';
+import CheckInNew from 'components/sale-report/check-in-new';
+import CheckInResale from 'components/sale-report/check-in-resale';
 import dayjs from 'dayjs';
 
 import React, { useEffect, useState } from 'react';
@@ -26,7 +30,7 @@ const SaleReportPage = () => {
   const [totalUserPhones, setTotalUserPhones] = useState<number>(0);
   const { dateFilter, setDateFilter } = useDateFilter();
   const [date, setDate] = useState<ExportParams>(temp);
-  const [datePickerEnable, setDatePickerEnable] = useState<boolean>(false);
+  //   const [datePickerEnable, setDatePickerEnable] = useState<boolean>(false);
   const [indexSelect, setIndexSelect] = useState<any>(2);
   useEffect(() => {
     const fetchClinicOrdersStatistic = async () => {
@@ -48,7 +52,6 @@ const SaleReportPage = () => {
             (prev: any, cur: any) => prev + cur.total,
             0
           );
-
           setTotalCustomers(totalTotal);
           setTotalNewCustomers(totalNew);
           setTotalUserPhones(allUserHasPhone);
@@ -159,19 +162,22 @@ const SaleReportPage = () => {
           <div className="flex gap-[8px]">
             <BoxStatistics
               title={'Tổng check-in resale'}
+              colorNumber={'#5A68ED'}
               number={formatMoney(totalUserPhones)}
               current={'check-in'}
             />
             <BoxStatistics
-              title={'Tổng check-in mới'}
+              title={'Tổng check-in new'}
               number={formatMoney(totalNewCustomers)}
-              colorNumber={'#5A68ED'}
+              colorNumber={'#D8315B'}
               current={'check-in'}
             />
           </div>
         </div>
-
-        {/* <TopSalers /> */}
+        <CheckInResale />
+        <CheckInNew />
+        <AdsCustomerResources />
+        <TopSalers />
       </div>
     </>
   );

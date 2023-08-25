@@ -32,14 +32,14 @@ const GraphClinicOrders = () => {
         return {
           clinic_name: item.clinic_data.clinic_name,
           value: item.clinic_data.paid,
-          type: 'paid',
+          type: 'Đã thanh toán',
         };
       });
       const formatDataUnpaid = clinicOrders.map((item: any) => {
         return {
           clinic_name: item.clinic_data.clinic_name,
           value: item.clinic_data.unpaid,
-          type: 'unpaid',
+          type: 'Chưa thanh toán',
         };
       });
       const mergedData = [
@@ -56,10 +56,7 @@ const GraphClinicOrders = () => {
     xField: 'clinic_name',
     yField: 'value',
     seriesField: 'type',
-    label: {
-      // 可手动配置 label 数据标签位置
-      position: 'top', // 'top', 'bottom', 'middle'
-    },
+    label: false,
     interactions: [
       {
         type: 'active-region',

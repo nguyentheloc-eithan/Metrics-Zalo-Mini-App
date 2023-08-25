@@ -2,6 +2,7 @@ import { message } from 'antd';
 import useDateFilter from 'common/stores/date-filter';
 import useFetchStaffStatistics from 'common/stores/staffs/staff-statistics';
 import ButtonIcon from 'components/button/ButtonIcon';
+import LoadingSquareSpin from 'components/loading';
 
 import BoxStatistics from 'components/overall-statistics/box-statistics';
 import StaffStatistics from 'components/staffs';
@@ -29,9 +30,13 @@ const StaffsPage = () => {
   const [date, setDate] = useState<ExportParams>(temp);
   const [datePickerEnable, setDatePickerEnable] = useState<boolean>(false);
   const [indexSelect, setIndexSelect] = useState<any>(2);
+
+  const [loading, setLoading] = useState<boolean>(false);
+
   useEffect(() => {
     const fetchClinicOrdersStatistic = async () => {
       try {
+        setLoading(true);
         const { allStaffStatistics, errorAllStaffStatistics } =
           await getStaffStatistics(date);
         if (errorAllStaffStatistics) {
@@ -63,6 +68,7 @@ const StaffsPage = () => {
         console.log('allStaffStatistics', allStaffStatistics);
         console.log('allStaffAttendance', allStaffAttendance);
       } finally {
+        setLoading(false);
       }
     };
     fetchClinicOrdersStatistic();
@@ -133,57 +139,61 @@ const StaffsPage = () => {
         showBackIcon={true}
         title="Nhân viên"
       />
-      <div className="flex flex-col p-[16px] gap-[16px] overflow-y-scroll">
-        <div className="flex items-center justify-between">
-          <div className="w-full flex gap-[5px]">
-            {dateRangeOptions.map((range, index) => {
-              return (
-                <div
-                  onClick={() => {
-                    handleOnclickRange(index, range.value);
-                  }}
-                  key={index}
-                  className={`${
-                    indexSelect == index
-                      ? 'bg-[#36383A] text-white'
-                      : 'bg-[white] text-[#36383A]'
-                  } rounded-[8px] text-[10px]  font-[400] leading-[16px] flex items-center justify-center w- h-[24px] px-[12px] py-[4px]`}>
-                  {range.title}
-                </div>
-              );
-            })}
+      {loading ? (
+        <LoadingSquareSpin />
+      ) : (
+        <div className="flex flex-col p-[16px] gap-[16px] overflow-y-scroll">
+          <div className="flex items-center justify-between">
+            <div className="w-full flex gap-[5px]">
+              {dateRangeOptions.map((range, index) => {
+                return (
+                  <div
+                    onClick={() => {
+                      handleOnclickRange(index, range.value);
+                    }}
+                    key={index}
+                    className={`${
+                      indexSelect == index
+                        ? 'bg-[#36383A] text-white'
+                        : 'bg-[white] text-[#36383A]'
+                    } rounded-[8px] text-[10px]  font-[400] leading-[16px] flex items-center justify-center w- h-[24px] px-[12px] py-[4px]`}>
+                    {range.title}
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex gap-[8px]">
+              <ButtonIcon icon={'zi-location'} />
+              <ButtonIcon icon={'zi-calendar'} />
+            </div>
           </div>
-          <div className="flex gap-[8px]">
-            <ButtonIcon icon={'zi-location'} />
-            <ButtonIcon icon={'zi-calendar'} />
-          </div>
-        </div>
-        <div className="flex flex-col gap-[8px]">
-          <BoxStatistics
-            title={'Tổng số nhân viên'}
-            number={formatMoney(totalStaffs)}
-            current={'Nhân viên'}
-          />
-
-          <div className="flex gap-[8px]">
+          <div className="flex flex-col gap-[8px]">
             <BoxStatistics
-              title={'Nhân viên mới'}
-              number={formatMoney(totalNew)}
-              colorNumber={'#5A68ED'}
+              title={'Tổng số nhân viên'}
+              number={formatMoney(totalStaffs)}
               current={'Nhân viên'}
             />
-            <BoxStatistics
-              title={'Lay-off (quit)'}
-              colorNumber={'#D8315B'}
-              number={formatMoney(totalUserPhones)}
-              current={'Nhân viên'}
-            />
-          </div>
-        </div>
 
-        <StaffStatistics />
-        {/* <TopSalers /> */}
-      </div>
+            <div className="flex gap-[8px]">
+              <BoxStatistics
+                title={'Nhân viên mới'}
+                number={formatMoney(totalNew)}
+                colorNumber={'#5A68ED'}
+                current={'Nhân viên'}
+              />
+              <BoxStatistics
+                title={'Lay-off (quit)'}
+                colorNumber={'#D8315B'}
+                number={formatMoney(totalUserPhones)}
+                current={'Nhân viên'}
+              />
+            </div>
+          </div>
+
+          <StaffStatistics />
+          {/* <TopSalers /> */}
+        </div>
+      )}
     </>
   );
 };

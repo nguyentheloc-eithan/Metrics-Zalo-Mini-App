@@ -3,6 +3,7 @@ import useFetchCustomers from 'common/stores/customers/customers';
 import useDateFilter from 'common/stores/date-filter';
 import ButtonIcon from 'components/button/ButtonIcon';
 import CustomerClinics from 'components/customers/customer-clinics';
+import LoadingSquareSpin from 'components/loading';
 
 import BoxStatistics from 'components/overall-statistics/box-statistics';
 import dayjs from 'dayjs';
@@ -28,9 +29,12 @@ const Customer = () => {
   const [date, setDate] = useState<ExportParams>(temp);
   const [datePickerEnable, setDatePickerEnable] = useState<boolean>(false);
   const [indexSelect, setIndexSelect] = useState<any>(2);
+
+  const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     const fetchClinicOrdersStatistic = async () => {
       try {
+        setLoading(true);
         const { dataCustomerByClinic, errorCustomerByClinic } =
           await getCustomerByClinic(date);
         const { allUserHasPhone } = await getCountUserPhone();
@@ -54,6 +58,7 @@ const Customer = () => {
           setTotalUserPhones(allUserHasPhone);
         }
       } finally {
+        setLoading(false);
       }
     };
     fetchClinicOrdersStatistic();
@@ -124,56 +129,60 @@ const Customer = () => {
         showBackIcon={true}
         title="Khách hàng"
       />
-      <div className="flex flex-col p-[16px] gap-[16px] overflow-y-scroll">
-        <div className="flex items-center justify-between">
-          <div className="w-full flex gap-[5px]">
-            {dateRangeOptions.map((range, index) => {
-              return (
-                <div
-                  onClick={() => {
-                    handleOnclickRange(index, range.value);
-                  }}
-                  key={index}
-                  className={`${
-                    indexSelect == index
-                      ? 'bg-[#36383A] text-white'
-                      : 'bg-[white] text-[#36383A]'
-                  } rounded-[8px] text-[10px]  font-[400] leading-[16px] flex items-center justify-center w- h-[24px] px-[12px] py-[4px]`}>
-                  {range.title}
-                </div>
-              );
-            })}
+      {loading ? (
+        <LoadingSquareSpin />
+      ) : (
+        <div className="flex flex-col p-[16px] gap-[16px] overflow-y-scroll">
+          <div className="flex items-center justify-between">
+            <div className="w-full flex gap-[5px]">
+              {dateRangeOptions.map((range, index) => {
+                return (
+                  <div
+                    onClick={() => {
+                      handleOnclickRange(index, range.value);
+                    }}
+                    key={index}
+                    className={`${
+                      indexSelect == index
+                        ? 'bg-[#36383A] text-white'
+                        : 'bg-[white] text-[#36383A]'
+                    } rounded-[8px] text-[10px]  font-[400] leading-[16px] flex items-center justify-center w- h-[24px] px-[12px] py-[4px]`}>
+                    {range.title}
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex gap-[8px]">
+              <ButtonIcon icon={'zi-location'} />
+              <ButtonIcon icon={'zi-calendar'} />
+            </div>
           </div>
-          <div className="flex gap-[8px]">
-            <ButtonIcon icon={'zi-location'} />
-            <ButtonIcon icon={'zi-calendar'} />
-          </div>
-        </div>
-        <div className="flex flex-col gap-[8px]">
-          <BoxStatistics
-            title={'Tổng số khách hiện tại'}
-            number={formatMoney(totalCustomers)}
-            current={'khách'}
-          />
-
-          <div className="flex gap-[8px]">
+          <div className="flex flex-col gap-[8px]">
             <BoxStatistics
-              title={'Có số điện thoại'}
-              number={formatMoney(totalUserPhones)}
+              title={'Tổng số khách hiện tại'}
+              number={formatMoney(totalCustomers)}
               current={'khách'}
             />
-            <BoxStatistics
-              title={'Khách hàng mới'}
-              number={formatMoney(totalNewCustomers)}
-              colorNumber={'#5A68ED'}
-              current={'khách'}
-            />
-          </div>
-        </div>
 
-        <CustomerClinics />
-        {/* <TopSalers /> */}
-      </div>
+            <div className="flex gap-[8px]">
+              <BoxStatistics
+                title={'Có số điện thoại'}
+                number={formatMoney(totalUserPhones)}
+                current={'khách'}
+              />
+              <BoxStatistics
+                title={'Khách hàng mới'}
+                number={formatMoney(totalNewCustomers)}
+                colorNumber={'#5A68ED'}
+                current={'khách'}
+              />
+            </div>
+          </div>
+
+          <CustomerClinics />
+          {/* <TopSalers /> */}
+        </div>
+      )}
     </>
   );
 };

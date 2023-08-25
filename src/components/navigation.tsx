@@ -11,17 +11,17 @@ const navItems = [
     icon: <Icon icon="zi-more-grid" />,
   },
   {
-    path: '/dev',
+    path: '/customers-nav',
     label: 'Khách',
     icon: <Icon icon="zi-group" />,
   },
   {
-    path: '/dev',
+    path: '/notifications',
     label: 'Thông báo',
     icon: <Icon icon="zi-notif" />,
   },
   {
-    path: '/dev',
+    path: '/profile',
     label: 'Cá nhân',
     icon: <Icon icon="zi-user-circle" />,
   },
@@ -45,22 +45,26 @@ export const Navigation: FC = () => {
   };
   return (
     <>
-      {location.pathname == '/overall-statistics' && (
-        <>
-          <BottomNavigation
-            id="bottom-nav"
-            activeKey={activeTab}
-            onChange={(key) => handleChangeRoute(key)}>
-            {navItems.map(({ path, label, icon }) => (
-              <BottomNavigation.Item
-                key={path}
-                label={label}
-                icon={icon}
-              />
-            ))}
-          </BottomNavigation>
-        </>
-      )}
+      {location.pathname !== '/sale-report' &&
+        location.pathname !== '/staffs' &&
+        location.pathname !== '/revenue' &&
+        location.pathname !== '/services' &&
+        location.pathname !== '/order-bookings' && (
+          <>
+            <BottomNavigation
+              id="bottom-nav"
+              activeKey={activeTab}
+              onChange={(key) => handleChangeRoute(key)}>
+              {navItems.map(({ path, label, icon }) => (
+                <BottomNavigation.Item
+                  key={path}
+                  label={label}
+                  icon={icon}
+                />
+              ))}
+            </BottomNavigation>
+          </>
+        )}
     </>
   );
 };

@@ -4,6 +4,7 @@ import useFetchCustomers from 'common/stores/customers/customers';
 import useDateFilter from 'common/stores/date-filter';
 
 import ButtonIcon from 'components/button/ButtonIcon';
+import LoadingSquareSpin from 'components/loading';
 import ClinicRevenue from 'components/overall-statistics/ClinicRevenue';
 import ServiceRevenue from 'components/overall-statistics/ServiceRevenue';
 import BoxStatistics from 'components/overall-statistics/box-statistics';
@@ -43,6 +44,8 @@ const RevenuePage = () => {
   const [totalCustomerPaid, setTotalCustomerPaid] = useState<string>('');
   const [totalDebit, setTotalDebit] = useState<string>('');
   const [indexSelect, setIndexSelect] = useState<any>(2);
+
+  const [loading, setLoading] = useState<boolean>(false);
 
   const [datePickerEnable, setDatePickerEnable] = useState<boolean>(false);
 
@@ -109,6 +112,7 @@ const RevenuePage = () => {
   useEffect(() => {
     const fetchClinicRevenue = async () => {
       try {
+        setLoading(true);
         const { clinicRevenue, errorClinicRevenue } = await getClinicRevenue(
           date
         );
@@ -145,6 +149,7 @@ const RevenuePage = () => {
           }
         }
       } finally {
+        setLoading(false);
       }
     };
     fetchClinicRevenue();
@@ -156,64 +161,68 @@ const RevenuePage = () => {
         showBackIcon={true}
         title="Doanh thu"
       />
-      <div className="flex flex-col p-[16px] gap-[16px] overflow-y-scroll">
-        <div className="flex items-center justify-between">
-          <div className="w-full flex gap-[5px]">
-            {dateRangeOptions.map((range, index) => {
-              return (
-                <div
-                  onClick={() => {
-                    handleOnclickRange(index, range.value);
-                  }}
-                  key={index}
-                  className={`${
-                    indexSelect == index
-                      ? 'bg-[#36383A] text-white'
-                      : 'bg-[white] text-[#36383A]'
-                  } rounded-[8px] text-[10px]  font-[400] leading-[16px] flex items-center justify-center w- h-[24px] px-[12px] py-[4px]`}>
-                  {range.title}
-                </div>
-              );
-            })}
+      {loading ? (
+        <LoadingSquareSpin />
+      ) : (
+        <div className="flex flex-col p-[16px] gap-[16px] overflow-y-scroll">
+          <div className="flex items-center justify-between">
+            <div className="w-full flex gap-[5px]">
+              {dateRangeOptions.map((range, index) => {
+                return (
+                  <div
+                    onClick={() => {
+                      handleOnclickRange(index, range.value);
+                    }}
+                    key={index}
+                    className={`${
+                      indexSelect == index
+                        ? 'bg-[#36383A] text-white'
+                        : 'bg-[white] text-[#36383A]'
+                    } rounded-[8px] text-[10px]  font-[400] leading-[16px] flex items-center justify-center w- h-[24px] px-[12px] py-[4px]`}>
+                    {range.title}
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex gap-[8px]">
+              <ButtonIcon icon={'zi-location'} />
+              <ButtonIcon
+                onClick={() => {
+                  setDatePickerEnable((prev) => !prev);
+                }}
+                active={datePickerEnable}
+                icon={'zi-calendar'}
+              />
+            </div>
           </div>
-          <div className="flex gap-[8px]">
-            <ButtonIcon icon={'zi-location'} />
-            <ButtonIcon
-              onClick={() => {
-                setDatePickerEnable((prev) => !prev);
-              }}
-              active={datePickerEnable}
-              icon={'zi-calendar'}
-            />
-          </div>
-        </div>
-        <div className="flex flex-col gap-[8px]">
-          <BoxStatistics
-            title={'Doanh Thu'}
-            number={totalRevenue}
-            current={'đ'}
-          />
-          <div className="flex gap-[8px]">
+          <div className="flex flex-col gap-[8px]">
             <BoxStatistics
-              title={'Thực thu'}
-              colorNumber={'#5A68ED'}
-              number={totalCustomerPaid}
+              title={'Doanh Thu'}
+              number={totalRevenue}
               current={'đ'}
             />
-            <BoxStatistics
-              title={'Công nợ'}
-              number={totalDebit}
-              colorNumber={'#D8315B'}
-              current={'đ'}
-            />
+            <div className="flex gap-[8px]">
+              <BoxStatistics
+                title={'Thực thu'}
+                colorNumber={'#5A68ED'}
+                number={totalCustomerPaid}
+                current={'đ'}
+              />
+              <BoxStatistics
+                title={'Công nợ'}
+                number={totalDebit}
+                colorNumber={'#D8315B'}
+                current={'đ'}
+              />
+            </div>
           </div>
-        </div>
-        {clinics && <ClinicRevenue data={[...clinics]} />}
-        <ServiceRevenue />
-        <TopCustomers customers={[...customers]} />
+          {clinics && <ClinicRevenue data={[...clinics]} />}
+          <ServiceRevenue />
+          <TopCustomers customers={[...customers]} />
 
-        {/* <TopSalers /> */}
-      </div>
+          {/* <TopSalers /> */}
+        </div>
+      )}
     </>
   );
 };

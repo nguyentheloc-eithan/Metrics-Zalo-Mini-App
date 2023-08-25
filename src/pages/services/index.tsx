@@ -5,6 +5,7 @@ import useFetchTopServiceBookings from 'common/stores/services/service-bookings'
 import useFetchServicesRevenue from 'common/stores/services/service-revenue';
 import useFetchTopTenServices from 'common/stores/services/top-ten-services';
 import ButtonIcon from 'components/button/ButtonIcon';
+import LoadingSquareSpin from 'components/loading';
 
 import BoxStatistics from 'components/overall-statistics/box-statistics';
 import TopServiceBookings from 'components/services/top-service-bookings';
@@ -50,6 +51,7 @@ const ServicesPage = () => {
   const { setTopServiceBookings } = useFetchTopServiceBookings();
 
   const [indexSelect, setIndexSelect] = useState<any>(2);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const { dateFilter, setDateFilter } = useDateFilter();
   const [date, setDate] = useState<ExportParams>(temp);
@@ -57,6 +59,7 @@ const ServicesPage = () => {
   useEffect(() => {
     const fetchTopTenServices = async () => {
       try {
+        setLoading(true);
         const { dataServiceBookings, errorServiceBookings } =
           await getTopServiceBookings(date);
         if (errorServiceBookings) {
@@ -114,6 +117,7 @@ const ServicesPage = () => {
           /*** fetch services have most bookings **/
         }
       } finally {
+        setLoading(false);
       }
     };
     fetchTopTenServices();
@@ -185,56 +189,60 @@ const ServicesPage = () => {
         showBackIcon={true}
         title="Dịch vụ"
       />
-      <div className="flex flex-col p-[16px] gap-[16px] overflow-y-scroll">
-        <div className="flex items-center justify-between">
-          <div className="w-full flex gap-[5px]">
-            {dateRangeOptions.map((range, index) => {
-              return (
-                <div
-                  onClick={() => {
-                    handleOnclickRange(index, range.value);
-                  }}
-                  key={index}
-                  className={`${
-                    indexSelect == index
-                      ? 'bg-[#36383A] text-white'
-                      : 'bg-[white] text-[#36383A]'
-                  } rounded-[8px] text-[10px]  font-[400] leading-[16px] flex items-center justify-center w- h-[24px] px-[12px] py-[4px]`}>
-                  {range.title}
-                </div>
-              );
-            })}
+      {loading ? (
+        <LoadingSquareSpin />
+      ) : (
+        <div className="flex flex-col p-[16px] gap-[16px] overflow-y-scroll">
+          <div className="flex items-center justify-between">
+            <div className="w-full flex gap-[5px]">
+              {dateRangeOptions.map((range, index) => {
+                return (
+                  <div
+                    onClick={() => {
+                      handleOnclickRange(index, range.value);
+                    }}
+                    key={index}
+                    className={`${
+                      indexSelect == index
+                        ? 'bg-[#36383A] text-white'
+                        : 'bg-[white] text-[#36383A]'
+                    } rounded-[8px] text-[10px]  font-[400] leading-[16px] flex items-center justify-center w- h-[24px] px-[12px] py-[4px]`}>
+                    {range.title}
+                  </div>
+                );
+              })}
+            </div>
+            <div className="flex gap-[8px]">
+              <ButtonIcon icon={'zi-location'} />
+              <ButtonIcon icon={'zi-calendar'} />
+            </div>
           </div>
-          <div className="flex gap-[8px]">
-            <ButtonIcon icon={'zi-location'} />
-            <ButtonIcon icon={'zi-calendar'} />
-          </div>
-        </div>
-        <div className="flex flex-col gap-[8px]">
-          <BoxStatistics
-            title={'Doanh thu của dịch vụ'}
-            number={allRevenueServices}
-            current={'đ'}
-          />
+          <div className="flex flex-col gap-[8px]">
+            <BoxStatistics
+              title={'Doanh thu của dịch vụ'}
+              number={allRevenueServices}
+              current={'đ'}
+            />
 
-          <div className="flex gap-[8px]">
-            <BoxStatistics
-              title={'Thực thu'}
-              number={realRevenue}
-              current={'đ'}
-            />
-            <BoxStatistics
-              title={'Công nợ'}
-              number={allDebit}
-              colorNumber={'#5A68ED'}
-              current={'đ'}
-            />
+            <div className="flex gap-[8px]">
+              <BoxStatistics
+                title={'Thực thu'}
+                number={realRevenue}
+                current={'đ'}
+              />
+              <BoxStatistics
+                title={'Công nợ'}
+                number={allDebit}
+                colorNumber={'#5A68ED'}
+                current={'đ'}
+              />
+            </div>
           </div>
+          <TopServices />
+          <TopServiceBookings />
+          {/* <TopSalers /> */}
         </div>
-        <TopServices />
-        <TopServiceBookings />
-        {/* <TopSalers /> */}
-      </div>
+      )}
     </>
   );
 };
