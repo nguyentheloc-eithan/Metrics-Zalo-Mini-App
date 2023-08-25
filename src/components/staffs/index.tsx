@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { message } from 'antd';
 import { ExportParams, getClinicRevenue } from 'services/rpc/clinic-revenue';
 import TableStaffStatistics from './TableStaffStatistics';
+import GraphStaffStatistics from './GraphStaffStatistics';
 
 const StaffStatistics = () => {
   const [chartType, setChartType] = useState<boolean>(true);
@@ -42,7 +43,7 @@ const StaffStatistics = () => {
           <TableStaffStatistics />
         </div>
       ) : (
-        <>graph</>
+        <GraphStaffStatistics />
       )}
     </div>
   );

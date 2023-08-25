@@ -14,6 +14,7 @@ import Developing from 'pages/developing';
 import Customers from 'pages/customers';
 import ServicesPage from 'pages/services';
 import StaffsPage from 'pages/staffs';
+import SaleReportPage from 'pages/sale-report';
 
 if (getSystemInfo().platform === 'android') {
   const androidSafeTop = Math.round(
@@ -40,6 +41,9 @@ export const Layout: FC = () => {
           <Route
             path="/dev"
             element={<Developing />}></Route>
+          <Route
+            path="/sale-report"
+            element={<SaleReportPage />}></Route>
           <Route
             path="/overall-statistics"
             element={<OverallStatistics />}></Route>

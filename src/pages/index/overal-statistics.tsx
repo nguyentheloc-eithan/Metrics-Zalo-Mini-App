@@ -57,7 +57,7 @@ const sections = [
   {
     name: 'Sales report',
     icon: <Icon icon="zi-poll-solid" />,
-    link: '',
+    link: '/sale-report',
   },
 ];
 const temp: ExportParams = {
@@ -67,9 +67,6 @@ const temp: ExportParams = {
 const OverallStatistics = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const { setClinics } = useFetchClinic();
-  const { setClinicOrders } = useFetchClinicOrders();
-  const { setClinicBookings } = useFetchClinicBookings();
-  const { setClinicCustomers } = useFetchClinicCustomers();
 
   useEffect(() => {
     const fetchData = async () => {

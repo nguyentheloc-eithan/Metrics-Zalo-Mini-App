@@ -2,7 +2,6 @@ import { message } from 'antd';
 import useFetchClinicBookings from 'common/stores/clinics/clinic-bookings';
 import useFetchClinicOrders from 'common/stores/clinics/clinic-orders';
 import useDateFilter from 'common/stores/date-filter';
-import useFetchTopServiceBookings from 'common/stores/services/service-bookings';
 import ButtonIcon from 'components/button/ButtonIcon';
 import ClinicBookings from 'components/order-bookings/clinic-bookings';
 import BoxSum from 'components/order-bookings/clinic-bookings/BoxSum';
@@ -15,7 +14,6 @@ import React, { useEffect, useState } from 'react';
 import { getClinicBookings } from 'services/rpc/clinic-bookings';
 import { getClinicOrders } from 'services/rpc/clinic-orders';
 import { ExportParams } from 'services/rpc/clinic-revenue';
-import { getTopServiceBookings } from 'services/rpc/top-services';
 import { dateRangeOptions } from 'utils/date-data-filter';
 import { Header } from 'zmp-ui';
 

@@ -1,29 +1,28 @@
 import { message } from 'antd';
+import useFetchCustomers from 'common/stores/customers/customers';
 import useDateFilter from 'common/stores/date-filter';
-import useFetchStaffStatistics from 'common/stores/staffs/staff-statistics';
 import ButtonIcon from 'components/button/ButtonIcon';
+import CustomerClinics from 'components/customers/customer-clinics';
 
 import BoxStatistics from 'components/overall-statistics/box-statistics';
-import StaffStatistics from 'components/staffs';
 import dayjs from 'dayjs';
 
 import React, { useEffect, useState } from 'react';
 import { ExportParams } from 'services/rpc/clinic-revenue';
 import {
-  getStaffAttendance,
-  getStaffStatistics,
-} from 'services/rpc/staffs/staffs';
+  getCountUserPhone,
+  getCustomerByClinic,
+} from 'services/rpc/customers/customer-by-clinics';
 import { dateRangeOptions } from 'utils/date-data-filter';
 import { temp } from 'utils/date-params-default';
 import { formatMoney } from 'utils/money-format';
 import { Header } from 'zmp-ui';
 
-const StaffsPage = () => {
-  const { setAllStaffStatistics, setAllStaffAttendances } =
-    useFetchStaffStatistics();
+const SaleReportPage = () => {
+  const { setCustomers } = useFetchCustomers();
 
-  const [totalStaffs, setTotalStaffs] = useState<number>(0);
-  const [totalNew, setTotalNew] = useState<number>(0);
+  const [totalCustomers, setTotalCustomers] = useState<number>(0);
+  const [totalNewCustomers, setTotalNewCustomers] = useState<number>(0);
   const [totalUserPhones, setTotalUserPhones] = useState<number>(0);
   const { dateFilter, setDateFilter } = useDateFilter();
   const [date, setDate] = useState<ExportParams>(temp);
@@ -32,36 +31,28 @@ const StaffsPage = () => {
   useEffect(() => {
     const fetchClinicOrdersStatistic = async () => {
       try {
-        const { allStaffStatistics, errorAllStaffStatistics } =
-          await getStaffStatistics(date);
-        if (errorAllStaffStatistics) {
-          message.error(errorAllStaffStatistics.message);
+        const { dataCustomerByClinic, errorCustomerByClinic } =
+          await getCustomerByClinic(date);
+        const { allUserHasPhone } = await getCountUserPhone();
+        if (errorCustomerByClinic) {
+          message.error(errorCustomerByClinic.message);
           return;
         }
-        if (allStaffStatistics) {
-          setAllStaffStatistics(allStaffStatistics);
-          const allStaffs = allStaffStatistics.reduce(
-            (prev: any, cur: any) => prev + cur.total,
-            0
-          );
-          const allNewStaffs = allStaffStatistics.reduce(
+        if (dataCustomerByClinic) {
+          setCustomers(dataCustomerByClinic);
+          const totalNew: number = dataCustomerByClinic.reduce(
             (prev: any, cur: any) => prev + cur.new,
             0
           );
-          setTotalNew(allNewStaffs);
-          setTotalStaffs(allStaffs);
+          const totalTotal: number = dataCustomerByClinic.reduce(
+            (prev: any, cur: any) => prev + cur.total,
+            0
+          );
+
+          setTotalCustomers(totalTotal);
+          setTotalNewCustomers(totalNew);
+          setTotalUserPhones(allUserHasPhone);
         }
-        const { allStaffAttendance, errorAllStaffAttendance } =
-          await getStaffAttendance(date);
-        if (errorAllStaffAttendance) {
-          message.error(errorAllStaffAttendance.message);
-          return;
-        }
-        if (allStaffAttendance) {
-          setAllStaffAttendances(allStaffAttendance);
-        }
-        console.log('allStaffStatistics', allStaffStatistics);
-        console.log('allStaffAttendance', allStaffAttendance);
       } finally {
       }
     };
@@ -131,7 +122,7 @@ const StaffsPage = () => {
       <Header
         className="app-header no-border pl-4 flex-none pb-[6px] font-[500] leading-[26px] text-[20px] tracking-[0.15px]"
         showBackIcon={true}
-        title="Nhân viên"
+        title="Sale Report"
       />
       <div className="flex flex-col p-[16px] gap-[16px] overflow-y-scroll">
         <div className="flex items-center justify-between">
@@ -160,32 +151,30 @@ const StaffsPage = () => {
         </div>
         <div className="flex flex-col gap-[8px]">
           <BoxStatistics
-            title={'Tổng số nhân viên'}
-            number={formatMoney(totalStaffs)}
-            current={'Nhân viên'}
+            title={'Tổng check-in'}
+            number={formatMoney(totalCustomers)}
+            current={'check-in'}
           />
 
           <div className="flex gap-[8px]">
             <BoxStatistics
-              title={'Nhân viên mới'}
-              number={formatMoney(totalNew)}
-              colorNumber={'#5A68ED'}
-              current={'Nhân viên'}
+              title={'Tổng check-in resale'}
+              number={formatMoney(totalUserPhones)}
+              current={'check-in'}
             />
             <BoxStatistics
-              title={'Lay-off (quit)'}
-              colorNumber={'#D8315B'}
-              number={formatMoney(totalUserPhones)}
-              current={'Nhân viên'}
+              title={'Tổng check-in mới'}
+              number={formatMoney(totalNewCustomers)}
+              colorNumber={'#5A68ED'}
+              current={'check-in'}
             />
           </div>
         </div>
 
-        <StaffStatistics />
         {/* <TopSalers /> */}
       </div>
     </>
   );
 };
 
-export default StaffsPage;
+export default SaleReportPage;
