@@ -19,17 +19,6 @@ import Profile from 'pages/profile';
 import Notifications from 'pages/notification';
 import CustomersNav from 'pages/customers-nav';
 
-if (getSystemInfo().platform === 'android') {
-  const androidSafeTop = Math.round(
-    (window as any).ZaloJavaScriptInterface.getStatusBarHeight() /
-      window.devicePixelRatio
-  );
-  document.body.style.setProperty(
-    '--zaui-safe-area-inset-top',
-    `${androidSafeTop}px`
-  );
-}
-
 export const Layout: FC = () => {
   return (
     <Box

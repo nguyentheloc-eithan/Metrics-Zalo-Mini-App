@@ -65,6 +65,9 @@ const RevenuePage = () => {
       } else if (value == 'today') {
         console.log('today');
         todayStatistics();
+      } else if (value == 'yesterday') {
+        console.log('yesterday');
+        yesterdayFilter();
       }
     }
   };
@@ -92,6 +95,19 @@ const RevenuePage = () => {
     setDate(dateNew);
     setDateFilter(dateNew);
   };
+  const yesterdayFilter = () => {
+    const currentDate = new Date();
+    const previousDate = new Date(currentDate);
+    previousDate.setDate(currentDate.getDate() - 1);
+    const formatDate = dayjs(previousDate).format('YYYY-MM-DD');
+    const dateNew: ExportParams = {
+      start_date: formatDate,
+      end_date: formatDate,
+    };
+    setDate(dateNew);
+    setDateFilter(dateNew);
+  };
+
   const thisMonthStatistic = () => {
     const now = dayjs().format('YYYY-MM-DD');
     const currentDate = new Date();
@@ -182,7 +198,7 @@ const RevenuePage = () => {
       ) : (
         <div className="flex flex-col p-[16px] gap-[16px] overflow-y-scroll">
           <div className="flex items-center justify-between">
-            <div className="w-full flex gap-[5px]">
+            <div className="w-full flex flex-wrap items-center justify-start gap-[5px]">
               {dateRangeOptions.map((range, index) => {
                 return (
                   <div
