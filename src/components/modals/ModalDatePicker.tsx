@@ -35,7 +35,7 @@ const ModalDatePicker = (props: ModalDatePickerProps) => {
           }}
           dateFormat={'dd-mm-yyyy'}
           label="Ngày bắt đầu"
-          title="startDate"
+          title="Ngầy bắt đầu"
         />
         <DatePicker
           onChange={(date) => {
@@ -43,7 +43,7 @@ const ModalDatePicker = (props: ModalDatePickerProps) => {
           }}
           dateFormat={'dd-mm-yyyy'}
           label="Ngày kết thúc"
-          title="endDate"
+          title="Ngầy kết thúc"
         />
       </div>
     </Modal>
