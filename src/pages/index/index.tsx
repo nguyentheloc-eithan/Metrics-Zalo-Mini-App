@@ -17,6 +17,7 @@ const HomePage: React.FunctionComponent = () => {
 
   const [user, setUser] = useState<IUser>();
   const { userLogin, setUserLogin } = useFetchZaloUser();
+  const [userExisted, setUserExisted] = useState<IUser[]>([]);
   useEffect(() => {
     user == null && getUser();
   }, []);
@@ -26,7 +27,7 @@ const HomePage: React.FunctionComponent = () => {
       const { userInfo } = await getUserInfo();
       let flag = await checkUser(userInfo.id);
       if (flag) {
-        getUserPhoneByZaloId(userInfo.id);
+        // const staff: IUser = getUserInStaffsTableByZaloId(userInfo.id);
       }
       console.log(userInfo.id);
     } catch (error) {
@@ -34,13 +35,19 @@ const HomePage: React.FunctionComponent = () => {
       console.log(error);
     }
   };
-  const getUserPhoneByZaloId = async (zalo_id: string) => {
+  const getUserInStaffsTableByZaloId = async (zalo_id: string) => {
     const { data, error } = await supabase
-      .from('users')
+      .from('staffs')
       .select('*')
       .eq('zalo_id', zalo_id);
+    if (error) {
+      console.log(error.message);
+      return;
+    }
     if (data) {
-      console.log(data);
+      console.log('Phone:', data);
+      setUserExisted(data[0]);
+      return data[0];
     }
   };
   const checkUser = async (id: string) => {
@@ -58,6 +65,24 @@ const HomePage: React.FunctionComponent = () => {
       console.log(error);
       return false;
     }
+  };
+  const checkIsAdmin = async (staff_id: string) => {
+    const { data: dataStaffRole, error: errorStaffRole } = await supabase
+      .from('staff_role')
+      .select('*')
+      .eq('staff_id', staff_id);
+    if (errorStaffRole) {
+      console.log(errorStaffRole.message);
+      return false;
+    }
+    if (dataStaffRole) {
+      if (dataStaffRole[0].role_id == 'a2886b4a-60c4-4f69-94a2-9650f7e02cd5') {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return true;
   };
   return (
     <Page className="relative flex-1 flex flex-col bg-white">
