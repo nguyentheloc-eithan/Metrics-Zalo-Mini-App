@@ -18,7 +18,7 @@ import { dateRangeOptions } from 'utils/date-data-filter';
 import { temp } from 'utils/date-params-default';
 import { formatMoney } from 'utils/money-format';
 
-import { Header, Modal } from 'zmp-ui';
+import { Header } from 'zmp-ui';
 
 interface DataCategories {
   type: string;
@@ -43,11 +43,13 @@ const RevenuePage = () => {
   const [totalRevenue, setTotalRevenue] = useState<string>('');
   const [totalCustomerPaid, setTotalCustomerPaid] = useState<string>('');
   const [totalDebit, setTotalDebit] = useState<string>('');
-  const [indexSelect, setIndexSelect] = useState<any>(2);
+  const [indexSelect, setIndexSelect] = useState<any>(3);
 
   const [loading, setLoading] = useState<boolean>(false);
 
   const [datePickerEnable, setDatePickerEnable] = useState<boolean>(false);
+  const [openModalDateRangePicker, setOpenModalDateRangePicker] =
+    useState<boolean>(false);
 
   const handleOnclickRange = (index: number, value: string) => {
     if (index == indexSelect) {
@@ -58,15 +60,19 @@ const RevenuePage = () => {
       setIndexSelect(index);
       if (value == 'thisWeek') {
         console.log('week');
+
         thisWeekStatistics();
       } else if (value == 'thisMonth') {
         console.log('month');
+
         thisMonthStatistic();
       } else if (value == 'today') {
         console.log('today');
+
         todayStatistics();
       } else if (value == 'yesterday') {
         console.log('yesterday');
+
         yesterdayFilter();
       }
     }
@@ -125,21 +131,23 @@ const RevenuePage = () => {
     setDateFilter(dateNew);
   };
   const onHandleFilterDate = (date_start: string, date_end: string) => {
-    const numericDateStart = parseInt(date_start.replace(/-/g, ''), 10);
-    const numericDateEnd = parseInt(date_end.replace(/-/g, ''), 10);
-    const check = numericDateEnd - numericDateStart;
-    if (check < 0) {
-      message.error('Chọn ngày kết thúc không hợp lệ');
-      return;
-    }
-
     const dateNew: ExportParams = {
       start_date: date_start,
       end_date: date_end,
     };
     setDate(dateNew);
     setDateFilter(dateNew);
+    setOpenModalDateRangePicker(false);
+  };
+
+  const cancelFilterOnRangePicker = () => {
     setDatePickerEnable(false);
+    const dateNew: ExportParams = {
+      start_date: temp.start_date,
+      end_date: temp.end_date,
+    };
+    setDate(dateNew);
+    setDateFilter(dateNew);
   };
   useEffect(() => {
     const fetchClinicRevenue = async () => {
@@ -149,6 +157,7 @@ const RevenuePage = () => {
           date
         );
         const { dataCustomer, errorCustomer } = await getTopCustomer(date);
+        console.log(dataCustomer);
 
         if (errorClinicRevenue) {
           message.error(errorClinicRevenue.message);
@@ -204,6 +213,7 @@ const RevenuePage = () => {
                   <div
                     onClick={() => {
                       handleOnclickRange(index, range.value);
+                      cancelFilterOnRangePicker();
                     }}
                     key={index}
                     className={`${
@@ -220,7 +230,9 @@ const RevenuePage = () => {
               <ButtonIcon icon={'zi-location'} />
               <ButtonIcon
                 onClick={() => {
-                  setDatePickerEnable((prev) => !prev);
+                  setDatePickerEnable(true);
+                  setOpenModalDateRangePicker(true);
+                  setIndexSelect(null);
                 }}
                 active={datePickerEnable}
                 icon={'zi-calendar'}
@@ -229,8 +241,9 @@ const RevenuePage = () => {
           </div>
           {datePickerEnable && (
             <ModalDatePicker
-              open={datePickerEnable}
+              open={openModalDateRangePicker}
               onClose={onHandleFilterDate}
+              setOpen={setDatePickerEnable}
             />
           )}
           <div className="flex flex-col gap-[8px]">

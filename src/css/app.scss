@@ -71,7 +71,18 @@ body {
 .zaui-tabs-tabbar-active-line {
   background-color: var(--zmp-primary-color);
 }
-
+#app
+  > div
+  > div.zaui-box.flex-1.flex.flex-col.overflow-hidden
+  > div
+  > div.p-\[16px\].flex.flex-col.gap-\[16px\]
+  > span {
+  background-color: white;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #e9ebed;
+  display: inline-flex;
+}
 .category-tabs {
   display: flex;
   flex-direction: column;

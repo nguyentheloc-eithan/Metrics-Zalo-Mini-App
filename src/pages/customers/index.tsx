@@ -4,6 +4,7 @@ import useDateFilter from 'common/stores/date-filter';
 import ButtonIcon from 'components/button/ButtonIcon';
 import CustomerClinics from 'components/customers/customer-clinics';
 import LoadingSquareSpin from 'components/loading';
+import ModalDatePicker from 'components/modals/ModalDatePicker';
 
 import BoxStatistics from 'components/overall-statistics/box-statistics';
 import dayjs from 'dayjs';
@@ -28,8 +29,9 @@ const Customer = () => {
   const { dateFilter, setDateFilter } = useDateFilter();
   const [date, setDate] = useState<ExportParams>(temp);
   const [datePickerEnable, setDatePickerEnable] = useState<boolean>(false);
-  const [indexSelect, setIndexSelect] = useState<any>(2);
-
+  const [indexSelect, setIndexSelect] = useState<any>(3);
+  const [openModalDateRangePicker, setOpenModalDateRangePicker] =
+    useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     const fetchClinicOrdersStatistic = async () => {
@@ -38,6 +40,7 @@ const Customer = () => {
         const { dataCustomerByClinic, errorCustomerByClinic } =
           await getCustomerByClinic(date);
         const { allUserHasPhone } = await getCountUserPhone();
+
         if (errorCustomerByClinic) {
           message.error(errorCustomerByClinic.message);
           return;
@@ -137,6 +140,15 @@ const Customer = () => {
     setDate(dateNew);
     setDateFilter(dateNew);
   };
+  const onHandleFilterDate = (date_start: string, date_end: string) => {
+    const dateNew: ExportParams = {
+      start_date: date_start,
+      end_date: date_end,
+    };
+    setDate(dateNew);
+    setDateFilter(dateNew);
+    setOpenModalDateRangePicker(false);
+  };
   return (
     <>
       <Header
@@ -169,9 +181,24 @@ const Customer = () => {
             </div>
             <div className="flex gap-[8px]">
               <ButtonIcon icon={'zi-location'} />
-              <ButtonIcon icon={'zi-calendar'} />
+              <ButtonIcon
+                icon={'zi-calendar'}
+                onClick={() => {
+                  setDatePickerEnable(true);
+                  setOpenModalDateRangePicker(true);
+                  setIndexSelect(null);
+                }}
+                active={datePickerEnable}
+              />
             </div>
           </div>
+          {datePickerEnable && (
+            <ModalDatePicker
+              open={openModalDateRangePicker}
+              onClose={onHandleFilterDate}
+              setOpen={setDatePickerEnable}
+            />
+          )}
           <div className="flex flex-col gap-[8px]">
             <BoxStatistics
               title={'Tổng số khách hiện tại'}

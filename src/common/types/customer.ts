@@ -7,4 +7,11 @@ interface ICustomer {
   revenue: number;
 }
 
-export type { ICustomer };
+interface ICustomerZalo {
+  id: string;
+  name: string;
+  avatar: string;
+  zalo_id: string;
+  phone: string;
+}
+export type { ICustomer, ICustomerZalo };

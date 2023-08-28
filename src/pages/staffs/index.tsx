@@ -3,6 +3,7 @@ import useDateFilter from 'common/stores/date-filter';
 import useFetchStaffStatistics from 'common/stores/staffs/staff-statistics';
 import ButtonIcon from 'components/button/ButtonIcon';
 import LoadingSquareSpin from 'components/loading';
+import ModalDatePicker from 'components/modals/ModalDatePicker';
 
 import BoxStatistics from 'components/overall-statistics/box-statistics';
 import StaffStatistics from 'components/staffs';
@@ -29,9 +30,11 @@ const StaffsPage = () => {
   const { dateFilter, setDateFilter } = useDateFilter();
   const [date, setDate] = useState<ExportParams>(temp);
   const [datePickerEnable, setDatePickerEnable] = useState<boolean>(false);
-  const [indexSelect, setIndexSelect] = useState<any>(2);
+  const [indexSelect, setIndexSelect] = useState<any>(3);
 
   const [loading, setLoading] = useState<boolean>(false);
+  const [openModalDateRangePicker, setOpenModalDateRangePicker] =
+    useState<boolean>(false);
 
   useEffect(() => {
     const fetchClinicOrdersStatistic = async () => {
@@ -148,6 +151,24 @@ const StaffsPage = () => {
     setDate(dateNew);
     setDateFilter(dateNew);
   };
+  const onHandleFilterDate = (date_start: string, date_end: string) => {
+    const dateNew: ExportParams = {
+      start_date: date_start,
+      end_date: date_end,
+    };
+    setDate(dateNew);
+    setDateFilter(dateNew);
+    setOpenModalDateRangePicker(false);
+  };
+  const cancelFilterOnRangePicker = () => {
+    setDatePickerEnable(false);
+    const dateNew: ExportParams = {
+      start_date: temp.start_date,
+      end_date: temp.end_date,
+    };
+    setDate(dateNew);
+    setDateFilter(dateNew);
+  };
   return (
     <>
       <Header
@@ -166,6 +187,7 @@ const StaffsPage = () => {
                   <div
                     onClick={() => {
                       handleOnclickRange(index, range.value);
+                      cancelFilterOnRangePicker();
                     }}
                     key={index}
                     className={`${
@@ -180,9 +202,24 @@ const StaffsPage = () => {
             </div>
             <div className="flex gap-[8px]">
               <ButtonIcon icon={'zi-location'} />
-              <ButtonIcon icon={'zi-calendar'} />
+              <ButtonIcon
+                icon={'zi-calendar'}
+                onClick={() => {
+                  setDatePickerEnable(true);
+                  setOpenModalDateRangePicker(true);
+                  setIndexSelect(null);
+                }}
+                active={datePickerEnable}
+              />
             </div>
           </div>
+          {datePickerEnable && (
+            <ModalDatePicker
+              open={openModalDateRangePicker}
+              onClose={onHandleFilterDate}
+              setOpen={setDatePickerEnable}
+            />
+          )}
           <div className="flex flex-col gap-[8px]">
             <BoxStatistics
               title={'Tổng số nhân viên'}

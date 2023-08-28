@@ -4,20 +4,19 @@ import { Route, Routes } from 'react-router';
 import { Box } from 'zmp-ui';
 import { Navigation } from './navigation';
 
-import ProfilePage from 'pages/profile';
-
-import OverallStatistics from 'pages/index/overal-statistics';
-import RevenuePage from 'pages/revenue';
-import { getSystemInfo } from 'zmp-sdk';
-import OrderBookings from 'pages/order-bookings';
-import Developing from 'pages/developing';
 import Customers from 'pages/customers';
+import CustomersNav from 'pages/page-in-nav/customer/customers-nav';
+import Developing from 'pages/developing';
+import OverallStatistics from 'pages/index/overal-statistics';
+
+import OrderBookings from 'pages/order-bookings';
+import Profile from 'pages/page-in-nav/profile/profile';
+import RevenuePage from 'pages/revenue';
+import SaleReportPage from 'pages/sale-report';
 import ServicesPage from 'pages/services';
 import StaffsPage from 'pages/staffs';
-import SaleReportPage from 'pages/sale-report';
-import Profile from 'pages/profile';
-import Notifications from 'pages/notification';
-import CustomersNav from 'pages/customers-nav';
+import UserSettings from 'pages/page-in-nav/profile/user-setting';
+import Notifications from 'pages/page-in-nav/notification';
 
 export const Layout: FC = () => {
   return (
@@ -33,6 +32,9 @@ export const Layout: FC = () => {
           <Route
             path="/profile"
             element={<Profile />}></Route>
+          <Route
+            path="/user-settings"
+            element={<UserSettings />}></Route>
           <Route
             path="/notifications"
             element={<Notifications />}></Route>
@@ -63,9 +65,6 @@ export const Layout: FC = () => {
           <Route
             path="/customers"
             element={<Customers />}></Route>
-          <Route
-            path="/profile"
-            element={<ProfilePage />}></Route>
         </Routes>
       </Box>
       <Navigation />

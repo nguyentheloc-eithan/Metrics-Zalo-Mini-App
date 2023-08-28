@@ -31,7 +31,7 @@ const SaleReportPage = () => {
   const { dateFilter, setDateFilter } = useDateFilter();
   const [date, setDate] = useState<ExportParams>(temp);
   //   const [datePickerEnable, setDatePickerEnable] = useState<boolean>(false);
-  const [indexSelect, setIndexSelect] = useState<any>(2);
+  const [indexSelect, setIndexSelect] = useState<any>(3);
   useEffect(() => {
     const fetchClinicOrdersStatistic = async () => {
       try {

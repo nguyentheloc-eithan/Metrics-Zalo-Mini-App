@@ -1,6 +1,6 @@
 import Lottie from 'lottie-react';
 import React from 'react';
-import devLoading from '../static/lottie/dev_ing.json';
+import devLoading from '../static/lottie/loading_2.json';
 const DevelopingLoading = () => {
   return (
     <div className="w-full h-full bg-white flex flex-col items-center justify-center">
