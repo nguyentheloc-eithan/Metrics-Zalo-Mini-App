@@ -73,7 +73,7 @@ const ModalDatePicker = (props: ModalDatePickerProps) => {
       title="Hãy chọn khoảng thời gian"
       actions={[
         {
-          text: 'Huỷ',
+          text: 'Huỷ filter',
           close: true,
           highLight: false,
           onClick: () => {

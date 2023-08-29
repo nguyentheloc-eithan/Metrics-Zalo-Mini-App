@@ -52,12 +52,12 @@ const sections = [
     link: '/services',
     enable: true,
   },
-  {
-    name: 'Sales report',
-    icon: <Icon icon="zi-poll" />,
-    link: '/sale-report',
-    enable: false,
-  },
+  // {
+  //   name: 'Sales report',
+  //   icon: <Icon icon="zi-poll" />,
+  //   link: '/sale-report',
+  //   enable: false,
+  // },
 ];
 
 const OverallStatistics = () => {

@@ -57,6 +57,7 @@ const RevenuePage = () => {
       setDate(temp);
       setDateFilter(temp);
     } else if (index !== indexSelect) {
+      setDatePickerEnable(false);
       setIndexSelect(index);
       if (value == 'thisWeek') {
         console.log('week');
@@ -64,15 +65,12 @@ const RevenuePage = () => {
         thisWeekStatistics();
       } else if (value == 'thisMonth') {
         console.log('month');
-
         thisMonthStatistic();
       } else if (value == 'today') {
         console.log('today');
-
         todayStatistics();
       } else if (value == 'yesterday') {
         console.log('yesterday');
-
         yesterdayFilter();
       }
     }

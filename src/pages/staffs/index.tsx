@@ -187,7 +187,6 @@ const StaffsPage = () => {
                   <div
                     onClick={() => {
                       handleOnclickRange(index, range.value);
-                      cancelFilterOnRangePicker();
                     }}
                     key={index}
                     className={`${

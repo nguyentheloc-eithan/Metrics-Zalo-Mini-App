@@ -9,21 +9,25 @@ const navItems = [
     path: '/overall-statistics',
     label: 'Tổng quan',
     icon: <Icon icon="zi-more-grid" />,
+    iconActive: <Icon icon="zi-more-diamond-solid" />,
   },
   {
     path: '/customers-nav',
     label: 'Khách',
     icon: <Icon icon="zi-group" />,
+    iconActive: <Icon icon="zi-group-solid" />,
   },
   {
     path: '/notifications',
     label: 'Thông báo',
     icon: <Icon icon="zi-notif" />,
+    iconActive: <Icon icon="zi-notif" />,
   },
   {
     path: '/profile',
     label: 'Cá nhân',
     icon: <Icon icon="zi-user-circle" />,
+    iconActive: <Icon icon="zi-user-circle-solid" />,
   },
 ];
 
@@ -57,7 +61,7 @@ export const Navigation: FC = () => {
               id="bottom-nav"
               activeKey={activeTab}
               onChange={(key) => handleChangeRoute(key)}>
-              {navItems.map(({ path, label, icon }) => (
+              {navItems.map(({ path, label, icon, iconActive }) => (
                 <BottomNavigation.Item
                   key={path}
                   label={label}
