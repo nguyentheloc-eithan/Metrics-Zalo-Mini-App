@@ -57,7 +57,6 @@ const RevenuePage = () => {
       setDate(temp);
       setDateFilter(temp);
     } else if (index !== indexSelect) {
-      setDatePickerEnable(false);
       setIndexSelect(index);
       if (value == 'thisWeek') {
         console.log('week');
@@ -211,7 +210,6 @@ const RevenuePage = () => {
                   <div
                     onClick={() => {
                       handleOnclickRange(index, range.value);
-                      cancelFilterOnRangePicker();
                     }}
                     key={index}
                     className={`${
