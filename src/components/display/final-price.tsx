@@ -5,12 +5,12 @@ import { calcFinalPrice } from "utils/product";
 import { DisplayPrice } from "./price";
 
 export const FinalPrice: FC<{
-  children: Product;
-  options?: SelectedOptions;
+    children: Product;
+    options?: SelectedOptions;
 }> = ({ children, options }) => {
-  const finalPrice = useMemo(
-    () => calcFinalPrice(children, options),
-    [children, options]
-  );
-  return <DisplayPrice>{finalPrice}</DisplayPrice>;
+    const finalPrice = useMemo(
+        () => calcFinalPrice(children, options),
+        [children, options],
+    );
+    return <DisplayPrice>{finalPrice}</DisplayPrice>;
 };
