@@ -14,11 +14,11 @@ const TableCustomerNav = (props: TableCustomerNavProps) => {
   return (
     <div>
       <div className="flex h-[calc((100vh-16px)/1.33)] flex-col gap-[16px] bg-white rounded-[8px] overflow-scroll">
-        <div className="h-full ">
-          <div className="w-[calc((100vw-32px))] mr-[16px] fixed z-[999] bg-[#E9EBED] gap-[48px] h-[36px] px-[12px] py-[8px] flex text-[10px] text-[#1F1F1F] font-[600] leading-[16px] tracking-[1.5px] items-center ">
+        <div className="h-full w-full">
+          <div className="w-[calc((100vw-32px))] mr-[16px] fixed z-[999] bg-[#E9EBED] h-[36px] px-[12px] py-[8px] flex justify-between text-[10px] text-[#1F1F1F] font-[600] leading-[16px] tracking-[1.5px] items-center ">
             <p>STT</p>
-            <p>Khách hàng</p>
-            <p className="ml-[60px] w-fit ">Số điện thoại</p>
+            <p className="w-fit mr-[60px]">Khách hàng</p>
+            <p className=" w-fit mr-[1rem]">Số điện thoại</p>
           </div>
           <div className="mt-[40px]">
             {zaloCustomers.map((customer, index) => {
@@ -62,7 +62,7 @@ const BoxRowCustomerNav = (props: BoxCustomerParams) => {
 
   return (
     <div
-      className={`w-full h-[40px] flex items-center p-[12px] lex justify-between text-[10px] text-[#36383A] font-[400] leading-[16px] border-b-[0.5px] border-b-[#E9EBED] `}>
+      className={`w-full h-[40px] flex items-center p-[12px]  justify-between text-[10px] text-[#36383A] font-[400] leading-[16px] border-b-[0.5px] border-b-[#E9EBED] `}>
       <div className="flex items-center">{index}</div>
       <div
         className={`w-[200px] flex items-center ${

@@ -102,7 +102,6 @@ const HomePage = () => {
         job: 'Admin',
         department: depart,
       };
-      console.log(updatedUser);
 
       setUserLogin(updatedUser);
       return true;
@@ -111,11 +110,11 @@ const HomePage = () => {
         'a1ee782b-2244-4015-877f-d11275afe27f'
       );
       const updatedUser = {
-        ...userLogin,
+        ...user,
         job: 'Developer',
         department: depart,
       };
-      console.log(updatedUser);
+
       setUserLogin(updatedUser);
 
       return true;
@@ -124,11 +123,10 @@ const HomePage = () => {
         '881ea3d3-ffc5-4f54-ba8b-9921b06ee663'
       );
       const updatedUser = {
-        ...userLogin,
+        ...user,
         job: 'Tester',
         department: depart,
       };
-      console.log(updatedUser);
 
       setUserLogin(updatedUser);
       return true;
@@ -185,6 +183,7 @@ const HomePage = () => {
       return;
     }
   };
+
   return (
     <>
       {loading ? (
