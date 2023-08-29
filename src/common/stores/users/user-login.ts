@@ -1,3 +1,4 @@
+import { IUser } from 'common/types/user';
 import { create } from 'zustand';
 
 type State = {
@@ -9,7 +10,18 @@ type Action = {
 };
 
 const useUserStore = create<State & Action>((set) => ({
-  userLogin: [],
+  userLogin: {
+    id: '',
+    name: '',
+    image: '',
+    department: '',
+    email: '',
+    job: '',
+    date_start: '',
+    date_of_birth: '',
+    phone: '',
+    address: '',
+  },
   setUserLogin: (user) => set(() => ({ userLogin: user })),
 }));
 

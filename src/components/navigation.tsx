@@ -50,7 +50,8 @@ export const Navigation: FC = () => {
         location.pathname !== '/staffs' &&
         location.pathname !== '/revenue' &&
         location.pathname !== '/services' &&
-        location.pathname !== '/order-bookings' && (
+        location.pathname !== '/order-bookings' &&
+        location.pathname !== '/not-admin' && (
           <>
             <BottomNavigation
               id="bottom-nav"

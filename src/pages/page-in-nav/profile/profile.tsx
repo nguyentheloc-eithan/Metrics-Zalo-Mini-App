@@ -1,21 +1,15 @@
+import useFetchZaloUser from 'common/stores/users/user-login';
+import { IUser } from 'common/types/user';
 import { ListRenderer } from 'components/list-renderer';
+import dayjs from 'dayjs';
 import React, { FC } from 'react';
 import { Avatar, Box, Header, Page, Text, useNavigate } from 'zmp-ui';
 
-const userTemp: IUser = {
-  id: '',
-  image: '',
-  job: 'Engineer',
-  name: 'Nguyen The Loc',
-  department: 'BOD',
-  email: 'username@email.com',
-  date_start: '15-05-2023',
-  date_of_birth: '31-01-2001',
-  phone: '0772898981',
-  address: '123 Main Street',
-};
-
-const PersonalInformation: FC = () => {
+interface PageInformationProps {
+  userLogin: any;
+}
+const PersonalInformation = (props: PageInformationProps) => {
+  const { userLogin } = props;
   return (
     <Box className="m-4">
       <ListRenderer
@@ -39,7 +33,9 @@ const PersonalInformation: FC = () => {
                   Ngày tháng năm sinh
                 </Text.Header>
                 <Text className="w-full flex justify-end">
-                  {userTemp.date_of_birth}
+                  {userLogin.date_of_birth
+                    ? userLogin.date_of_birth
+                    : 'DD-MM-YYYY'}
                 </Text>
               </Box>
             ),
@@ -51,7 +47,7 @@ const PersonalInformation: FC = () => {
                 <Text.Header className="flex w-full items-center justify-between font-[400] text-[#8F9499] spacing-[0.25px] text-[14px] leading-[20px]">
                   Só điện thoại
                 </Text.Header>
-                <Text>{userTemp.phone}</Text>
+                <Text>{userLogin.phone}</Text>
               </Box>
             ),
           },
@@ -63,7 +59,7 @@ const PersonalInformation: FC = () => {
                   Địa chỉ
                 </Text.Header>
                 <Text className="w-full flex justify-end">
-                  {userTemp.address}
+                  {userLogin.address}
                 </Text>
               </Box>
             ),
@@ -76,16 +72,20 @@ const PersonalInformation: FC = () => {
   );
 };
 
-const JobInformation: FC = () => {
+const JobInformation = (props: PageInformationProps) => {
+  const { userLogin } = props;
   return (
     <Box className="m-4">
       <div className="flex flex-col items-center justify-center mt-[36px] mb-[16px]">
-        <Avatar size={103} />
+        <Avatar
+          src={userLogin.avatar}
+          size={103}
+        />
         <div className="mt-[16px] mb-[4px] text-[14px] font-[600] leading-[20px] tracking-[0.25px]">
-          {userTemp.name}
+          {userLogin.name}
         </div>
         <div className="text-[12px] font-[300] leading-[18px] tracking-[0.4px]">
-          {userTemp.job}
+          {userLogin.job}
         </div>
       </div>
       <ListRenderer
@@ -108,7 +108,7 @@ const JobInformation: FC = () => {
                 <Text.Header className="flex w-full items-center justify-between font-[400] text-[#8F9499] spacing-[0.25px] text-[14px] leading-[20px]">
                   Phòng ban
                 </Text.Header>
-                <Text>{userTemp.department}</Text>
+                <Text>{userLogin.department}</Text>
               </Box>
             ),
           },
@@ -119,7 +119,7 @@ const JobInformation: FC = () => {
                 <Text.Header className="flex w-full items-center justify-between font-[400] text-[#8F9499] spacing-[0.25px] text-[14px] leading-[20px]">
                   Email
                 </Text.Header>
-                <Text>{userTemp.email}</Text>
+                <Text>{userLogin.email}</Text>
               </Box>
             ),
           },
@@ -131,7 +131,9 @@ const JobInformation: FC = () => {
                   Ngày gia nhập
                 </Text.Header>
                 <Text className="w-full flex justify-end">
-                  {userTemp.date_start}
+                  {userLogin.created_at
+                    ? dayjs(userLogin.created_at).format('DD-MM-YYYY')
+                    : 'DD-MM-YYYY'}
                 </Text>
               </Box>
             ),
@@ -190,6 +192,8 @@ const Settings = () => {
 };
 
 const Profile = () => {
+  const { userLogin } = useFetchZaloUser();
+  console.log('userLogin', userLogin);
   return (
     <Page>
       <Header
@@ -198,8 +202,8 @@ const Profile = () => {
         title="Cá nhân"
       />
       {/* <Subscription /> */}
-      <JobInformation />
-      <PersonalInformation />
+      <JobInformation userLogin={userLogin} />
+      <PersonalInformation userLogin={userLogin} />
       <Settings />
     </Page>
   );

@@ -16,16 +16,19 @@ const sections = [
       />
     ),
     link: '/revenue',
+    enable: true,
   },
   {
     name: 'Orders & Bookings',
     icon: <Icon icon="zi-note" />,
     link: '/order-bookings',
+    enable: true,
   },
   {
     name: 'Khách hàng',
     icon: <Icon icon="zi-group" />,
     link: '/customers',
+    enable: true,
   },
   {
     name: 'Nhân viên',
@@ -36,6 +39,7 @@ const sections = [
       />
     ),
     link: '/staffs',
+    enable: true,
   },
   {
     name: 'Dịch vụ',
@@ -46,11 +50,13 @@ const sections = [
       />
     ),
     link: '/services',
+    enable: true,
   },
   {
     name: 'Sales report',
     icon: <Icon icon="zi-poll" />,
     link: '/sale-report',
+    enable: false,
   },
 ];
 
@@ -93,6 +99,7 @@ const OverallStatistics = () => {
             icon={section.icon}
             text={section.name}
             link={section.link}
+            enable={section.enable}
           />
         ))}
       </div>
