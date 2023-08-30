@@ -12,16 +12,16 @@ import LoadingSquareSpin from 'components/loading';
 import dayjs from 'dayjs';
 import { getPhoneNumberByToken } from 'services/zalo/get-phone';
 const userLoginInit = {
-  id: '',
-  name: '',
-  image: '',
-  department: '',
-  email: '',
-  job: '',
-  date_start: '',
-  date_of_birth: '',
-  phone: '',
-  address: '',
+    id: "",
+    name: "",
+    image: "",
+    department: "",
+    email: "",
+    job: "",
+    date_start: "",
+    date_of_birth: "",
+    phone: "",
+    address: "",
 };
 const HomePage = () => {
   const navigate = useNavigate();
@@ -183,72 +183,73 @@ const HomePage = () => {
         'a2886b4a-60c4-4f69-94a2-9650f7e02cd5'
       );
 
-      const updatedUser = {
-        ...user,
-        job: 'Admin',
-        department: depart,
-      };
+            const updatedUser = {
+                ...user,
+                job: "Admin",
+                department: depart,
+            };
 
-      setUserLogin(updatedUser);
-      return true;
-    } else if (id_role == 'a1ee782b-2244-4015-877f-d11275afe27f') {
-      const depart: any = await departmentFetch(
-        'a1ee782b-2244-4015-877f-d11275afe27f'
-      );
-      const updatedUser = {
-        ...user,
-        job: 'Developer',
-        department: depart,
-      };
+            setUserLogin(updatedUser);
+            return true;
+        } else if (id_role == "a1ee782b-2244-4015-877f-d11275afe27f") {
+            const depart: any = await departmentFetch(
+                "a1ee782b-2244-4015-877f-d11275afe27f",
+            );
+            const updatedUser = {
+                ...user,
+                job: "Developer",
+                department: depart,
+            };
 
-      setUserLogin(updatedUser);
+            setUserLogin(updatedUser);
 
-      return true;
-    } else if (id_role == '881ea3d3-ffc5-4f54-ba8b-9921b06ee663') {
-      const depart: any = await departmentFetch(
-        '881ea3d3-ffc5-4f54-ba8b-9921b06ee663'
-      );
-      const updatedUser = {
-        ...user,
-        job: 'Tester',
-        department: depart,
-      };
+            return true;
+        } else if (id_role == "881ea3d3-ffc5-4f54-ba8b-9921b06ee663") {
+            const depart: any = await departmentFetch(
+                "881ea3d3-ffc5-4f54-ba8b-9921b06ee663",
+            );
+            const updatedUser = {
+                ...user,
+                job: "Tester",
+                department: depart,
+            };
 
-      setUserLogin(updatedUser);
-      return true;
-    } else {
-      return false;
-    }
-  };
+            setUserLogin(updatedUser);
+            return true;
+        } else {
+            return false;
+        }
+    };
 
-  const departmentFetch = async (role_id: string) => {
-    let departmentId: any = '';
-    let department: string = '';
-    const { data: data_role, error: error_role } = await supabase
-      .from('roles')
-      .select('department_id')
-      .eq('id', role_id);
-    if (error_role) {
-      console.log('find department error');
-      return;
-    }
-    if (data_role) {
-      departmentId = data_role[0].department_id;
+    const departmentFetch = async (role_id: string) => {
+        let departmentId: any = "";
+        let department: string = "";
+        const { data: data_role, error: error_role } = await supabase
+            .from("roles")
+            .select("department_id")
+            .eq("id", role_id);
+        if (error_role) {
+            console.log("find department error");
+            return;
+        }
+        if (data_role) {
+            departmentId = data_role[0].department_id;
 
-      const { data: data_department, error: error_department } = await supabase
-        .from('departments')
-        .select('*')
-        .eq('id', departmentId);
-      if (error_department) {
-        console.log('find department error', error_department);
-        return;
-      }
-      if (data_department) {
-        department = data_department[0].name;
-      }
-    }
-    return department;
-  };
+            const { data: data_department, error: error_department } =
+                await supabase
+                    .from("departments")
+                    .select("*")
+                    .eq("id", departmentId);
+            if (error_department) {
+                console.log("find department error", error_department);
+                return;
+            }
+            if (data_department) {
+                department = data_department[0].name;
+            }
+        }
+        return department;
+    };
 
   const formatUserInStaff = (data: any) => {
     if (data) {
@@ -284,28 +285,32 @@ const HomePage = () => {
                 className="w-[343px] mt-[60px] h-[343px] object-contain"
               />
 
-              <button
-                onClick={getUser}
-                className="bg-[#36383A] mt-[50px] h-[44px] rounded-[8px] w-[343px] px-[24px] text-[14px] font-[700] leading-[20px] tracking-[1.25px] py-[12px] text-[white]">
-                Đăng nhập bằng Zalo
-              </button>
+                            <button
+                                onClick={getUser}
+                                className="bg-[#36383A] mt-[50px] h-[44px] rounded-[8px] w-[343px] px-[24px] text-[14px] font-[700] leading-[20px] tracking-[1.25px] py-[12px] text-[white]"
+                            >
+                                Đăng nhập bằng Zalo
+                            </button>
 
-              <div className="text-[14px] font-[700] mt-[8px] text-[#36383A] leading-[20px] tracking-[0.1px]">
-                Bạn chưa có tài khoản?
-                <span className="text-[#BC2449]"> Liên hệ với Admin.</span>
-              </div>
-            </div>
-            <div className="flex w-full items-center justify-center mt-[30px]">
-              <img
-                src="https://ucarecdn.com/3a1ae635-d250-4910-a931-d47b2fd5ebc6/-/quality/smart/-/format/auto/"
-                className="w-[103px]"
-              />
-            </div>
-          </Box>
-        </Page>
-      )}
-    </>
-  );
+                            <div className="text-[14px] font-[700] mt-[8px] text-[#36383A] leading-[20px] tracking-[0.1px]">
+                                Bạn chưa có tài khoản?
+                                <span className="text-[#BC2449]">
+                                    {" "}
+                                    Liên hệ với Admin.
+                                </span>
+                            </div>
+                        </div>
+                        <div className="flex w-full items-center justify-center mt-[30px]">
+                            <img
+                                src="https://ucarecdn.com/3a1ae635-d250-4910-a931-d47b2fd5ebc6/-/quality/smart/-/format/auto/"
+                                className="w-[103px]"
+                            />
+                        </div>
+                    </Box>
+                </Page>
+            )}
+        </>
+    );
 };
 
 export default HomePage;

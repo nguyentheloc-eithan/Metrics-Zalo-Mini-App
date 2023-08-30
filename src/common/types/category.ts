@@ -1,4 +1,4 @@
 export interface ICategory {
-  name: string;
-  percentage: any;
+    name: string;
+    percentage: any;
 }
