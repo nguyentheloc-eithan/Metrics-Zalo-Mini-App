@@ -66,8 +66,8 @@ const HomePage = () => {
                   formatUserInStaff(staffCatchByPhone);
                 setUserLogin(userCatchByPhone);
 
-                console.log('staffCatchByPhone', staffCatchByPhone);
-                console.log('userCatchByPhone', userCatchByPhone);
+                // console.log('staffCatchByPhone', staffCatchByPhone);
+                // console.log('userCatchByPhone', userCatchByPhone);
 
                 const checkAdmin = await checkIsAdmin(
                   staffCatchByPhone.id,
@@ -91,7 +91,6 @@ const HomePage = () => {
       setLoading(false);
       return;
     } catch (error) {
-      console.log('ko vao trong kia ma chay ra toi day');
       navigate('/not-admin');
       console.log('getuser', error);
     }
