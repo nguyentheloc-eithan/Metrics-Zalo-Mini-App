@@ -28,7 +28,7 @@ export default function Assistance() {
         console.log(newMessages);
 
         const response = await fetch(
-            "http://localhost:9081/api/v1/chatbot/admin",
+            "https://api.auradental.vn/api/v1/chatbot/admin",
             {
                 method: "POST",
                 body: JSON.stringify(newMessages),
