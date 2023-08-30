@@ -63,19 +63,21 @@ const BoxRowCustomerNav = (props: BoxCustomerParams) => {
   return (
     <div
       className={`w-full h-[40px] flex items-center p-[12px]  justify-between text-[10px] text-[#36383A] font-[400] leading-[16px] border-b-[0.5px] border-b-[#E9EBED] `}>
-      <div className="flex items-center">{index}</div>
+      <div className="flex items-center">
+        {index < 10 ? '0' + index : index}
+      </div>
       <div
         className={`w-[200px] flex items-center ${
-          avatar ? 'justify-start ml-[15px]' : ''
+          avatar ? 'justify-start ml-[10px]' : ''
         } gap-[6px]`}>
         {avatar ? (
           <Avatar
-            className="w-[25px] h-[25px]"
-            size={24}
+            className="object-cover"
+            size={26}
             src={avatar}
           />
         ) : null}
-        <div className="w-[200px] capitalize">{name}</div>
+        <div className="w-[120px] capitalize">{name}</div>
       </div>
       <div className={`w-[100px] flex justify-between ${classNameStatistic}`}>
         <div>{number}</div>
