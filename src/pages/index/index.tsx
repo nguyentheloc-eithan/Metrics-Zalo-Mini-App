@@ -5,11 +5,12 @@ import Lottie from 'lottie-react';
 import lottie from '../../static/lottie/animation_llkpplro.json';
 import { IUser } from 'common/types/user';
 import useFetchZaloUser from 'common/stores/users/user-login';
-import { getUserInfo, login } from 'zmp-sdk/apis';
+import { getAccessToken, getUserInfo, login } from 'zmp-sdk/apis';
 import { getPhoneNumber } from 'zmp-sdk/apis';
 import { supabase } from 'services/supabse';
 import LoadingSquareSpin from 'components/loading';
 import dayjs from 'dayjs';
+import { getPhoneNumberByToken } from 'services/zalo/get-phone';
 const userLoginInit = {
   id: '',
   name: '',
@@ -26,10 +27,12 @@ const HomePage = () => {
   const navigate = useNavigate();
   const { userLogin, setUserLogin } = useFetchZaloUser();
   const [loading, setLoading] = useState<boolean>(false);
+  const [userPhone, setUserPhone] = useState<string>('');
 
   const getUser = async () => {
     try {
       setLoading(true);
+
       await login({});
       const { userInfo } = await getUserInfo();
       let flag = await checkUser(userInfo.id);
@@ -43,7 +46,42 @@ const HomePage = () => {
         } else {
           navigate('/not-admin');
         }
+      } else {
+        const accessToken = await getAccessToken({});
+        getPhoneNumber({
+          success: async (data) => {
+            let { token } = data;
+            console.log('token: ' + token);
+            if (token && accessToken) {
+              const phone = await getPhoneNumberByToken(token, accessToken);
+              const checkPhone = await checkUserByPhone(phone);
+              if (checkPhone == false) {
+                navigate('/not-admin');
+              } else {
+                updateUserZaloId(phone, userInfo.id);
+                const staffCatchByPhone: any =
+                  getUserInStaffsTableByPhone(phone);
+                const userCatchByPhone: any =
+                  formatUserInStaff(staffCatchByPhone);
+                setUserLogin(userCatchByPhone);
+                const checkAdmin = await checkIsAdmin(
+                  staffCatchByPhone.id,
+                  userCatchByPhone
+                );
+                if (checkAdmin == true) {
+                  navigate('/overall-statistics');
+                } else {
+                  navigate('/not-admin');
+                }
+              }
+            }
+          },
+          fail: (error) => {
+            console.log('error getPhone', error);
+          },
+        });
       }
+
       setLoading(false);
     } catch (error) {
       // xử lý khi gọi api thất bại
@@ -51,6 +89,46 @@ const HomePage = () => {
       console.log('getuser', error);
     }
   };
+  const checkUserByPhone = async (phone: string) => {
+    const { data: dataPhone, error: errorPhone } = await supabase
+      .from('staffs')
+      .select('*')
+      .eq('phone', phone);
+
+    if ((dataPhone && dataPhone?.length == 0) || !dataPhone) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const updateUserZaloId = async (phone: string, zalo_id: string) => {
+    const { error } = await supabase
+      .from('staffs')
+      .update({ zalo_id: zalo_id })
+      .eq('phone', phone);
+    if (error) {
+      console.log('insert zalo_id', error.message);
+      return;
+    }
+  };
+
+  /*phone*/
+  const getUserInStaffsTableByPhone = async (phone: string) => {
+    const { data, error } = await supabase
+      .from('staffs')
+      .select('*')
+      .eq('phone', phone);
+    if (error) {
+      console.log('getDataByPhone', error.message);
+      return;
+    }
+    if (data) {
+      return data[0];
+    }
+  };
+
+  /*zalo_id*/
   const getUserInStaffsTableByZaloId = async (zalo_id: string) => {
     const { data, error } = await supabase
       .from('staffs')
@@ -61,13 +139,15 @@ const HomePage = () => {
       return;
     }
     if (data) {
+      console.log('data[0]', data[0]);
+
       return data[0];
     }
   };
   const checkUser = async (id: string) => {
     try {
       const { data: user, error } = await supabase
-        .from('users')
+        .from('staffs')
         .select('*')
         .eq('zalo_id', id);
       if ((user && user?.length == 0) || !user) {
@@ -183,7 +263,6 @@ const HomePage = () => {
       return;
     }
   };
-
   return (
     <>
       {loading ? (
