@@ -1,6 +1,7 @@
 import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import assistance from "../../../../static/assistance.svg";
 
 type Props = {
     isUser?: boolean;
@@ -21,7 +22,7 @@ export default function Bubble({ isUser, children, empty }: Props) {
             {!isUser && (
                 <img
                     className="rounded-full w-6 h-6 bg-white"
-                    src="src/static/assistance.svg"
+                    src={assistance}
                     alt="Assistance"
                 />
             )}
