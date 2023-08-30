@@ -51,23 +51,29 @@ const HomePage = () => {
         getPhoneNumber({
           success: async (data) => {
             let { token } = data;
-            console.log('token: ' + token);
+            // console.log('token: ' + token);
             if (token && accessToken) {
               const phone = await getPhoneNumberByToken(token, accessToken);
               const checkPhone = await checkUserByPhone(phone);
+              console.log('checkPhone', checkPhone);
               if (checkPhone == false) {
                 navigate('/not-admin');
               } else {
                 updateUserZaloId(phone, userInfo.id);
                 const staffCatchByPhone: any =
-                  getUserInStaffsTableByPhone(phone);
+                  await getUserInStaffsTableByPhone(phone);
                 const userCatchByPhone: any =
                   formatUserInStaff(staffCatchByPhone);
                 setUserLogin(userCatchByPhone);
+
+                console.log('staffCatchByPhone', staffCatchByPhone);
+                console.log('userCatchByPhone', userCatchByPhone);
+
                 const checkAdmin = await checkIsAdmin(
                   staffCatchByPhone.id,
                   userCatchByPhone
                 );
+                console.log('checkAdmin', checkAdmin);
                 if (checkAdmin == true) {
                   navigate('/overall-statistics');
                 } else {
@@ -83,12 +89,15 @@ const HomePage = () => {
       }
 
       setLoading(false);
+      return;
     } catch (error) {
-      // xử lý khi gọi api thất bại
+      console.log('ko vao trong kia ma chay ra toi day');
       navigate('/not-admin');
       console.log('getuser', error);
     }
   };
+
+  /*phone*/
   const checkUserByPhone = async (phone: string) => {
     const { data: dataPhone, error: errorPhone } = await supabase
       .from('staffs')
@@ -112,8 +121,6 @@ const HomePage = () => {
       return;
     }
   };
-
-  /*phone*/
   const getUserInStaffsTableByPhone = async (phone: string) => {
     const { data, error } = await supabase
       .from('staffs')
