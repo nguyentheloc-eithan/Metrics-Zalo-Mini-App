@@ -18,6 +18,7 @@ import StaffsPage from "pages/staffs";
 import UserSettings from "pages/page-in-nav/profile/user-setting";
 import Notifications from "pages/page-in-nav/notification";
 import NotAdmin from "pages/index/not-admin";
+import Assistance from "pages/page-in-nav/assistance";
 
 export const Layout: FC = () => {
     return (
@@ -34,6 +35,7 @@ export const Layout: FC = () => {
                         path="/notifications"
                         element={<Notifications />}
                     ></Route>
+                    <Route path="/assistance" element={<Assistance />} />
                     <Route
                         path="/customers-nav"
                         element={<CustomersNav />}

@@ -18,6 +18,12 @@ const navItems = [
         iconActive: <Icon icon="zi-group-solid" />,
     },
     {
+        path: "/assistance",
+        label: "Thư ký",
+        icon: <Icon icon="zi-chat" />,
+        iconActive: <Icon icon="zi-chat-solid" />,
+    },
+    {
         path: "/notifications",
         label: "Thông báo",
         icon: <Icon icon="zi-notif" />,
