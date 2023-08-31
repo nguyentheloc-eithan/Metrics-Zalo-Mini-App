@@ -47,7 +47,8 @@ export default function Bubble({ isUser, children, empty }: Props) {
                     </ReactMarkdown>
                 )}
             </div>
-            {isUser && <div className="rounded-full w-6 h-6 bg-white"></div>}
+            {/* TODO add avatar*/}
+            {isUser && <img className="rounded-full w-6 h-6 bg-white" />}
         </section>
     );
 }
