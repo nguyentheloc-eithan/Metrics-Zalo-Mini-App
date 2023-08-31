@@ -47,9 +47,9 @@ const TableClinicRevenue = (props: TableClinicRevenueProps) => {
         <div className="p-[16px] flex flex-col gap-[16px] bg-white rounded-[8px]">
             <div>
                 <div className="w-full bg-[#E9EBED] h-[36px] px-[12px] py-[8px] flex justify-between text-[10px] text-[#1F1F1F] font-[600] leading-[16px] tracking-[1.5px] items-center">
-                    <p className="flex flex-start">STT</p>
-                    <p className="flex flex-start w-[100px]">Cơ sở</p>
-                    <p className={`w-[100px]`}>
+                    <div className="flex flex-start">STT</div>
+                    <div className="flex flex-start w-[100px]">Cơ sở</div>
+                    <div className={`w-[100px]`}>
                         {revenueFilter
                             ? "Doanh thu"
                             : debitFilter
@@ -57,7 +57,7 @@ const TableClinicRevenue = (props: TableClinicRevenueProps) => {
                             : customerPaidFilter
                             ? "Thực thu"
                             : "Doanh thu"}
-                    </p>
+                    </div>
                 </div>
                 <div>
                     {data.map((clinic, index) => {

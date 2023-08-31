@@ -202,7 +202,7 @@ const Profile = () => {
             />
             <JobInformation userLogin={userLogin} />
             <PersonalInformation userLogin={userLogin} />
-            <Settings />
+            {/* <Settings /> */}
         </Page>
     );
 };

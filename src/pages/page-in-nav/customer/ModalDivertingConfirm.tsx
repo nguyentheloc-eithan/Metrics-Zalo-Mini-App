@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { openChat, showToast } from "zmp-sdk/apis";
 import { Modal } from "zmp-ui";
 
@@ -10,25 +10,18 @@ type ModalDivertingProps = {
 
 const ModalDivertingConfirm = (props: ModalDivertingProps) => {
     const { customer, active, setActiveCustomerDiverting } = props;
+    const [hasZaloId, setHasZaloId] = useState<boolean>(false);
     console.log("ModalDivertingConfirm", customer);
-    const contactCustomers = async (zalo_id: any) => {
-        if (zalo_id) {
-            try {
-                await openChat({
-                    type: "user",
-                    id: zalo_id,
-                    message: "Xin chào bạn",
-                });
-            } catch (error) {
-                showToast({
-                    message:
-                        "Đã có lỗi xảy ra trong quá trình liên hệ với khách hàng",
-                });
-                console.log(
-                    "lỗi xảy ra trong quá trình liên hệ với khách hàng",
-                    error,
-                );
-            }
+    const contactCustomers = async (customer: any) => {
+        if (customer.zalo_id == null) {
+            setHasZaloId(true);
+        } else {
+            await openChat({
+                type: "user",
+                id: customer.zalo_id,
+                message: "Xin chào bạn",
+            });
+            setActiveCustomerDiverting(false);
         }
     };
     return (
@@ -37,8 +30,7 @@ const ModalDivertingConfirm = (props: ModalDivertingProps) => {
                 visible={active}
                 title="Chuyển hướng"
                 onClose={() => {
-                    contactCustomers(customer.zalo_id);
-                    setActiveCustomerDiverting(false);
+                    contactCustomers(customer);
                 }}
                 actions={[
                     {
@@ -59,6 +51,11 @@ const ModalDivertingConfirm = (props: ModalDivertingProps) => {
                         {" " + customer?.name}
                     </span>
                     .
+                    {hasZaloId && (
+                        <div className="text-[red]">
+                            Khách hàng không có Zalo ID.
+                        </div>
+                    )}
                 </div>
             </Modal>
         </div>

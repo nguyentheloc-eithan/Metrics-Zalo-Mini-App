@@ -19,9 +19,9 @@ const TableTopCategories = (props: TableTopCategoriesProps) => {
             </div>
             <div>
                 <div className="w-full bg-[#E9EBED] h-[36px] px-[12px] py-[8px] flex justify-around text-[10px] text-[#1F1F1F] font-[600] leading-[16px] tracking-[1.5px] items-center">
-                    <p>STT</p>
-                    <p className="w-[142px]">Danh mục</p>
-                    <p className="w-[100px]">
+                    <div>STT</div>
+                    <div className="w-[142px]">Danh mục</div>
+                    <div className="w-[100px]">
                         {revenueFilter
                             ? "Doanh thu"
                             : debitFilter
@@ -29,7 +29,7 @@ const TableTopCategories = (props: TableTopCategoriesProps) => {
                             : customerPaidFilter
                             ? "Thực thu"
                             : "Doanh thu"}
-                    </p>
+                    </div>
                 </div>
                 <div>
                     {topCategories.map((category, index) => {

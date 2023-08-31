@@ -1,7 +1,7 @@
 import React from "react";
 import { Avatar, Box, Header, Input } from "zmp-ui";
 
-const userTemp: IUser = {
+const userTemp: any = {
     id: "",
     image: "",
     job: "Engineer",

@@ -7,6 +7,9 @@ import { supabase } from "services/supabase";
 import { Header, Input } from "zmp-ui";
 import ModalDivertingConfirm from "./ModalDivertingConfirm";
 import TableCustomerNav from "./TableCustomerNav";
+import { ExportParams } from "services/rpc/clinic-revenue";
+import { temp } from "utils/date-params-default";
+import useDateFilter from "common/stores/date-filter";
 
 const actionFilter = [
     {
@@ -21,10 +24,25 @@ const actionFilter = [
 
 const CustomersNav = () => {
     const { setZaloCustomers, zaloCustomers } = useFetchZaloCustomers();
+    const { setDateFilter } = useDateFilter();
     const [allCustomers, setAllCustomers] = useState<ICustomerZalo[]>([]);
 
     const [loading, setLoading] = useState<boolean>(true);
     const [indexSelect, setIndexSelect] = useState<any>(0);
+    const [date, setDate] = useState<ExportParams>(temp);
+
+    const [datePickerEnable, setDatePickerEnable] = useState<boolean>(false);
+    const [openModalDateRangePicker, setOpenModalDateRangePicker] =
+        useState<boolean>(false);
+    const onHandleFilterDate = (date_start: string, date_end: string) => {
+        const dateNew: ExportParams = {
+            start_date: date_start,
+            end_date: date_end,
+        };
+        setDate(dateNew);
+        setDateFilter(dateNew);
+        setOpenModalDateRangePicker(false);
+    };
 
     const handleOnclickRange = (index: number, value: string) => {
         if (index == indexSelect) {
@@ -142,15 +160,15 @@ const CustomersNav = () => {
                         </div>
                         <div className="flex gap-[8px]">
                             {/* <ButtonIcon icon={"zi-location"} /> */}
-                            <ButtonIcon
-                                // onClick={() => {
-                                //   setDatePickerEnable(true);
-                                //   setOpenModalDateRangePicker(true);
-                                //   setIndexSelect(null);
-                                // }}
-                                // active={datePickerEnable}
+                            {/* <ButtonIcon
+                                onClick={() => {
+                                  setDatePickerEnable(true);
+                                  setOpenModalDateRangePicker(true);
+                                  setIndexSelect(null);
+                                }}
+                                active={datePickerEnable}
                                 icon={"zi-calendar"}
-                            />
+                            /> */}
                         </div>
                     </div>
                     <TableCustomerNav allCustomers={allCustomers} />

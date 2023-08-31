@@ -28,7 +28,7 @@ const TableCustomerNav = (props: TableCustomerNavProps) => {
                     </div>
                     <div className="mt-[40px]">
                         {allCustomers
-                            .slice(0, 150)
+                            .slice(0, 350)
                             .map((customer: any, index: number) => {
                                 return (
                                     <BoxRowCustomerNav
@@ -80,15 +80,19 @@ const BoxRowCustomerNav = (props: BoxCustomerParams) => {
         <div
             className={`w-full h-auto flex items-center p-[12px]  justify-between text-[10px] text-[#36383A] font-[400] leading-[16px] border-b-[0.5px] border-b-[#E9EBED] `}
         >
-            <div className="flex items-center">{index}</div>
+            <div className="flex items-center">
+                {index < 10 ? "0" + index : index}
+            </div>
             <div
-                className={`w-[180px] flex items-center ${
+                className={`w-[180px] ml-[15px] flex items-center ${
                     customer.avatar ? "justify-start ml-[15px]" : ""
                 } gap-[6px]`}
             >
                 {customer.avatar ? (
-                    <Avatar className="" size={26} src={customer.avatar} />
-                ) : null}
+                    <Avatar size={26} src={customer.avatar} />
+                ) : (
+                    <Avatar size={26} src="" />
+                )}
                 <div className="w-fit capitalize">{customer.name}</div>
             </div>
             <div

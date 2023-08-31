@@ -20,11 +20,11 @@ const TableTopCategories = (props: TableTopServicesProps) => {
             </div>
             <div>
                 <div className="w-full bg-[#E9EBED] h-[36px] px-[12px] py-[8px] flex justify-between text-[10px] text-[#1F1F1F] font-[600] leading-[16px] tracking-[1.5px] items-center">
-                    <p className="w-[30px] flex flex-start">STT</p>
-                    <p className="w-[100px] flex flex-start mr-[70px]">
+                    <div className="w-[30px] flex flex-start">STT</div>
+                    <div className="w-[100px] flex flex-start mr-[20px]">
                         Dịch vụ
-                    </p>
-                    <p>
+                    </div>
+                    <div className="w-fit mr-[1rem]">
                         {revenueFilter
                             ? "Doanh thu"
                             : debitFilter
@@ -32,7 +32,7 @@ const TableTopCategories = (props: TableTopServicesProps) => {
                             : customerPaidFilter
                             ? "Thực thu"
                             : "Doanh thu"}
-                    </p>
+                    </div>
                 </div>
                 <div>
                     {topServices.map((service, index) => {

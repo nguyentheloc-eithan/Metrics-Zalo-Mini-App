@@ -47,6 +47,7 @@ const TopCustomers = (props: TopCustomerProps) => {
     useEffect(() => {
         const filterTop5Customer = () => {
             const customersFilter: ICustomer[] = take(customers, 5);
+            console.log(customersFilter);
             setTop5Customers(customersFilter);
         };
         filterTop5Customer();
@@ -63,7 +64,7 @@ const TopCustomers = (props: TopCustomerProps) => {
                     <p className="flex flex-start w-fit mr-[80px] text-[12px]">
                         Khách hàng
                     </p>
-                    <p className={`w-[100px]  text-[12px]`}>
+                    <p className={`w-fit  text-[12px]`}>
                         {revenueFilter
                             ? "Doanh thu"
                             : debitFilter
@@ -85,7 +86,7 @@ const TopCustomers = (props: TopCustomerProps) => {
                                         : "text-[#36383A]"
                                 }`}
                                 key={index}
-                                avatar={"a"}
+                                avatar={customer.customer_avatar}
                                 name={customer.customer_name}
                                 index={index + 1}
                                 money={

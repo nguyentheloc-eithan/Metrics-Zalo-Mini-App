@@ -77,7 +77,7 @@ const TableTopTenServices = () => {
                             ? "Số bookings"
                             : "Doanh thu"}
                     </div>
-                    <div className="w-[90px] ml-[5px]">% so tổng</div>
+                    <div className="w-fit ml-[5px]">% so tổng</div>
                 </div>
                 <div>
                     {topTenServices.map((service, index) => {

@@ -1,6 +1,6 @@
 import React from "react";
 import UserCard from "./user-card";
-import { Header, Icon, Page } from "zmp-ui";
+import { Header, Icon, Page, useNavigate } from "zmp-ui";
 import useFetchZaloUser from "common/stores/users/user-login";
 import BoxButton from "components/overall-statistics/box-button";
 const sections = [
@@ -48,6 +48,7 @@ const sections = [
 ];
 const More = () => {
     const { userLogin } = useFetchZaloUser();
+    const navigate = useNavigate();
     return (
         <Page>
             <Header
@@ -72,9 +73,12 @@ const More = () => {
                         enable={section.enable}
                     />
                 ))}
-            </div>
-            <div className="w-full p-[16px] flex items-center justify-between bg-white rounded-[8px] text-[#DC1F18]">
-                Đăng xuất
+                <div
+                    onClick={() => navigate("/")}
+                    className="w-full p-[16px] flex items-center justify-between bg-white rounded-[8px] text-[#DC1F18]"
+                >
+                    Đăng xuất
+                </div>
             </div>
         </Page>
     );
