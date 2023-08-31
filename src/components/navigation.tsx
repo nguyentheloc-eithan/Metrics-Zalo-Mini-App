@@ -1,5 +1,4 @@
-import { useVirtualKeyboardVisible } from "hooks";
-import React, { FC, useEffect, useMemo, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { useLocation } from "react-router";
 
 import { BottomNavigation, Icon, useNavigate } from "zmp-ui";

@@ -68,8 +68,8 @@ const StaffsPage = () => {
                 if (allStaffAttendance) {
                     setAllStaffAttendances(allStaffAttendance);
                 }
-                console.log("allStaffStatistics", allStaffStatistics);
-                console.log("allStaffAttendance", allStaffAttendance);
+                // console.log("allStaffStatistics", allStaffStatistics);
+                // console.log("allStaffAttendance", allStaffAttendance);
             } finally {
                 setLoading(false);
             }
@@ -204,7 +204,7 @@ const StaffsPage = () => {
                             })}
                         </div>
                         <div className="flex gap-[8px]">
-                            <ButtonIcon icon={"zi-location"} />
+                            {/* <ButtonIcon icon={"zi-location"} /> */}
                             <ButtonIcon
                                 icon={"zi-calendar"}
                                 onClick={() => {

@@ -184,7 +184,7 @@ const Customer = () => {
                             })}
                         </div>
                         <div className="flex gap-[8px]">
-                            <ButtonIcon icon={"zi-location"} />
+                            {/* <ButtonIcon icon={"zi-location"} /> */}
                             <ButtonIcon
                                 icon={"zi-calendar"}
                                 onClick={() => {

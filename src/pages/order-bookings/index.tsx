@@ -287,7 +287,7 @@ const OrderBookings = () => {
                             })}
                         </div>
                         <div className="flex gap-[8px]">
-                            <ButtonIcon icon={"zi-location"} />
+                            {/* <ButtonIcon icon={"zi-location"} /> */}
                             <ButtonIcon
                                 active={datePickerEnable}
                                 icon={"zi-calendar"}

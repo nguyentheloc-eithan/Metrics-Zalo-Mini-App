@@ -7,4 +7,9 @@ interface IClinic {
     revenue: number;
 }
 
-export type { IClinic };
+interface IClinicSelect {
+    label: string;
+    value: any;
+}
+
+export type { IClinic, IClinicSelect };

@@ -6,6 +6,7 @@ import useDateFilter from "common/stores/date-filter";
 import ButtonIcon from "components/button/ButtonIcon";
 import LoadingSquareSpin from "components/loading";
 import ModalDatePicker from "components/modals/ModalDatePicker";
+import ModalMultipleSelects from "components/modals/ModalMultipleSelects";
 import ClinicRevenue from "components/overall-statistics/ClinicRevenue";
 import ServiceRevenue from "components/overall-statistics/ServiceRevenue";
 import BoxStatistics from "components/overall-statistics/box-statistics";
@@ -35,7 +36,6 @@ interface DataServices {
     customer_paid: number;
     debit: number;
 }
-
 const RevenuePage = () => {
     const { clinics, setClinics } = useFetchClinic();
     const { customers, setCustomers } = useFetchCustomers();
@@ -52,7 +52,12 @@ const RevenuePage = () => {
     const [datePickerEnable, setDatePickerEnable] = useState<boolean>(false);
     const [openModalDateRangePicker, setOpenModalDateRangePicker] =
         useState<boolean>(false);
+    const [filterClinicEnable, setFilterClinicEnable] =
+        useState<boolean>(false);
+    const [openModalFilterClinic, setOpenModalFilterClinic] =
+        useState<boolean>(false);
 
+    const [clinicTakeByFilter, setClinicsTakeByFilter] = useState<string[]>([]);
     const handleOnclickRange = (index: number, value: string) => {
         if (index == indexSelect) {
             setIndexSelect(null);
@@ -139,6 +144,7 @@ const RevenuePage = () => {
         setOpenModalDateRangePicker(false);
     };
 
+    console.log("clinicTakeByFilter", clinicTakeByFilter);
     useEffect(() => {
         const fetchClinicRevenue = async () => {
             try {
@@ -153,29 +159,60 @@ const RevenuePage = () => {
                     return;
                 }
                 if (clinicRevenue) {
-                    setClinics(clinicRevenue);
-                    const revenue = clinicRevenue.reduce(
-                        (prev: any, cur: any) => prev + cur.revenue,
-                        0,
-                    );
-                    const customerPaid = clinicRevenue.reduce(
-                        (prev: any, cur: any) => prev + cur.customer_paid,
-                        0,
-                    );
-                    const debit = clinicRevenue.reduce(
-                        (prev: any, cur: any) => prev + cur.debit,
-                        0,
-                    );
-                    setTotalRevenue(formatMoney(revenue));
-                    setTotalCustomerPaid(formatMoney(customerPaid));
-                    setTotalDebit(formatMoney(debit));
+                    if (clinicTakeByFilter.length == 0) {
+                        setClinics(clinicRevenue);
+                        const revenue = clinicRevenue.reduce(
+                            (prev: any, cur: any) => prev + cur.revenue,
+                            0,
+                        );
+                        const customerPaid = clinicRevenue.reduce(
+                            (prev: any, cur: any) => prev + cur.customer_paid,
+                            0,
+                        );
+                        const debit = clinicRevenue.reduce(
+                            (prev: any, cur: any) => prev + cur.debit,
+                            0,
+                        );
+                        setTotalRevenue(formatMoney(revenue));
+                        setTotalCustomerPaid(formatMoney(customerPaid));
+                        setTotalDebit(formatMoney(debit));
 
-                    if (errorCustomer) {
-                        message.error(errorCustomer.message);
-                        return;
-                    }
-                    if (dataCustomer) {
-                        setCustomers(dataCustomer);
+                        if (errorCustomer) {
+                            message.error(errorCustomer.message);
+                            return;
+                        }
+                        if (dataCustomer) {
+                            setCustomers(dataCustomer);
+                        }
+                    } else {
+                        const result = clinicTakeByFilter.map((clinic) => {
+                            clinicRevenue.filter((item) => item.name == clinic);
+                        });
+                        console.log("clinic filter ne", result);
+                        setClinics(clinicRevenue);
+                        const revenue = clinicRevenue.reduce(
+                            (prev: any, cur: any) => prev + cur.revenue,
+                            0,
+                        );
+                        const customerPaid = clinicRevenue.reduce(
+                            (prev: any, cur: any) => prev + cur.customer_paid,
+                            0,
+                        );
+                        const debit = clinicRevenue.reduce(
+                            (prev: any, cur: any) => prev + cur.debit,
+                            0,
+                        );
+                        setTotalRevenue(formatMoney(revenue));
+                        setTotalCustomerPaid(formatMoney(customerPaid));
+                        setTotalDebit(formatMoney(debit));
+
+                        if (errorCustomer) {
+                            message.error(errorCustomer.message);
+                            return;
+                        }
+                        if (dataCustomer) {
+                            setCustomers(dataCustomer);
+                        }
                     }
                 }
             } finally {
@@ -219,7 +256,15 @@ const RevenuePage = () => {
                             })}
                         </div>
                         <div className="flex gap-[8px]">
-                            <ButtonIcon icon={"zi-location"} />
+                            {/* <ButtonIcon
+                                icon={"zi-location"}
+                                onClick={() => {
+                                    setFilterClinicEnable(true);
+                                    setOpenModalFilterClinic(true);
+                                    setIndexSelect(null);
+                                }}
+                                active={filterClinicEnable}
+                            /> */}
                             <ButtonIcon
                                 onClick={() => {
                                     setDatePickerEnable(true);
@@ -231,11 +276,19 @@ const RevenuePage = () => {
                             />
                         </div>
                     </div>
-                    {datePickerEnable && (
+                    {datePickerEnable == true && (
                         <ModalDatePicker
                             open={openModalDateRangePicker}
                             onClose={onHandleFilterDate}
                             setOpen={setDatePickerEnable}
+                        />
+                    )}
+                    {filterClinicEnable == true && (
+                        <ModalMultipleSelects
+                            setDataFilter={setClinicsTakeByFilter}
+                            open={openModalFilterClinic}
+                            onClose={undefined}
+                            setOpen={setFilterClinicEnable}
                         />
                     )}
                     <div className="flex flex-col gap-[8px]">

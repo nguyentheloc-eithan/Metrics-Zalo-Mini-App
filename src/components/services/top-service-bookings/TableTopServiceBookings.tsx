@@ -77,9 +77,9 @@ const TableTopServiceBookings = () => {
         <div className="p-[2px] flex flex-col gap-[16px] bg-white rounded-[8px]">
             <div>
                 <div className="w-full bg-[#E9EBED] h-[36px] px-[12px] py-[8px] flex  text-[10px] text-[#1F1F1F] font-[600] leading-[16px] tracking-[1.5px] items-center">
-                    <p>STT</p>
-                    <p className="w-[80px] ml-[15px]">Dịch vụ</p>
-                    <p className="w-[100px] ml-[60px]">
+                    <div>STT</div>
+                    <div className="w-[80px] ml-[15px]">Dịch vụ</div>
+                    <div className="w-[100px] ml-[60px]">
                         {revenueFilter
                             ? "Doanh thu"
                             : debitFilter
@@ -89,8 +89,8 @@ const TableTopServiceBookings = () => {
                             : isBookings
                             ? "Số bookings"
                             : "Số bookings"}
-                    </p>
-                    <p className="w-[80px] ml-[15px]">% so tổng</p>
+                    </div>
+                    <div className="w-[80px] ml-[15px]">% so tổng</div>
                 </div>
                 <div>
                     {data.map((service, index) => {

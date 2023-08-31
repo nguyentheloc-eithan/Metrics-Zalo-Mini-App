@@ -18,7 +18,7 @@ const BoxRow = (props: BoxCustomerParams) => {
         >
             <div>{index}</div>
             <div
-                className={`w-[122px] flex items-center  ${
+                className={`w-[139px] flex items-center  ${
                     avatar ? "justify-start ml-[10px]" : ""
                 } gap-[6px]`}
             >
@@ -26,7 +26,7 @@ const BoxRow = (props: BoxCustomerParams) => {
                 <div>{name}</div>
             </div>
             <div
-                className={`w-[100px] flex justify-between ${classNameStatistic}`}
+                className={`w-[90px] flex justify-between ${classNameStatistic}`}
             >
                 <div>{formatMoney(money)}</div>
                 <div>{currency}</div>

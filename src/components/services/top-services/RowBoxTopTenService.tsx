@@ -24,7 +24,7 @@ const RowBoxTopTenService = (props: BoxCustomerParams) => {
 
     return (
         <div
-            className={`w-full h-[40px] flex items-center px-[12px] py-[8px] gap-[18px] text-[10px] text-[#36383A] font-[400] leading-[16px] border-b-[0.5px] border-b-[#E9EBED]`}
+            className={`w-full h-auto flex items-center px-[12px] py-[8px] gap-[18px] text-[10px] text-[#36383A] font-[400] leading-[16px] border-b-[0.5px] border-b-[#E9EBED]`}
         >
             <div className="flex w-[10px] flex-start">{index}</div>
             <div

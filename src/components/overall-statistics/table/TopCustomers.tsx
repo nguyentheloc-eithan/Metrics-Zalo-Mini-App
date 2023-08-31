@@ -59,11 +59,11 @@ const TopCustomers = (props: TopCustomerProps) => {
             </div>
             <div>
                 <div className="w-full bg-[#E9EBED] h-[36px] px-[12px] py-[8px] flex justify-between text-[10px] text-[#1F1F1F] font-[600] leading-[16px] tracking-[1.5px] items-center">
-                    <p>STT</p>
-                    <p className="flex flex-start w-[100px] mr-[80px]">
+                    <p className="text-[12px]">STT</p>
+                    <p className="flex flex-start w-fit mr-[80px] text-[12px]">
                         Khách hàng
                     </p>
-                    <p className={`w-[100px]`}>
+                    <p className={`w-[100px]  text-[12px]`}>
                         {revenueFilter
                             ? "Doanh thu"
                             : debitFilter

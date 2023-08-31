@@ -11,6 +11,10 @@ import { supabase } from "services/supabase";
 import LoadingSquareSpin from "components/loading";
 import dayjs from "dayjs";
 import { getPhoneNumberByToken } from "services/zalo/get-phone";
+import { getClinicRevenue } from "services/rpc/clinic-revenue";
+import { temp } from "utils/date-params-default";
+import useFetchClinicSelects from "common/stores/clinics/clinics";
+import { IClinicSelect } from "common/types/clinic";
 const userLoginInit = {
     id: "",
     name: "",
@@ -28,6 +32,7 @@ const HomePage = () => {
     const { userLogin, setUserLogin } = useFetchZaloUser();
     const [loading, setLoading] = useState<boolean>(false);
     const [userPhone, setUserPhone] = useState<string>("");
+    const { setAllClinicSelects } = useFetchClinicSelects();
 
     const getUser = async () => {
         try {
@@ -283,6 +288,29 @@ const HomePage = () => {
             return;
         }
     };
+
+    useEffect(() => {
+        const fetchClinics = async () => {
+            const { clinicRevenue } = await getClinicRevenue(temp);
+            if (clinicRevenue) {
+                const formatClinicSelect: IClinicSelect[] = clinicRevenue.map(
+                    (clinic: any) => {
+                        return {
+                            label:
+                                clinic.clinic_name
+                                    .toLowerCase()
+                                    .charAt(0)
+                                    .toUpperCase() +
+                                clinic.clinic_name.toLowerCase().slice(1),
+                            value: clinic.clinic_name,
+                        };
+                    },
+                );
+                setAllClinicSelects(formatClinicSelect);
+            }
+        };
+        fetchClinics();
+    }, []);
     return (
         <Page className="relative flex-1 flex flex-col bg-white">
             <Welcome />

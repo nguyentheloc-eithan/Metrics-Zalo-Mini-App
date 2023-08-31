@@ -141,7 +141,7 @@ const CustomersNav = () => {
                             })}
                         </div>
                         <div className="flex gap-[8px]">
-                            <ButtonIcon icon={"zi-location"} />
+                            {/* <ButtonIcon icon={"zi-location"} /> */}
                             <ButtonIcon
                                 // onClick={() => {
                                 //   setDatePickerEnable(true);

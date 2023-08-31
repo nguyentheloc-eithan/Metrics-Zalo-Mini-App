@@ -53,9 +53,9 @@ const TableClinicOrders = () => {
         <div className="p-[16px] flex flex-col gap-[16px] bg-white rounded-[8px]">
             <div>
                 <div className="w-full bg-[#E9EBED] h-[36px] px-[12px] py-[8px] flex justify-between text-[10px] text-[#1F1F1F] font-[600] leading-[16px] tracking-[1.5px] items-center">
-                    <p>STT</p>
-                    <p>Cơ sở</p>
-                    <p className="w-[120px]">
+                    <div>STT</div>
+                    <div>Cơ sở</div>
+                    <div className="w-[120px]">
                         {allOrders
                             ? "Tổng số orders"
                             : paid
@@ -63,7 +63,7 @@ const TableClinicOrders = () => {
                             : unpaid
                             ? "Chưa thanh toán"
                             : "Tổng số orders"}
-                    </p>
+                    </div>
                 </div>
                 <div>
                     {data.map((clinic, index) => {

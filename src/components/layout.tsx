@@ -7,7 +7,6 @@ import { Navigation } from "./navigation";
 import Customers from "pages/customers";
 import CustomersNav from "pages/page-in-nav/customer/customers-nav";
 import Developing from "pages/developing";
-import OverallStatistics from "pages/index/overal-statistics";
 
 import OrderBookings from "pages/order-bookings";
 import Profile from "pages/page-in-nav/profile/profile";
@@ -45,10 +44,6 @@ export const Layout: FC = () => {
                     <Route
                         path="/sale-report"
                         element={<SaleReportPage />}
-                    ></Route>
-                    <Route
-                        path="/overall-statistics"
-                        element={<OverallStatistics />}
                     ></Route>
                     <Route path="/staffs" element={<StaffsPage />}></Route>
                     <Route path="/revenue" element={<RevenuePage />}></Route>

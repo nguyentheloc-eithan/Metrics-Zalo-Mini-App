@@ -197,7 +197,7 @@ const Profile = () => {
         <Page>
             <Header
                 className="app-header no-border pl-4 flex-none pb-[6px] font-[500] leading-[26px] text-[20px] tracking-[0.15px]"
-                showBackIcon={false}
+                showBackIcon={true}
                 title="Cá nhân"
             />
             <JobInformation userLogin={userLogin} />
