@@ -200,7 +200,6 @@ const Profile = () => {
                 showBackIcon={false}
                 title="Cá nhân"
             />
-            {/* <Subscription /> */}
             <JobInformation userLogin={userLogin} />
             <PersonalInformation userLogin={userLogin} />
             <Settings />

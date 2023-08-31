@@ -38,7 +38,7 @@ const ClinicRevenue = (props: ClinicRevenueProps) => {
             <div className="flex items-center justify-between">
                 <div className="text-[14px] font-[700] leading-[20px] tracking-[0.1px]">
                     Doanh thu theo chi nhánh
-                    <span> {chartType ? "(Triệu đông)" : ""}</span>
+                    <span> {chartType ? "(Triệu đồng)" : ""}</span>
                 </div>
                 <div className="flex gap-[8px]">
                     <ButtonIcon

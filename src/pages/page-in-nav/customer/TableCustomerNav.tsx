@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
+import { openChat, showToast } from "zmp-sdk/apis";
 import { Avatar, Icon } from "zmp-ui";
+import ModalDivertingConfirm from "./ModalDivertingConfirm";
 
 interface TableCustomerNavProps {
-    setActiveCustomerDiverting: (e: boolean) => void;
     allCustomers: any;
 }
 const TableCustomerNav = (props: TableCustomerNavProps) => {
-    const { setActiveCustomerDiverting, allCustomers } = props;
+    const { allCustomers } = props;
+
+    const [activeCustomerDiverting, setActiveCustomerDiverting] =
+        useState<boolean>(false);
+    const [customerSelected, setCustomerSelected] = useState<any>();
+
     return (
         <div>
             <div className="flex h-[calc((100vh-16px)/1.33)] flex-col gap-[16px] bg-white rounded-[8px] overflow-scroll">
@@ -21,23 +27,32 @@ const TableCustomerNav = (props: TableCustomerNavProps) => {
                         </p>
                     </div>
                     <div className="mt-[40px]">
-                        {allCustomers.map((customer, index) => {
-                            return (
-                                <BoxRowCustomerNav
-                                    key={index}
-                                    avatar={customer.avatar}
-                                    name={customer.name}
-                                    index={index + 1}
-                                    number={customer.phone}
-                                    setActiveCustomerDiverting={
-                                        setActiveCustomerDiverting
-                                    }
-                                />
-                            );
-                        })}
+                        {allCustomers
+                            .slice(0, 150)
+                            .map((customer: any, index: number) => {
+                                return (
+                                    <BoxRowCustomerNav
+                                        index={index + 1}
+                                        customer={customer}
+                                        setActiveCustomerDiverting={
+                                            setActiveCustomerDiverting
+                                        }
+                                        setCustomerSelected={
+                                            setCustomerSelected
+                                        }
+                                    />
+                                );
+                            })}
                     </div>
                 </div>
             </div>
+            {activeCustomerDiverting && (
+                <ModalDivertingConfirm
+                    setActiveCustomerDiverting={setActiveCustomerDiverting}
+                    customer={customerSelected}
+                    active={activeCustomerDiverting}
+                />
+            )}
         </div>
     );
 };
@@ -45,21 +60,20 @@ const TableCustomerNav = (props: TableCustomerNavProps) => {
 export default TableCustomerNav;
 
 interface BoxCustomerParams {
-    name: string;
     index: number;
-    avatar?: any;
-    number?: any;
+    customer: any;
+
     classNameStatistic?: string;
     setActiveCustomerDiverting: (e: boolean) => void;
+    setCustomerSelected: any;
 }
 const BoxRowCustomerNav = (props: BoxCustomerParams) => {
     const {
-        name,
         index,
-        avatar,
-        number,
+        customer,
         classNameStatistic,
         setActiveCustomerDiverting,
+        setCustomerSelected,
     } = props;
 
     return (
@@ -69,18 +83,25 @@ const BoxRowCustomerNav = (props: BoxCustomerParams) => {
             <div className="flex items-center">{index}</div>
             <div
                 className={`w-[180px] flex items-center ${
-                    avatar ? "justify-start ml-[15px]" : ""
+                    customer.avatar ? "justify-start ml-[15px]" : ""
                 } gap-[6px]`}
             >
-                {avatar ? <Avatar className="" size={26} src={avatar} /> : null}
-                <div className="w-fit capitalize">{name}</div>
+                {customer.avatar ? (
+                    <Avatar className="" size={26} src={customer.avatar} />
+                ) : null}
+                <div className="w-fit capitalize">{customer.name}</div>
             </div>
             <div
                 className={`w-[100px] flex justify-between ${classNameStatistic}`}
             >
-                <div>{number}</div>
-                {number !== null ? (
-                    <div onClick={() => setActiveCustomerDiverting(true)}>
+                <div>{customer.phone}</div>
+                {customer.phone !== null ? (
+                    <div
+                        onClick={() => {
+                            setActiveCustomerDiverting(true),
+                                setCustomerSelected(customer);
+                        }}
+                    >
                         <Icon icon="zi-chat" size={16} />
                     </div>
                 ) : (

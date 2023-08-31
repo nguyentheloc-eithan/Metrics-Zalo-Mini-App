@@ -1,6 +1,7 @@
 import { message } from "antd";
 
 import useFetchClinic from "common/stores/clinics/clinic-revenue";
+import LoadingSquareSpin from "components/loading";
 
 import BoxButton from "components/overall-statistics/box-button";
 import React, { useEffect, useState } from "react";
@@ -92,7 +93,7 @@ const OverallStatistics = () => {
                 showBackIcon={false}
                 title="AURA MANAGER"
             />
-            <div className="p-[16px] w-full flex items-center justify-center flex-wrap gap-[16px]">
+            <div className="p-[16px] w-full flex items-center justify-start flex-wrap gap-[16px]">
                 {sections.map((section, index) => (
                     <BoxButton
                         key={index}
@@ -103,6 +104,7 @@ const OverallStatistics = () => {
                     />
                 ))}
             </div>
+            {loading && <LoadingSquareSpin />}
         </>
     );
 };

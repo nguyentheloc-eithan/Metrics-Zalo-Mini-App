@@ -6,15 +6,15 @@ import { BottomNavigation, Icon, useNavigate } from "zmp-ui";
 
 const navItems = [
     {
-        path: "/overall-statistics",
-        label: "Tổng quan",
-        icon: <Icon icon="zi-more-grid" />,
+        path: "/revenue",
+        label: "Doanh thu",
+        icon: <Icon icon="zi-poll" />,
         iconActive: <Icon icon="zi-more-diamond-solid" />,
     },
     {
-        path: "/customers-nav",
-        label: "Khách",
-        icon: <Icon icon="zi-group" />,
+        path: "/order-bookings",
+        label: "Orders",
+        icon: <Icon icon="zi-note" />,
         iconActive: <Icon icon="zi-group-solid" />,
     },
     {
@@ -30,9 +30,9 @@ const navItems = [
         iconActive: <Icon icon="zi-notif" />,
     },
     {
-        path: "/profile",
-        label: "Cá nhân",
-        icon: <Icon icon="zi-user-circle" />,
+        path: "/more",
+        label: "Thêm",
+        icon: <Icon icon="zi-more-grid" />,
         iconActive: <Icon icon="zi-user-circle-solid" />,
     },
 ];
@@ -58,9 +58,7 @@ export const Navigation: FC = () => {
             {location.pathname !== "/sale-report" &&
                 location.pathname !== "/" &&
                 location.pathname !== "/staffs" &&
-                location.pathname !== "/revenue" &&
                 location.pathname !== "/services" &&
-                location.pathname !== "/order-bookings" &&
                 location.pathname !== "/not-admin" && (
                     <>
                         <BottomNavigation

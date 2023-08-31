@@ -48,6 +48,8 @@ const GraphCategories = (props: GraphCategoriesProps) => {
                                             100,
                                     ) / 100,
                                 revenue: item.revenue,
+                                customer_paid: item.customer_paid,
+                                debit: item.debit,
                             };
                         });
 

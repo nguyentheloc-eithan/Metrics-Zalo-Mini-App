@@ -44,7 +44,7 @@ const HomePage = () => {
                 setUserLogin(user);
                 const checkAdmin = await checkIsAdmin(staff.id, staff);
                 if (checkAdmin == true) {
-                    navigate("/overall-statistics");
+                    navigate("/revenue");
                 } else {
                     navigate("/not-admin");
                 }
@@ -62,9 +62,8 @@ const HomePage = () => {
                                     token,
                                     accessToken,
                                 );
-                                const checkPhone = await checkUserByPhone(
-                                    phone,
-                                );
+                                const checkPhone =
+                                    await checkUserByPhone(phone);
                                 console.log("checkPhone", checkPhone);
                                 if (checkPhone == false) {
                                     navigate("/not-admin");
@@ -87,7 +86,7 @@ const HomePage = () => {
                                     );
                                     console.log("checkAdmin", checkAdmin);
                                     if (checkAdmin == true) {
-                                        navigate("/overall-statistics");
+                                        navigate("/revenue");
                                     } else {
                                         navigate("/not-admin");
                                     }

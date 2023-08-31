@@ -3,34 +3,16 @@ import React from "react";
 import BulletPoint from "components/button/BulletPoint";
 import { DataServices } from "pages/revenue";
 import BoxRow from "./BoxCustomer";
-const customerTop5 = [
-    {
-        name: "Tên dịch vụ",
-        money: "100.000.000",
-    },
-    {
-        name: "Tên dịch vụ",
-        money: "100.000.000",
-    },
-    {
-        name: "Tên dịch vụ",
-        money: "100.000.000",
-    },
-    {
-        name: "Tên dịch vụ",
-        money: "100.000.000",
-    },
-    {
-        name: "Tên dịch vụ",
-        money: "100.000.000",
-    },
-];
 
 interface TableTopServicesProps {
     topServices: DataServices[];
+    revenueFilter: boolean;
+    customerPaidFilter: boolean;
+    debitFilter: boolean;
 }
 const TableTopCategories = (props: TableTopServicesProps) => {
-    const { topServices } = props;
+    const { topServices, revenueFilter, customerPaidFilter, debitFilter } =
+        props;
     return (
         <div className="p-[16px] flex flex-col gap-[16px] bg-white rounded-[8px]">
             <div className="text-[14px] font-[700] leading-[20px] tracking-[0.1px]">
@@ -42,33 +24,44 @@ const TableTopCategories = (props: TableTopServicesProps) => {
                     <p className="w-[100px] flex flex-start mr-[70px]">
                         Dịch vụ
                     </p>
-                    <p>Doanh thu</p>
+                    <p>
+                        {revenueFilter
+                            ? "Doanh thu"
+                            : debitFilter
+                            ? "Công nợ"
+                            : customerPaidFilter
+                            ? "Thực thu"
+                            : "Doanh thu"}
+                    </p>
                 </div>
                 <div>
-                    {topServices.map((customer, index) => {
+                    {topServices.map((service, index) => {
                         return (
                             <BoxRow
-                                name={customer.type}
+                                classNameStatistic={`${
+                                    debitFilter
+                                        ? "text-[#BC2449]"
+                                        : customerPaidFilter
+                                        ? "text-[#5A68ED]"
+                                        : "text-[#36383A]"
+                                }`}
+                                key={index}
+                                name={service.type}
                                 index={index + 1}
-                                avatar={customer.service_image}
-                                money={customer.revenue}
+                                avatar={service.service_image}
+                                money={
+                                    revenueFilter
+                                        ? service.revenue
+                                        : customerPaidFilter
+                                        ? service.customer_paid
+                                        : debitFilter
+                                        ? service.debit
+                                        : service.revenue
+                                }
                                 currency={"đ"}
                             />
                         );
                     })}
-                </div>
-                <div className="mt-[16px] flex gap-[16px]">
-                    <BulletPoint text={"Doanh thu"} enable={true} />
-                    <BulletPoint
-                        text={"Thực thu"}
-                        color={"#A3ABF5"}
-                        enable={false}
-                    />
-                    <BulletPoint
-                        text={"Công nợ"}
-                        color={"#F2BBC9"}
-                        enable={false}
-                    />
                 </div>
             </div>
         </div>

@@ -23,6 +23,8 @@ import { Header } from "zmp-ui";
 interface DataCategories {
     type: string;
     value: any;
+    customer_paid: number;
+    debit: number;
     revenue: number;
 }
 interface DataServices {
@@ -137,15 +139,6 @@ const RevenuePage = () => {
         setOpenModalDateRangePicker(false);
     };
 
-    const cancelFilterOnRangePicker = () => {
-        setDatePickerEnable(false);
-        const dateNew: ExportParams = {
-            start_date: temp.start_date,
-            end_date: temp.end_date,
-        };
-        setDate(dateNew);
-        setDateFilter(dateNew);
-    };
     useEffect(() => {
         const fetchClinicRevenue = async () => {
             try {
@@ -154,7 +147,6 @@ const RevenuePage = () => {
                     await getClinicRevenue(date);
                 const { dataCustomer, errorCustomer } =
                     await getTopCustomer(date);
-                console.log(dataCustomer);
 
                 if (errorClinicRevenue) {
                     message.error(errorClinicRevenue.message);

@@ -19,6 +19,7 @@ import UserSettings from "pages/page-in-nav/profile/user-setting";
 import Notifications from "pages/page-in-nav/notification";
 import NotAdmin from "pages/index/not-admin";
 import Assistance from "pages/page-in-nav/assistance";
+import More from "pages/page-in-nav/more";
 
 export const Layout: FC = () => {
     return (
@@ -36,7 +37,7 @@ export const Layout: FC = () => {
                         element={<Notifications />}
                     ></Route>
                     <Route path="/assistance" element={<Assistance />} />
-                    <Route
+                    <Route //================================================> customer page in <More/>
                         path="/customers-nav"
                         element={<CustomersNav />}
                     ></Route>
@@ -57,6 +58,7 @@ export const Layout: FC = () => {
                         element={<OrderBookings />}
                     ></Route>
                     <Route path="/customers" element={<Customers />}></Route>
+                    <Route path="/more" element={<More />}></Route>
                     <Route path="/not-admin" element={<NotAdmin />}></Route>
                 </Routes>
             </Box>
