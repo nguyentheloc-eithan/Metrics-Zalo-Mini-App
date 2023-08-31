@@ -1,3 +1,4 @@
+import useBottomNavigation from "common/stores/bottom-navigation";
 import { useVirtualKeyboardVisible } from "hooks";
 import React, { FC, useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router";
@@ -53,6 +54,10 @@ export const Navigation: FC = () => {
         setActiveTab(key);
         navigate(key, { animate: false });
     };
+
+    const { isShow } = useBottomNavigation();
+    if (!isShow) return <></>;
+
     return (
         <>
             {location.pathname !== "/sale-report" &&

@@ -1,12 +1,13 @@
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 import { Header, Icon } from "zmp-ui";
-import { Button, message } from "antd";
+import { Button } from "antd";
 
-import EmptyScreen from "./empty-screen";
 import Bubble from "./components/bubble";
 import Lottie from "lottie-react";
 import bubbleLoading from "../../../static/lottie/bubble-loading.json";
 import { CreateMessage } from "ai";
+import EmptyScreen from "./empty-screen";
+import useBottomNavigation from "common/stores/bottom-navigation";
 
 export default function Assistance() {
     const [messages, setMessages] = useState<CreateMessage[]>([]);
@@ -15,20 +16,13 @@ export default function Assistance() {
     const onSend = async (e: FormEvent) => {
         e.preventDefault();
         setInput("");
-        if (
-            (messages.length && messages[messages.length - 1].role == "user") ||
-            !input
-        )
-            return;
 
         const newMessages = [...messages];
         newMessages.push({ role: "user", content: input });
         setMessages(newMessages);
 
-        console.log(newMessages);
-
         const response = await fetch(
-            "http://localhost:9081/api/v1/chatbot/admin",
+            "https://api.auradental.vn/api/v1/chatbot/admin",
             {
                 method: "POST",
                 body: JSON.stringify(newMessages),
@@ -37,8 +31,14 @@ export default function Assistance() {
                 },
             },
         );
-        const data = await response.json();
-        console.log(data);
+
+        let data = await response.json();
+
+        if (!response.ok) {
+            console.log(data);
+            data = { role: "asistance", content: "⚠️ Có lỗi xảy ra!" };
+        }
+
         setMessages((prev) => {
             const newMessages = [...prev];
             newMessages.push(data);
@@ -69,6 +69,8 @@ export default function Assistance() {
             clearTimeout(timer); // Clear the timeout if the component is unmounted
         };
     }, [messages]);
+
+    const { toggleShow } = useBottomNavigation();
     return (
         <main className="h-full flex-col flex ">
             <Header
@@ -77,52 +79,56 @@ export default function Assistance() {
                 title="Thư ký"
             />
             <div className="flex-1 basis-auto overflow-y-auto p-4 flex flex-col gap-4">
-                {messages.length ? (
-                    <>
-                        {messages.map((message, i) => (
-                            <Bubble isUser={message.role == "user"} key={i}>
-                                {message.content}
-                            </Bubble>
-                        ))}
-                        {hasLoadingBubble && (
-                            <Bubble
-                                empty={
-                                    <Lottie
-                                        animationData={bubbleLoading}
-                                        loop={true}
-                                        className="w-7 h-4"
-                                    />
-                                }
+                <EmptyScreen setInput={setInput} />
+                {messages.map((message, i) => (
+                    <Bubble isUser={message.role == "user"} key={i}>
+                        {message.content}
+                    </Bubble>
+                ))}
+                {hasLoadingBubble && (
+                    <Bubble
+                        empty={
+                            <Lottie
+                                animationData={bubbleLoading}
+                                loop={true}
+                                className="w-7 h-4"
                             />
-                        )}
-                        <div ref={messagesEndRef} />
-                    </>
-                ) : (
-                    <EmptyScreen setInput={setInput} />
+                        }
+                    />
                 )}
-                {/* {isLoading && (
-              <button
-                  className="inline-flex py-2 px-4 my-4 mx-auto bg-white p-2 rounded-lg gap-2 border border-solid border-[#36383A] items-center text-caption font-semibold"
-                  onClick={() => stop()}
-              >
-                  <Icon icon="zi-close-circle" />
-                  Dừng câu trả lời
-              </button>
-          )} */}
+                <div ref={messagesEndRef} />
             </div>
             <form className="flex bg-white" onSubmit={onSend}>
                 {/* TODO handle multi line */}
                 <input
+                    onFocus={() => toggleShow(false)}
+                    onBlur={() => toggleShow(true)}
                     name="message"
                     value={input}
                     className="flex-1 p-4 word-wrap text-caption"
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Nhập thông tin cần được giải đáp"
                 />
+                {/* Lười làm qué, đừng thắc mắc hyhy :>*/}
                 <Button
+                    disabled={
+                        (messages.length &&
+                            messages[messages.length - 1].role == "user") ||
+                        !input
+                    }
                     className="mx-4"
                     icon={
-                        <Icon icon="zi-send-solid" className="text-[#8F9499]" />
+                        <Icon
+                            icon="zi-send-solid"
+                            className={
+                                (messages.length &&
+                                    messages[messages.length - 1].role ==
+                                        "user") ||
+                                !input
+                                    ? "text-[#8F9499]"
+                                    : ""
+                            }
+                        />
                     }
                     htmlType="submit"
                 />
