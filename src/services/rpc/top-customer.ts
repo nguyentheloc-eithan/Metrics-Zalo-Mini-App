@@ -1,5 +1,5 @@
 // total_statistic_top_paid
-import { supabase } from "services/supabse";
+import { supabase } from "services/supabase";
 
 interface ExportParams {
     start_date: string;

@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { supabase } from "services/supabse";
+import { supabase } from "services/supabase";
 
 interface ExportServicesParams {
     start_date: string;

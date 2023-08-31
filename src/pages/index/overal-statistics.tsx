@@ -4,7 +4,7 @@ import useFetchClinic from "common/stores/clinics/clinic-revenue";
 
 import BoxButton from "components/overall-statistics/box-button";
 import React, { useEffect, useState } from "react";
-import { supabase } from "services/supabse";
+import { supabase } from "services/supabase";
 import { Header, Icon } from "zmp-ui";
 const sections = [
     {

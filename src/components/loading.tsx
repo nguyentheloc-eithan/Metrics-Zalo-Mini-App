@@ -4,7 +4,7 @@ import Lottie from "lottie-react";
 
 const LoadingSquareSpin = () => {
     return (
-        <div className="w-full h-full bg-white flex items-center justify-center">
+        <div className="fixed top-0 left-0 w-full h-full bg-white flex items-center justify-center">
             <Lottie
                 animationData={lottieLoading}
                 loop={true}

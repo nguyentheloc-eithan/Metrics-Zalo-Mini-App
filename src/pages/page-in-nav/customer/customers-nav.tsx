@@ -1,14 +1,12 @@
-import ButtonIcon from "components/button/ButtonIcon";
-import React, { useEffect, useState } from "react";
-import { Header, Input } from "zmp-ui";
-import TableCustomerNav from "./TableCustomerNav";
-import ModalDivertingConfirm from "./ModalDivertingConfirm";
-import { getTopCustomer } from "services/rpc/top-customer";
-import { temp } from "utils/date-params-default";
-import { supabase } from "services/supabse";
 import useFetchZaloCustomers from "common/stores/customers/zalo-customers";
-import LoadingSquareSpin from "components/loading";
 import { ICustomerZalo } from "common/types/customer";
+import ButtonIcon from "components/button/ButtonIcon";
+import LoadingSquareSpin from "components/loading";
+import React, { useEffect, useState } from "react";
+import { supabase } from "services/supabase";
+import { Header, Input } from "zmp-ui";
+import ModalDivertingConfirm from "./ModalDivertingConfirm";
+import TableCustomerNav from "./TableCustomerNav";
 
 const actionFilter = [
     {
@@ -60,11 +58,11 @@ const CustomersNav = () => {
 
     const filterCustomersByPhone = () => {
         setLoading(true);
-        const filterCustomersHavePhone = zaloCustomers.filter(
+        const filterCustomersHavePhone = allCustomers.filter(
             (customer) => customer.phone !== null,
         );
         if (filterCustomersHavePhone.length > 0) {
-            setZaloCustomers(filterCustomersHavePhone);
+            setAllCustomers(filterCustomersHavePhone);
             setLoading(false);
         } else {
             console.log("Không có khách hàng phù hợp với filter");
@@ -108,7 +106,26 @@ const CustomersNav = () => {
         fetchCustomers();
     }, []);
 
-    const handleChangeSearch = (data: string) => {};
+    const handleSearch = (input: string) => {
+        if (input === "") {
+            setAllCustomers(zaloCustomers);
+            return;
+        }
+        var regex = /^[0-9]+$/;
+        if (input.match(regex)) {
+            const pattern = new RegExp(input, "i");
+            const tmp = zaloCustomers.filter((item: ICustomerZalo) => {
+                return pattern.test(item.phone);
+            });
+            setAllCustomers(tmp);
+        } else {
+            const pattern = new RegExp(input, "i");
+            const tmp = zaloCustomers.filter((item: ICustomerZalo) => {
+                return pattern.test(item.name);
+            });
+            setAllCustomers(tmp);
+        }
+    };
     return (
         <div className="h-full">
             {loading ? (
@@ -122,7 +139,7 @@ const CustomersNav = () => {
                     />
                     <div className="p-[16px] flex flex-col gap-[16px]">
                         <Input.Search
-                            onChange={(e) => console.log(e.target.value)}
+                            onChange={(e) => handleSearch(e.target.value)}
                         />
                         <div className="flex items-center justify-between">
                             <div className="flex flex-wrap items-center gap-[5px]">
@@ -161,6 +178,7 @@ const CustomersNav = () => {
                             </div>
                         </div>
                         <TableCustomerNav
+                            allCustomers={allCustomers}
                             setActiveCustomerDiverting={
                                 setActiveCustomerDiverting
                             }
