@@ -13,8 +13,8 @@ import useDateFilter from "common/stores/date-filter";
 
 const actionFilter = [
     {
-        title: "Mới nhất",
-        value: "newest",
+        title: "Có Zalo ID",
+        value: "hasZaloId",
     },
     {
         title: "Có số điện thoại",
@@ -26,6 +26,13 @@ const CustomersNav = () => {
     const { setZaloCustomers, zaloCustomers } = useFetchZaloCustomers();
     const { setDateFilter } = useDateFilter();
     const [allCustomers, setAllCustomers] = useState<ICustomerZalo[]>([]);
+
+    const [allCustomersHasZaloId, setAllCustomersHasZaloId] = useState<
+        ICustomerZalo[]
+    >([]);
+    const [allCustomersHavePhone, setAllCustomersHavePhone] = useState<
+        ICustomerZalo[]
+    >([]);
 
     const [loading, setLoading] = useState<boolean>(true);
     const [indexSelect, setIndexSelect] = useState<any>(0);
@@ -53,28 +60,29 @@ const CustomersNav = () => {
             if (value == "havePhoneNumber") {
                 filterCustomersByPhone();
 
-                console.log("week");
-            } else if (value == "newest") {
+                console.log("havePhoneNumber");
+            } else if (value == "hasZaloId") {
                 filterNewest();
-                console.log("newest");
+                console.log("hasZaloId");
             }
         }
     };
 
     const filterCustomersByPhone = () => {
-        setLoading(true);
-        const filterCustomersHavePhone = allCustomers.filter(
-            (customer) => customer.phone !== null,
-        );
-        if (filterCustomersHavePhone.length > 0) {
-            setAllCustomers(filterCustomersHavePhone);
-            setLoading(false);
-        } else {
-            console.log("Không có khách hàng phù hợp với filter");
-        }
+        // setLoading(true);
+        setAllCustomers(allCustomersHavePhone);
+        // const filterCustomersHavePhone = allCustomers.filter(
+        //     (customer) => customer.phone !== null,
+        // );
+        // if (filterCustomersHavePhone.length > 0) {
+        //     setAllCustomers(filterCustomersHavePhone);
+        //     setLoading(false);
+        // } else {
+        //     console.log("Không có khách hàng phù hợp với filter");
+        // }
     };
     const filterNewest = () => {
-        setAllCustomers(zaloCustomers);
+        setAllCustomers(allCustomersHasZaloId);
     };
     useEffect(() => {
         const fetchCustomers = async () => {
@@ -91,6 +99,15 @@ const CustomersNav = () => {
                 if (data) {
                     setZaloCustomers(data);
                     setAllCustomers(data);
+                    const filterHasZaloId = data.filter(
+                        (customer) => customer.zalo_id !== null,
+                    );
+                    const filterHasPhone = data.filter(
+                        (customer) => customer.phone !== null,
+                    );
+                    setAllCustomersHavePhone(filterHasPhone);
+                    setAllCustomersHasZaloId(filterHasZaloId);
+                    console.log("filterHasZaloId", filterHasZaloId);
                 }
             } finally {
                 setLoading(false);

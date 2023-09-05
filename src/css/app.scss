@@ -1,43 +1,43 @@
 body {
-    background-color: var(--zmp-background-color);
-    user-select: none;
+  background-color: var(--zmp-background-color);
+  user-select: none;
 }
 
 .zaui-routes {
-    height: 100%;
+  height: 100%;
 }
 
 .zaui-page {
-    min-height: unset;
+  min-height: unset;
 }
 
 .zaui-header {
-    position: sticky;
-    height: auto;
-    margin-bottom: 0;
-    flex: none;
+  position: sticky;
+  height: auto;
+  margin-bottom: 0;
+  flex: none;
 
-    &::after {
-        display: none;
-    }
+  &::after {
+    display: none;
+  }
 }
 
 .zaui-input-affix-wrapper {
-    margin: 0;
+  margin: 0;
 }
 
 .border-inset {
-    border: 0.5px solid rgba(0, 0, 0, 0.1);
+  border: 0.5px solid rgba(0, 0, 0, 0.1);
 }
 
 .zaui-text-xxxxSmall {
-    line-height: 16px;
+  line-height: 16px;
 }
 
 .zaui-btn-tertiary,
 .zaui-btn-tertiary.zaui-btn-highlight,
 .zaui-bottom-navigation-item-active {
-    color: var(--zmp-primary-color);
+  color: var(--zmp-primary-color);
 }
 
 .zaui-btn-primary,
@@ -47,83 +47,144 @@ body {
 .zaui-btn-primary.zaui-btn-highlight:active,
 .zaui-btn-primary:focus-visible,
 .zaui-btn-primary.zaui-btn-highlight:focus-visible {
-    background-color: var(--zmp-primary-color);
+  background-color: var(--zmp-primary-color);
 }
 
 .zaui-btn-primary:active,
 .zaui-btn-primary.zaui-btn-highlight:active,
 .zaui-btn-primary:focus-visible,
 .zaui-btn-primary.zaui-btn-highlight:focus-visible {
-    opacity: 0.9;
+  opacity: 0.9;
 }
 
 .zaui-picker-item-selected {
-    color: var(--zmp-primary-color);
+  color: var(--zmp-primary-color);
 }
 
 .zaui-input-affix-wrapper-focused,
 .zaui-input-affix-wrapper:hover,
 .zaui-input-affix-wrapper:focus,
 .zaui-input-affix-wrapper:focus-visible {
-    border-color: var(--zmp-primary-color);
+  border-color: var(--zmp-primary-color);
 }
 
 .zaui-tabs-tabbar-active-line {
-    background-color: var(--zmp-primary-color);
+  background-color: var(--zmp-primary-color);
 }
 #app
-    > div
-    > div.zaui-box.flex-1.flex.flex-col.overflow-hidden
-    > div
-    > div.p-\[16px\].flex.flex-col.gap-\[16px\]
-    > span {
-    background-color: white;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #e9ebed;
-    display: inline-flex;
+  > div
+  > div.zaui-box.flex-1.flex.flex-col.overflow-hidden
+  > div
+  > div.p-\[16px\].flex.flex-col.gap-\[16px\]
+  > span {
+  background-color: white;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #e9ebed;
+  display: inline-flex;
 }
 .category-tabs {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+
+  .zaui-tabs-tabbar {
+    flex: none;
+  }
+  .zaui-tab-content {
     display: flex;
     flex-direction: column;
     flex: 1;
-
-    .zaui-tabs-tabbar {
-        flex: none;
-    }
-    .zaui-tab-content {
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-        overflow-y: auto;
-    }
-    .zaui-tab {
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-    }
+    overflow-y: auto;
+  }
+  .zaui-tab {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
 }
 
 .swiper-pagination.swiper-pagination-horizontal {
-    display: flex;
-    gap: 4px;
-    background: rgba(0, 0, 0, 0.2);
-    width: auto;
-    left: 50%;
-    transform: translateX(-50%);
-    border-radius: 100px;
-    padding: 4px;
-    bottom: 12px;
+  display: flex;
+  gap: 4px;
+  background: rgba(0, 0, 0, 0.2);
+  width: auto;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 100px;
+  padding: 4px;
+  bottom: 12px;
 
-    > .swiper-pagination-bullet {
-        width: 4px;
-        height: 4px;
-        margin: 0;
-        background: rgba(255, 255, 255, 0.6);
+  > .swiper-pagination-bullet {
+    width: 4px;
+    height: 4px;
+    margin: 0;
+    background: rgba(255, 255, 255, 0.6);
 
-        &.swiper-pagination-bullet-active {
-            background: #ffffff;
-            transform: scale(1.5);
-        }
+    &.swiper-pagination-bullet-active {
+      background: #ffffff;
+      transform: scale(1.5);
     }
+  }
+}
+#app
+  > div
+  > div.zaui-box.flex-1.flex.flex-col.overflow-hidden
+  > div
+  > div.p-\[16px\].flex.flex-col.gap-\[16px\]
+  > div.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.css-1fw5qro-MuiPaper-root
+  > div.MuiTableContainer-root.css-41abqd-MuiTableContainer-root
+  > table {
+  border-collapse: collapse;
+}
+#app
+  > div
+  > div.zaui-box.flex-1.flex.flex-col.overflow-hidden
+  > div
+  > div.p-\[16px\].flex.flex-col.gap-\[16px\]
+  > div.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.css-1fw5qro-MuiPaper-root
+  > div.MuiTableContainer-root.css-41abqd-MuiTableContainer-root
+  > table,
+td,
+th,
+tr {
+  border: none;
+}
+
+#app
+  > div
+  > div.zaui-box.flex-1.flex.flex-col.overflow-hidden
+  > div
+  > div.p-\[16px\].flex.flex-col.gap-\[16px\]
+  > div.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.css-1fw5qro-MuiPaper-root
+  > div.MuiTablePagination-root.css-jtlhu6-MuiTablePagination-root {
+  overflow: hidden;
+  font-size: 10px;
+}
+
+#\:r1\: {
+  font-size: 10px;
+}
+#app
+  > div
+  > div.zaui-box.flex-1.flex.flex-col.overflow-hidden
+  > div
+  > div.p-\[16px\].flex.flex-col.gap-\[16px\]
+  > div.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.css-1fw5qro-MuiPaper-root
+  > div.MuiTablePagination-root.css-jtlhu6-MuiTablePagination-root
+  > div
+  > p.MuiTablePagination-displayedRows.css-levciy-MuiTablePagination-displayedRows {
+  font-size: 10px;
+}
+#app
+  > div
+  > div.zaui-box.flex-1.flex.flex-col.overflow-hidden
+  > div
+  > div.p-\[16px\].flex.flex-col.gap-\[16px\]
+  > div.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.css-1fw5qro-MuiPaper-root
+  > div.MuiTablePagination-root.css-jtlhu6-MuiTablePagination-root {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-items: center;
 }
