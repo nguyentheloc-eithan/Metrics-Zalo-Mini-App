@@ -46,6 +46,7 @@
         "react-router-dom": "^6.8.2",
         "recoil": "^0.7.7",
         "remark-gfm": "^3.0.1",
+        "shadcn-ui": "^0.3.0",
         "swiper": "^9.1.0",
         "zmp-cli": "^3.14.0",
         "zmp-sdk": "^2.27.2",
