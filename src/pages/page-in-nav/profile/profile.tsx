@@ -1,9 +1,8 @@
 import useFetchZaloUser from "common/stores/users/user-login";
-import { IUser } from "common/types/user";
 import { ListRenderer } from "components/list-renderer";
 import dayjs from "dayjs";
-import React, { FC } from "react";
-import { Avatar, Box, Header, Page, Text, useNavigate } from "zmp-ui";
+import React from "react";
+import { Avatar, Box, Header, Icon, Page, Text, useNavigate } from "zmp-ui";
 
 interface PageInformationProps {
     userLogin: any;
@@ -35,7 +34,7 @@ const PersonalInformation = (props: PageInformationProps) => {
                                 <Text className="w-full flex justify-end">
                                     {userLogin.date_of_birth
                                         ? userLogin.date_of_birth
-                                        : "DD-MM-YYYY"}
+                                        : "dd-mm-yyyy"}
                                 </Text>
                             </Box>
                         ),
@@ -59,7 +58,12 @@ const PersonalInformation = (props: PageInformationProps) => {
                                     Địa chỉ
                                 </Text.Header>
                                 <Text className="w-full flex justify-end">
-                                    {userLogin.address}
+                                    {userLogin.ward +
+                                        ", " +
+                                        userLogin.district +
+                                        ", " +
+                                        userLogin.city +
+                                        "."}
                                 </Text>
                             </Box>
                         ),
@@ -74,10 +78,20 @@ const PersonalInformation = (props: PageInformationProps) => {
 
 const JobInformation = (props: PageInformationProps) => {
     const { userLogin } = props;
+    const navigate = useNavigate();
     return (
         <Box className="m-4">
             <div className="flex flex-col items-center justify-center mt-[36px] mb-[16px]">
-                <Avatar src={userLogin.avatar} size={103} />
+                <div className="relative w-[103px] h-[103px]">
+                    <Avatar src={userLogin.avatar} size={103} online={true} />
+                    <div
+                        onClick={() => navigate("/user-settings")}
+                        className="absolute right-0 bottom-0 w-[32px] h-[32px] rounded-[50%] bg-white border border-[#B9BDC1] flex items-center justify-center"
+                    >
+                        <Icon icon="zi-edit-text" size={16} />
+                    </div>
+                </div>
+
                 <div className="mt-[16px] mb-[4px] text-[14px] font-[600] leading-[20px] tracking-[0.25px]">
                     {userLogin.name}
                 </div>
