@@ -2,6 +2,9 @@ body {
   background-color: var(--zmp-background-color);
   user-select: none;
 }
+::-webkit-scrollbar {
+  display: none;
+}
 
 .zaui-routes {
   height: 100%;
@@ -127,64 +130,65 @@ body {
     }
   }
 }
-#app
-  > div
-  > div.zaui-box.flex-1.flex.flex-col.overflow-hidden
-  > div
-  > div.p-\[16px\].flex.flex-col.gap-\[16px\]
-  > div.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.css-1fw5qro-MuiPaper-root
-  > div.MuiTableContainer-root.css-41abqd-MuiTableContainer-root
-  > table {
-  border-collapse: collapse;
-}
-#app
-  > div
-  > div.zaui-box.flex-1.flex.flex-col.overflow-hidden
-  > div
-  > div.p-\[16px\].flex.flex-col.gap-\[16px\]
-  > div.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.css-1fw5qro-MuiPaper-root
-  > div.MuiTableContainer-root.css-41abqd-MuiTableContainer-root
-  > table,
-td,
-th,
-tr {
-  border: none;
-}
 
-#app
-  > div
-  > div.zaui-box.flex-1.flex.flex-col.overflow-hidden
-  > div
-  > div.p-\[16px\].flex.flex-col.gap-\[16px\]
-  > div.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.css-1fw5qro-MuiPaper-root
-  > div.MuiTablePagination-root.css-jtlhu6-MuiTablePagination-root {
-  overflow: hidden;
-  font-size: 10px;
-}
+// #app
+//   > div
+//   > div.zaui-box.flex-1.flex.flex-col.overflow-hidden
+//   > div
+//   > div.p-\[16px\].flex.flex-col.gap-\[16px\]
+//   > div.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.css-1fw5qro-MuiPaper-root
+//   > div.MuiTableContainer-root.css-41abqd-MuiTableContainer-root
+//   > table {
+//   border-collapse: collapse;
+// }
+// #app
+//   > div
+//   > div.zaui-box.flex-1.flex.flex-col.overflow-hidden
+//   > div
+//   > div.p-\[16px\].flex.flex-col.gap-\[16px\]
+//   > div.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.css-1fw5qro-MuiPaper-root
+//   > div.MuiTableContainer-root.css-41abqd-MuiTableContainer-root
+//   > table,
+// td,
+// th,
+// tr {
+//   border: none;
+// }
 
-#\:r1\: {
-  font-size: 10px;
-}
-#app
-  > div
-  > div.zaui-box.flex-1.flex.flex-col.overflow-hidden
-  > div
-  > div.p-\[16px\].flex.flex-col.gap-\[16px\]
-  > div.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.css-1fw5qro-MuiPaper-root
-  > div.MuiTablePagination-root.css-jtlhu6-MuiTablePagination-root
-  > div
-  > p.MuiTablePagination-displayedRows.css-levciy-MuiTablePagination-displayedRows {
-  font-size: 10px;
-}
-#app
-  > div
-  > div.zaui-box.flex-1.flex.flex-col.overflow-hidden
-  > div
-  > div.p-\[16px\].flex.flex-col.gap-\[16px\]
-  > div.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.css-1fw5qro-MuiPaper-root
-  > div.MuiTablePagination-root.css-jtlhu6-MuiTablePagination-root {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-items: center;
-}
+// #app
+//   > div
+//   > div.zaui-box.flex-1.flex.flex-col.overflow-hidden
+//   > div
+//   > div.p-\[16px\].flex.flex-col.gap-\[16px\]
+//   > div.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.css-1fw5qro-MuiPaper-root
+//   > div.MuiTablePagination-root.css-jtlhu6-MuiTablePagination-root {
+//   overflow: hidden;
+//   font-size: 10px;
+// }
+
+// #\:r1\: {
+//   font-size: 10px;
+// }
+// #app
+//   > div
+//   > div.zaui-box.flex-1.flex.flex-col.overflow-hidden
+//   > div
+//   > div.p-\[16px\].flex.flex-col.gap-\[16px\]
+//   > div.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.css-1fw5qro-MuiPaper-root
+//   > div.MuiTablePagination-root.css-jtlhu6-MuiTablePagination-root
+//   > div
+//   > p.MuiTablePagination-displayedRows.css-levciy-MuiTablePagination-displayedRows {
+//   font-size: 10px;
+// }
+// #app
+//   > div
+//   > div.zaui-box.flex-1.flex.flex-col.overflow-hidden
+//   > div
+//   > div.p-\[16px\].flex.flex-col.gap-\[16px\]
+//   > div.MuiPaper-root.MuiPaper-elevation.MuiPaper-rounded.MuiPaper-elevation1.css-1fw5qro-MuiPaper-root
+//   > div.MuiTablePagination-root.css-jtlhu6-MuiTablePagination-root {
+//   display: flex;
+//   width: 100%;
+//   align-items: center;
+//   justify-items: center;
+// }
