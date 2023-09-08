@@ -43,7 +43,7 @@ const GraphClinicOrders = () => {
                 };
             });
             const mergedData = [
-                ...formatDataOrders,
+                // ...formatDataOrders,
                 ...formatDataPaid,
                 ...formatDataUnpaid,
             ];

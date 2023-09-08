@@ -10,343 +10,238 @@ import { getPhoneNumber } from "zmp-sdk/apis";
 import { supabase } from "services/supabase";
 import LoadingSquareSpin from "components/loading";
 import dayjs from "dayjs";
-import { getPhoneNumberByToken } from "services/zalo/get-phone";
+import {
+  getPhoneNumberByToken,
+  getPhoneNumberZalo,
+} from "services/zalo/get-phone";
 import { getClinicRevenue } from "services/rpc/clinic-revenue";
 import { temp } from "utils/date-params-default";
 import useFetchClinicSelects from "common/stores/clinics/clinics";
 import { IClinicSelect } from "common/types/clinic";
 const userLoginInit = {
-    id: "",
-    name: "",
-    image: "",
-    department: "",
-    email: "",
-    job: "",
-    date_start: "",
-    date_of_birth: "",
-    phone: "",
-    address: "",
+  id: "",
+  name: "",
+  image: "",
+  department: "",
+  email: "",
+  job: "",
+  date_start: "",
+  date_of_birth: "",
+  phone: "",
+  address: "",
 };
 const HomePage = () => {
-    const navigate = useNavigate();
-    const { userLogin, setUserLogin } = useFetchZaloUser();
-    const [loading, setLoading] = useState<boolean>(false);
-    const [userPhone, setUserPhone] = useState<string>("");
-    const { setAllClinicSelects } = useFetchClinicSelects();
-
-    const getUser = async () => {
-        try {
-            setLoading(true);
-
-            await login({});
-            const { userInfo } = await getUserInfo();
-            let flag = await checkUser(userInfo.id);
-            if (flag) {
-                const staff: any = await getUserInStaffsTableByZaloId(
-                    userInfo.id,
-                );
-                const user: any = formatUserInStaff(staff);
-                setUserLogin(user);
-                const checkAdmin = await checkIsAdmin(staff.id, staff);
-                if (checkAdmin == true) {
-                    navigate("/revenue");
-                } else {
-                    navigate("/not-admin");
-                }
-            } else {
-                const accessToken = await getAccessToken({});
-                getPhoneNumber({
-                    success: async (data) => {
-                        let { token } = data;
-                        // console.log('token: ' + token);
-                        if (token && accessToken) {
-                            try {
-                                setLoading(true);
-
-                                const phone = await getPhoneNumberByToken(
-                                    token,
-                                    accessToken,
-                                );
-                                const checkPhone =
-                                    await checkUserByPhone(phone);
-                                console.log("checkPhone", checkPhone);
-                                if (checkPhone == false) {
-                                    navigate("/not-admin");
-                                } else {
-                                    updateUserZaloId(phone, userInfo.id);
-                                    const staffCatchByPhone: any =
-                                        await getUserInStaffsTableByPhone(
-                                            phone,
-                                        );
-                                    const userCatchByPhone: any =
-                                        formatUserInStaff(staffCatchByPhone);
-                                    setUserLogin(userCatchByPhone);
-
-                                    // console.log('staffCatchByPhone', staffCatchByPhone);
-                                    // console.log('userCatchByPhone', userCatchByPhone);
-
-                                    const checkAdmin = await checkIsAdmin(
-                                        staffCatchByPhone.id,
-                                        userCatchByPhone,
-                                    );
-                                    console.log("checkAdmin", checkAdmin);
-                                    if (checkAdmin == true) {
-                                        navigate("/revenue");
-                                    } else {
-                                        navigate("/not-admin");
-                                    }
-                                }
-                            } catch (error) {
-                            } finally {
-                                setLoading(false);
-                            }
-                        }
-                    },
-                    fail: (error) => {
-                        console.log("error getPhone", error);
-                    },
-                });
-            }
-            return;
-        } catch (error) {
-            navigate("/not-admin");
-            console.log("getuser", error);
-        }
+  const navigate = useNavigate();
+  const { userLogin, setUserLogin } = useFetchZaloUser();
+  const [loading, setLoading] = useState<boolean>(false);
+  const [userPhone, setUserPhone] = useState<string>("");
+  const { setAllClinicSelects } = useFetchClinicSelects();
+  useEffect(() => {
+    getUser();
+  }, []);
+  const loginSuccess = (user) => {
+    setUserLogin(user);
+    const timeout = setTimeout(() => {
+      navigate("/revenue", { animate: false });
+    }, 1200);
+    return () => {
+      clearTimeout(timeout);
     };
+  };
+  const noAccount = () => {
+    const timeout = setTimeout(() => {
+      navigate("/not-admin", { animate: false });
+    }, 1200);
+    return () => {
+      clearTimeout(timeout);
+    };
+  };
+  const getUser = async () => {
+    try {
+      await login({});
+      const { userInfo } = await getUserInfo({});
+      const _userInfo = {
+        zalo_id: userInfo.id,
+        avatar: userInfo.avatar,
+        name: userInfo.name,
+        phone: "",
+        id: "",
+        created_at: "",
+        job: "",
+        department: "",
+      };
+      setUserLogin(_userInfo);
+    } catch (error) {
+      // message("Login thất bại. Vui lòng thử lại sau.");
+      console.log(error);
+    }
+  };
+  const getStaffByZaloId = async (zaloId: string) => {
+    if (zaloId) {
+      try {
+        setLoading(true);
+        const { data } = await supabase.rpc(
+          "get_staff_info_by_zalo_id_new_v2",
+          { zaloid: zaloId },
+        );
+        console.log("data", data);
+        if (data && data.length > 0) {
+          console.log("Have zaloid");
+          let department = await departmentFetch(data[0].roles_staff[0].name);
+          console.log("department", department);
 
-    /*phone*/
-    const checkUserByPhone = async (phone: string) => {
-        const { data: dataPhone, error: errorPhone } = await supabase
-            .from("staffs")
-            .select("*")
-            .eq("phone", phone);
-
-        if ((dataPhone && dataPhone?.length == 0) || !dataPhone) {
-            return false;
+          setUserLogin({
+            ...data[0],
+            department: department,
+            job: data[0].roles_staff[0].name,
+          });
+          if (
+            (data[0].roles_staff[0].name == "Tester" ||
+              data[0].roles_staff[0].name == "Admin" ||
+              data[0].roles_staff[0].name == "Developer") &&
+            data[0].roles_staff[0].verify
+          ) {
+            loginSuccess({
+              ...data[0],
+              department: department,
+              job: data[0].roles_staff[0].name,
+            });
+            return;
+          } else {
+            console.log("Here 1");
+            noAccount();
+            return;
+          }
         } else {
-            return true;
-        }
-    };
+          console.log("Dont have zaloid");
+          let phoneNumber = await getPhoneNumberZalo();
+          if (phoneNumber) {
+            let { data } = await supabase.rpc("get_staff_info_by_phone_v2", {
+              staff_phone: phoneNumber,
+            });
 
-    const updateUserZaloId = async (phone: string, zalo_id: string) => {
-        const { error } = await supabase
-            .from("staffs")
-            .update({ zalo_id: zalo_id })
-            .eq("phone", phone);
-        if (error) {
-            console.log("insert zalo_id", error.message);
-            return;
-        }
-    };
-    const getUserInStaffsTableByPhone = async (phone: string) => {
-        const { data, error } = await supabase
-            .from("staffs")
-            .select("*")
-            .eq("phone", phone);
-        if (error) {
-            console.log("getDataByPhone", error.message);
-            return;
-        }
-        if (data) {
-            return data[0];
-        }
-    };
-
-    /*zalo_id*/
-    const getUserInStaffsTableByZaloId = async (zalo_id: string) => {
-        const { data, error } = await supabase
-            .from("staffs")
-            .select("*")
-            .eq("zalo_id", zalo_id);
-        if (error) {
-            console.log("instaff", error.message);
-            return;
-        }
-        if (data) {
-            console.log("data[0]", data[0]);
-
-            return data[0];
-        }
-    };
-    const checkUser = async (id: string) => {
-        try {
-            const { data: user, error } = await supabase
+            if (data && data.length > 0) {
+              await supabase
                 .from("staffs")
-                .select("*")
-                .eq("zalo_id", id);
-            if ((user && user?.length == 0) || !user) {
-                return false;
-            } else {
-                return true;
-            }
-        } catch (error) {
-            console.log("incheckuser", error);
-            return false;
-        }
-    };
-    const checkIsAdmin = async (staff_id: string, user: any) => {
-        let id_role = "";
-        const { data: dataStaffRole, error: errorStaffRole } = await supabase
-            .from("staffs_roles")
-            .select("*")
-            .eq("staff_id", staff_id);
-        if (errorStaffRole) {
-            return false;
-        }
-        if (dataStaffRole) {
-            id_role = dataStaffRole[0].role_id;
-        }
-        if (id_role == "a2886b4a-60c4-4f69-94a2-9650f7e02cd5") {
-            const depart: any = await departmentFetch(
-                "a2886b4a-60c4-4f69-94a2-9650f7e02cd5",
-            );
+                .update({ zalo_id: zaloId })
+                .eq("id", data[0]?.id);
+              let department = await departmentFetch(
+                data[0].roles_staff[0].name,
+              );
+              console.log("department", department);
 
-            const updatedUser = {
-                ...user,
-                job: "Admin",
-                department: depart,
-            };
-
-            setUserLogin(updatedUser);
-            return true;
-        } else if (id_role == "a1ee782b-2244-4015-877f-d11275afe27f") {
-            const depart: any = await departmentFetch(
-                "a1ee782b-2244-4015-877f-d11275afe27f",
-            );
-            const updatedUser = {
-                ...user,
-                job: "Developer",
-                department: depart,
-            };
-
-            setUserLogin(updatedUser);
-
-            return true;
-        } else if (id_role == "881ea3d3-ffc5-4f54-ba8b-9921b06ee663") {
-            const depart: any = await departmentFetch(
-                "881ea3d3-ffc5-4f54-ba8b-9921b06ee663",
-            );
-            const updatedUser = {
-                ...user,
-                job: "Tester",
-                department: depart,
-            };
-
-            setUserLogin(updatedUser);
-            return true;
-        } else {
-            return false;
-        }
-    };
-
-    const departmentFetch = async (role_id: string) => {
-        let departmentId: any = "";
-        let department: string = "";
-        const { data: data_role, error: error_role } = await supabase
-            .from("roles")
-            .select("department_id")
-            .eq("id", role_id);
-        if (error_role) {
-            console.log("find department error");
-            return;
-        }
-        if (data_role) {
-            departmentId = data_role[0].department_id;
-
-            const { data: data_department, error: error_department } =
-                await supabase
-                    .from("departments")
-                    .select("*")
-                    .eq("id", departmentId);
-            if (error_department) {
-                console.log("find department error", error_department);
+              setUserLogin({
+                ...data[0],
+                department: department,
+                job: data[0].roles_staff[0].name,
+              });
+              if (
+                (data[0].roles_staff[0].name == "Tester" ||
+                  data[0].roles_staff[0].name == "Admin" ||
+                  data[0].roles_staff[0].name == "Developer") &&
+                data[0].roles_staff[0].verify
+              ) {
+                loginSuccess({
+                  ...data[0],
+                  department: department,
+                  job: data[0].roles_staff[0].name,
+                });
                 return;
-            }
-            if (data_department) {
-                department = data_department[0].name;
-            }
-        }
-        return department;
-    };
+              } else {
+                console.log("Here 2");
 
-    const formatUserInStaff = (data: any) => {
-        if (data) {
-            const result = {
-                id: data.id,
-                name: data?.name,
-                image: data?.avatar,
-                department: data?.department,
-                email: data?.email,
-                job: data?.role,
-                date_start: dayjs(data?.created_at).format("DD-MM-YYYY"),
-                date_of_birth: dayjs(data?.birth).format("DD-MM-YYYY"),
-                phone: data?.phone,
-                address: data?.address,
+                noAccount();
+                return;
+              }
+            } else {
+              console.log("Here 3");
+
+              noAccount();
+            }
+          } else {
+            console.log("Here 4");
+
+            noAccount();
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+  /*phone*/
+  const departmentFetch = async (value: string) => {
+    let department: string = "";
+    const { data: data_role, error: error_role } = await supabase
+      .from("roles")
+      .select("department_id(*)")
+      .eq("value", value);
+    console.log("data_role", data_role);
+    if (error_role) {
+      console.log("find department error");
+      return;
+    }
+    if (data_role && data_role.length > 0) {
+      if (data_role[0].department_id?.name) {
+        department = data_role[0].department_id?.name;
+      }
+    }
+    return department;
+  };
+  useEffect(() => {
+    const fetchClinics = async () => {
+      const { clinicRevenue } = await getClinicRevenue(temp);
+      if (clinicRevenue) {
+        const formatClinicSelect: IClinicSelect[] = clinicRevenue.map(
+          (clinic: any) => {
+            return {
+              label:
+                clinic.clinic_name.toLowerCase().charAt(0).toUpperCase() +
+                clinic.clinic_name.toLowerCase().slice(1),
+              value: clinic.clinic_name,
             };
-            return result;
-        } else {
-            return;
-        }
+          },
+        );
+        setAllClinicSelects(formatClinicSelect);
+      }
     };
+    fetchClinics();
+  }, []);
+  return (
+    <Page className="relative flex-1 flex flex-col bg-white">
+      <Welcome />
+      <Box className="flex-1 overflow-auto">
+        <div className="flex items-center flex-col justify-center">
+          <Lottie
+            animationData={lottie}
+            loop={true}
+            className="w-[343px] mt-[60px] h-[343px] object-contain"
+          />
 
-    useEffect(() => {
-        const fetchClinics = async () => {
-            const { clinicRevenue } = await getClinicRevenue(temp);
-            if (clinicRevenue) {
-                const formatClinicSelect: IClinicSelect[] = clinicRevenue.map(
-                    (clinic: any) => {
-                        return {
-                            label:
-                                clinic.clinic_name
-                                    .toLowerCase()
-                                    .charAt(0)
-                                    .toUpperCase() +
-                                clinic.clinic_name.toLowerCase().slice(1),
-                            value: clinic.clinic_name,
-                        };
-                    },
-                );
-                setAllClinicSelects(formatClinicSelect);
-            }
-        };
-        fetchClinics();
-    }, []);
-    return (
-        <Page className="relative flex-1 flex flex-col bg-white">
-            <Welcome />
-            <Box className="flex-1 overflow-auto">
-                <div className="flex items-center flex-col justify-center">
-                    <Lottie
-                        animationData={lottie}
-                        loop={true}
-                        className="w-[343px] mt-[60px] h-[343px] object-contain"
-                    />
+          <button
+            onClick={async () => await getStaffByZaloId(userLogin?.zalo_id)}
+            className="bg-[#36383A] mt-[50px] h-[44px] rounded-[8px] w-[343px] px-[24px] text-[14px] font-[700] leading-[20px] tracking-[1.25px] py-[12px] text-[white]"
+          >
+            Đăng nhập bằng Zalo
+          </button>
 
-                    <button
-                        onClick={getUser}
-                        className="bg-[#36383A] mt-[50px] h-[44px] rounded-[8px] w-[343px] px-[24px] text-[14px] font-[700] leading-[20px] tracking-[1.25px] py-[12px] text-[white]"
-                    >
-                        Đăng nhập bằng Zalo
-                    </button>
-
-                    <div className="text-[14px] font-[700] mt-[8px] text-[#36383A] leading-[20px] tracking-[0.1px]">
-                        Bạn chưa có tài khoản?
-                        <span className="text-[#BC2449]">
-                            {" "}
-                            Liên hệ với Admin.
-                        </span>
-                    </div>
-                </div>
-                <div className="flex w-full items-center justify-center mt-[30px]">
-                    <img
-                        src="https://ucarecdn.com/3a1ae635-d250-4910-a931-d47b2fd5ebc6/-/quality/smart/-/format/auto/"
-                        className="w-[103px]"
-                    />
-                </div>
-            </Box>
-            {loading && <LoadingSquareSpin />}
-        </Page>
-    );
+          <div className="text-[14px] font-[700] mt-[8px] text-[#36383A] leading-[20px] tracking-[0.1px]">
+            Bạn chưa có tài khoản?
+            <span className="text-[#BC2449]">Liên hệ với Admin.</span>
+          </div>
+        </div>
+        <div className="flex w-full items-center justify-center mt-[30px]">
+          <img
+            src="https://ucarecdn.com/3a1ae635-d250-4910-a931-d47b2fd5ebc6/-/quality/smart/-/format/auto/"
+            className="w-[103px]"
+          />
+        </div>
+      </Box>
+      {loading && <LoadingSquareSpin />}
+    </Page>
+  );
 };
 
 export default HomePage;
