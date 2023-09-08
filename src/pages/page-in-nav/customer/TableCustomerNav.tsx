@@ -1,7 +1,10 @@
+"use client";
 import React, { useState } from "react";
-import { openChat, showToast } from "zmp-sdk/apis";
-import { Avatar, Icon } from "zmp-ui";
 import ModalDivertingConfirm from "./ModalDivertingConfirm";
+import { Avatar, Icon } from "zmp-ui";
+// import { openChat, showToast } from "zmp-sdk/apis";
+// import { Avatar, Icon } from "zmp-ui";
+// import ModalDivertingConfirm from "./ModalDivertingConfirm";
 
 interface TableCustomerNavProps {
   allCustomers: any;
@@ -23,7 +26,7 @@ const TableCustomerNav = (props: TableCustomerNavProps) => {
             <p className=" w-fit mr-[2rem] text-[10px]">Số điện thoại</p>
           </div>
           <div className="mt-[40px]">
-            {allCustomers.slice(0, 350).map((customer: any, index: number) => {
+            {allCustomers.map((customer: any, index: number) => {
               return (
                 <BoxRowCustomerNav
                   key={index}
@@ -103,90 +106,249 @@ const BoxRowCustomerNav = (props: BoxCustomerParams) => {
     </div>
   );
 };
-// import React, { useEffect, useState } from "react";
-// import { Button, Table } from "antd";
-// import type { ColumnsType } from "antd/es/table";
-// import { ICustomerZalo } from "common/types/customer";
 
-// interface DataType {
-//   key: React.Key;
-//   name: string;
-//   age: number;
-//   address: string;
-// }
+// import {
+//   ColumnDef,
+//   flexRender,
+//   getCoreRowModel,
+//   getPaginationRowModel,
+//   useReactTable,
+// } from "@tanstack/react-table";
 
-// const columns: ColumnsType<ICustomerZalo> = [
+// import { Button } from "@/components/ui/button";
+// import {
+//   Table,
+//   TableBody,
+//   TableCell,
+//   TableHead,
+//   TableHeader,
+//   TableRow,
+// } from "@/components/ui/table";
+
+// type Payment = {
+//   id: string;
+//   amount: number;
+//   status: "pending" | "processing" | "success" | "failed";
+//   email: string;
+// };
+
+// export const payments: Payment[] = [
 //   {
-//     title: () => <div className="text-[10px]">STT</div>,
-//     dataIndex: "key",
-//     width: 40,
-//     render: (_, record, index) => (
-//       <div className="w-auto flex items-center text-[10px] justify-center border-none">
-//         {index + 1}
-//       </div>
-//     ),
+//     id: "728ed52f",
+//     amount: 100,
+//     status: "pending",
+//     email: "m@example.com",
 //   },
 //   {
-//     title: () => (
-//       <div className="w-full border-none text-[10px]">Tên khách hàng</div>
-//     ),
-//     width: 140,
-//     dataIndex: "name",
-//     render: (_, record, index) => (
-//       <div className="w-full flex items-center  border-none justify-center text-[10px]">
-//         {record.name}
-//       </div>
-//     ),
+//     id: "489e1d42",
+//     amount: 125,
+//     status: "processing",
+//     email: "example@gmail.com",
+//   },
+//   // ...
+// ];
+// export const columns: ColumnDef<any>[] = [
+//   {
+//     accessorKey: "key",
+//     header: "STT",
 //   },
 //   {
-//     title: () => (
-//       <div className="w-full border-none text-[10px]">Số điện thoại</div>
-//     ),
-//     width: 140,
-//     dataIndex: "phone",
-
-//     render: (_, record, index) => (
-//       <div className="w-full flex items-center  border-none justify-center text-[10px]">
-//         {record.phone}
-//       </div>
-//     ),
+//     accessorKey: "name",
+//     header: "Email",
+//   },
+//   {
+//     accessorKey: "phone",
+//     header: "Amount",
 //   },
 // ];
-
-// const TableCustomerNav = ({ allCustomers }: TableCustomerNavProps) => {
-//   const [data, setData] = useState<any>([]);
-//   useEffect(() => {
-//     const formatDataCustomer = () => {
-//       const dataFormat = allCustomers.map((item, index) => {
-//         return {
-//           key: index + 1,
-//           name: item.name,
-//           avatar: item.avatar,
-//           phone: item.phone,
-//         };
-//       });
-//       setData(dataFormat);
-//     };
-//     formatDataCustomer();
-//   }, [allCustomers]);
+// interface DataTableProps<TData, TValue> {
+//   columns: ColumnDef<TData, TValue>[];
+//   data: TData[];
+// }
+// export function DataTable<TData, TValue>({
+//   columns,
+//   data,
+// }: DataTableProps<TData, TValue>) {
+//   const table = useReactTable({
+//     data,
+//     columns,
+//     getCoreRowModel: getCoreRowModel(),
+//     getPaginationRowModel: getPaginationRowModel(),
+//   });
 
 //   return (
 //     <div>
-//       <div style={{ marginBottom: 16 }}>
-//         {/* <span style={{ marginLeft: 8 }}>
-//           {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
-//         </span> */}
+//       <div className="rounded-md border">
+//         <Table>
+//           <TableHeader>
+//             {table.getHeaderGroups().map((headerGroup) => (
+//               <TableRow key={headerGroup.id}>
+//                 {headerGroup.headers.map((header) => {
+//                   return (
+//                     <TableHead key={header.id}>
+//                       {header.isPlaceholder
+//                         ? null
+//                         : flexRender(
+//                             header.column.columnDef.header,
+//                             header.getContext(),
+//                           )}
+//                     </TableHead>
+//                   );
+//                 })}
+//               </TableRow>
+//             ))}
+//           </TableHeader>
+//           <TableBody>
+//             {table.getRowModel().rows?.length ? (
+//               table.getRowModel().rows.map((row) => (
+//                 <TableRow
+//                   key={row.id}
+//                   data-state={row.getIsSelected() && "selected"}
+//                 >
+//                   {row.getVisibleCells().map((cell) => (
+//                     <TableCell key={cell.id}>
+//                       {flexRender(
+//                         cell.column.columnDef.cell,
+//                         cell.getContext(),
+//                       )}
+//                     </TableCell>
+//                   ))}
+//                 </TableRow>
+//               ))
+//             ) : (
+//               <TableRow>
+//                 <TableCell
+//                   colSpan={columns.length}
+//                   className="h-24 text-center"
+//                 >
+//                   No results.
+//                 </TableCell>
+//               </TableRow>
+//             )}
+//           </TableBody>
+//         </Table>
 //       </div>
-//       <div className=" w-full h-auto overflow-y-scroll flex items-center justify-center border border-[red]">
-//         <Table
-//           columns={columns}
-//           dataSource={data}
-//           scroll={{ y: 440 }}
-//           pagination={false}
-//         />
+//       <div className="flex items-center justify-end space-x-2 py-4">
+//         <Button
+//           variant="outline"
+//           size="sm"
+//           onClick={() => table.previousPage()}
+//           disabled={!table.getCanPreviousPage()}
+//         >
+//           Previous
+//         </Button>
+//         <Button
+//           variant="outline"
+//           size="sm"
+//           onClick={() => table.nextPage()}
+//           disabled={!table.getCanNextPage()}
+//         >
+//           Next
+//         </Button>
 //       </div>
 //     </div>
 //   );
-// };
+// }
+// const data = [
+//   {
+//     id: "728ed52f",
+//     amount: 100,
+//     status: "pending",
+//     email: "m@example.com",
+//   },
+//   {
+//     id: "728ed52f",
+//     amount: 100,
+//     status: "pending",
+//     email: "m@example.com",
+//   },
+//   {
+//     id: "728ed52f",
+//     amount: 100,
+//     status: "pending",
+//     email: "m@example.com",
+//   },
+//   {
+//     id: "728ed52f",
+//     amount: 100,
+//     status: "pending",
+//     email: "m@example.com",
+//   },
+//   {
+//     id: "728ed52f",
+//     amount: 100,
+//     status: "pending",
+//     email: "m@example.com",
+//   },
 
+//   {
+//     id: "728ed52f",
+//     amount: 100,
+//     status: "pending",
+//     email: "m@example.com",
+//   },
+//   {
+//     id: "728ed52f",
+//     amount: 100,
+//     status: "pending",
+//     email: "m@example.com",
+//   },
+//   {
+//     id: "728ed52f",
+//     amount: 100,
+//     status: "pending",
+//     email: "m@example.com",
+//   },
+//   {
+//     id: "728ed52f",
+//     amount: 100,
+//     status: "pending",
+//     email: "m@example.com",
+//   },
+//   {
+//     id: "728ed52f",
+//     amount: 100,
+//     status: "pending",
+//     email: "m@example.com",
+//   },
+//   {
+//     id: "728ed52f",
+//     amount: 100,
+//     status: "pending",
+//     email: "m@example.com",
+//   },
+//   {
+//     id: "728ed52f",
+//     amount: 100,
+//     status: "pending",
+//     email: "m@example.com",
+//   },
+//   {
+//     id: "728ed52f",
+//     amount: 100,
+//     status: "pending",
+//     email: "m@example.com",
+//   },
+//   {
+//     id: "728ed52f",
+//     amount: 100,
+//     status: "pending",
+//     email: "m@example.com",
+//   },
+//   {
+//     id: "728ed52f",
+//     amount: 100,
+//     status: "pending",
+//     email: "m@example.com",
+//   },
+// ];
+
+// const TableCustomerNav = (props: TableCustomerNavProps) => {
+//   const { allCustomers } = props;
+//   return (
+//     <div className="">
+//       <DataTable columns={columns as any} data={allCustomers} />
+//     </div>
+//   );
+// };
 // export default TableCustomerNav;

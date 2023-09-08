@@ -26,6 +26,7 @@ const CustomersNav = () => {
   const { setZaloCustomers, zaloCustomers } = useFetchZaloCustomers();
   const { setDateFilter } = useDateFilter();
   const [allCustomers, setAllCustomers] = useState<ICustomerZalo[]>([]);
+  const [initAllCustomers, setInitAllCustomer] = useState<ICustomerZalo[]>([]);
 
   const [allCustomersHasZaloId, setAllCustomersHasZaloId] = useState<
     ICustomerZalo[]
@@ -98,13 +99,15 @@ const CustomersNav = () => {
         }
         if (data) {
           setZaloCustomers(data);
-          setAllCustomers(data);
-          const filterHasZaloId = data.filter(
-            (customer) => customer.zalo_id !== null,
-          );
-          const filterHasPhone = data.filter(
-            (customer) => customer.phone !== null,
-          );
+          setInitAllCustomer(data);
+
+          const filterHasZaloId = data
+            .filter((customer) => customer.zalo_id !== null)
+            .slice(0, 150);
+          const filterHasPhone = data
+            .filter((customer) => customer.phone !== null)
+            .slice(0, 150);
+          setAllCustomers(filterHasZaloId);
           setAllCustomersHavePhone(filterHasPhone);
           setAllCustomersHasZaloId(filterHasZaloId);
           console.log("filterHasZaloId", filterHasZaloId);
@@ -126,13 +129,13 @@ const CustomersNav = () => {
     var regex = /^[0-9]+$/;
     if (input.match(regex)) {
       const pattern = new RegExp(input, "i");
-      const tmp = zaloCustomers.filter((item: ICustomerZalo) => {
+      const tmp = initAllCustomers.filter((item: ICustomerZalo) => {
         return pattern.test(item.phone);
       });
       setAllCustomers(tmp);
     } else {
       const pattern = new RegExp(input, "i");
-      const tmp = zaloCustomers.filter((item: ICustomerZalo) => {
+      const tmp = initAllCustomers.filter((item: ICustomerZalo) => {
         return pattern.test(item.name);
       });
       setAllCustomers(tmp);
