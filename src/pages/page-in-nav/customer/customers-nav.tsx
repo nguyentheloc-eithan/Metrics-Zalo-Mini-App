@@ -42,15 +42,6 @@ const CustomersNav = () => {
   const [datePickerEnable, setDatePickerEnable] = useState<boolean>(false);
   const [openModalDateRangePicker, setOpenModalDateRangePicker] =
     useState<boolean>(false);
-  const onHandleFilterDate = (date_start: string, date_end: string) => {
-    const dateNew: ExportParams = {
-      start_date: date_start,
-      end_date: date_end,
-    };
-    setDate(dateNew);
-    setDateFilter(dateNew);
-    setOpenModalDateRangePicker(false);
-  };
 
   const handleOnclickRange = (index: number, value: string) => {
     if (index == indexSelect) {
